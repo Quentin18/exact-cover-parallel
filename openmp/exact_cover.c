@@ -150,6 +150,24 @@ void sparse_array_unadd(struct sparse_array_t *S)
         S->len--;
 }
 
+/**
+ * Affiche un tableau creux.
+ * 
+ * @param S tableau creu
+ */
+void sparse_array_print(const struct sparse_array_t *S)
+{
+        printf("== Sparse array ==\n");
+        printf("len: %d\n", S->len);
+        printf("capacity: %d\n", S->capacity);
+        printf("p:");
+        for (int i = 0; i < S->capacity; i++)
+                printf(" %d", S->p[i]);
+        printf("\nq:");        
+        for (int i = 0; i < S->capacity; i++)
+                printf(" %d", S->q[i]);
+        printf("\n");
+}
 
 
 bool item_is_active(const struct context_t *ctx, int item)
@@ -517,28 +535,6 @@ struct context_t * backtracking_setup(const struct instance_t *instance)
 
 
 /**
- * Copie un tableau creux.
- * 
- * @param s tableau creux
- */
-struct sparse_array_t *sparse_array_copy(const struct sparse_array_t *s)
-{
-        struct sparse_array_t *S = malloc(sizeof(*S));
-        if (S == NULL)
-                err(1, "impossible d'allouer un tableau creux");
-        S->len = s->len;
-        S->capacity = s->capacity;
-        S->p = malloc(s->capacity * sizeof(int));
-        S->q = malloc(s->capacity * sizeof(int));
-        if (S->p == NULL || S->q == NULL)
-                err(1, "Impossible d'allouer p/q dans un tableau creux");
-        for (int i = 0; i < s->capacity; i++)
-                S->q[i] = s->q[i];           // copie du tableau
-        return S;
-}
-
-
-/**
  * Copie un tableau d'entiers.
  * 
  * @param a tableau d'entiers
@@ -556,6 +552,22 @@ int *array_copy(const int *a, int n)
         return A;
 }
 
+/**
+ * Copie un tableau creux.
+ * 
+ * @param s tableau creux
+ */
+struct sparse_array_t *sparse_array_copy(const struct sparse_array_t *s)
+{
+        struct sparse_array_t *S = malloc(sizeof(*S));
+        if (S == NULL)
+                err(1, "impossible d'allouer un tableau creux");
+        S->len = s->len;
+        S->capacity = s->capacity;
+        S->p = array_copy(s->p, s->capacity);
+        S->q = array_copy(s->q, s->capacity);
+        return S;
+}
 
 /**
  * Crée une copie du contexte donné en argument.
@@ -594,40 +606,92 @@ struct context_t * copy_ctx(const struct context_t *ctx, int n)
         return ctx_copy;
 }
 
+/**
+ * Nettoie la mémoire pour un tableau creux.
+ * 
+ * @param s tableau creux
+ */
+void sparse_array_free(struct sparse_array_t *S)
+{
+        free(S->p);
+        free(S->q);
+        free(S);
+}
 
-void solve(const struct instance_t *instance, const struct context_t *ctx)
+/**
+ * Nettoie la mémoire pour un contexte.
+ * 
+ * @param ctx context
+ * @param n nombre d'items
+ */
+void free_ctx(struct context_t *ctx, int n)
+{
+        sparse_array_free(ctx->active_items);
+        for (int item = 0; item < n; item++)
+                sparse_array_free(ctx->active_options[item]);
+        free(ctx->active_options);
+        free(ctx->chosen_options);
+        free(ctx->child_num);
+        free(ctx->num_children);
+        free(ctx);
+}
+
+/**
+ * Nettoie la mémoire pour une instance.
+ * 
+ * @param instance instance
+ */
+void free_instance(struct instance_t *instance)
+{
+        if (instance->item_name != NULL)
+        {
+                for (int i = 0; i < instance->n_items; i++)
+                {
+                        free(instance->item_name[i]);
+                }
+                free(instance->item_name);
+        }
+        free(instance->options);
+        free(instance->ptr);
+        free(instance);
+}
+
+
+void solve(const struct instance_t *instance, struct context_t *ctx)
 {
         /* Copie du contexte */
-        struct context_t * ctx_copy = copy_ctx(ctx, instance->n_items);
+        // struct context_t * ctx_copy = copy_ctx(ctx, instance->n_items);
 
-        ctx_copy->nodes++;
-        if (ctx_copy->nodes == next_report)
-                progress_report(ctx_copy);
-        if (sparse_array_empty(ctx_copy->active_items)) {
-                solution_found(instance, ctx_copy);
+        ctx->nodes++;
+        if (ctx->nodes == next_report)
+                progress_report(ctx);
+        if (sparse_array_empty(ctx->active_items)) {
+                solution_found(instance, ctx);
                 return;                         /* succès : plus d'objet actif */
         }
-        int chosen_item = choose_next_item(ctx_copy);
-        struct sparse_array_t *active_options = ctx_copy->active_options[chosen_item];
-        if (sparse_array_empty(active_options))
+        int chosen_item = choose_next_item(ctx);
+        struct sparse_array_t *active_options = ctx->active_options[chosen_item];
+        if (sparse_array_empty(active_options)) {
                 return;           /* échec : impossible de couvrir chosen_item */
-        cover(instance, ctx_copy, chosen_item);
-        ctx_copy->num_children[ctx_copy->level] = active_options->len;
+        }
+        cover(instance, ctx, chosen_item);
+        ctx->num_children[ctx->level] = active_options->len;
         for (int k = 0; k < active_options->len; k++) {
                 int option = active_options->p[k];
-                ctx_copy->child_num[ctx_copy->level] = k;
-                choose_option(instance, ctx_copy, option, chosen_item);
+                ctx->child_num[ctx->level] = k;
+                choose_option(instance, ctx, option, chosen_item);
 
                 /* Création d'une tâche */
                 // #pragma omp task
-                solve(instance, ctx_copy);
+                solve(instance, ctx);
 
-                if (ctx_copy->solutions >= max_solutions)
+                if (ctx->solutions >= max_solutions) {
                         return;
-                unchoose_option(instance, ctx_copy, option, chosen_item);
+                }
+                unchoose_option(instance, ctx, option, chosen_item);
         }
 
-        uncover(instance, ctx_copy, chosen_item);                      /* backtrack */
+        uncover(instance, ctx, chosen_item);                      /* backtrack */
 }
 
 
@@ -671,6 +735,9 @@ int main(int argc, char **argv)
         #pragma omp parallel
         #pragma omp single
         solve(instance, ctx);
+
+        free_ctx(ctx, instance->n_items);
+        free_instance(instance);
 
         printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions, 
                         wtime() - start);
