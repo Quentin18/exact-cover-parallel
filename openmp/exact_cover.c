@@ -515,33 +515,121 @@ struct context_t * backtracking_setup(const struct instance_t *instance)
         return ctx;
 }
 
-void solve(const struct instance_t *instance, struct context_t *ctx)
+
+/**
+ * Copie un tableau creux.
+ * 
+ * @param s tableau creux
+ */
+struct sparse_array_t *sparse_array_copy(const struct sparse_array_t *s)
 {
-        ctx->nodes++;
-        if (ctx->nodes == next_report)
-                progress_report(ctx);
-        if (sparse_array_empty(ctx->active_items)) {
-                solution_found(instance, ctx);
+        struct sparse_array_t *S = malloc(sizeof(*S));
+        if (S == NULL)
+                err(1, "impossible d'allouer un tableau creux");
+        S->len = s->len;
+        S->capacity = s->capacity;
+        S->p = malloc(s->capacity * sizeof(int));
+        S->q = malloc(s->capacity * sizeof(int));
+        if (S->p == NULL || S->q == NULL)
+                err(1, "Impossible d'allouer p/q dans un tableau creux");
+        for (int i = 0; i < s->capacity; i++)
+                S->q[i] = s->q[i];           // copie du tableau
+        return S;
+}
+
+
+/**
+ * Copie un tableau d'entiers.
+ * 
+ * @param a tableau d'entiers
+ * @param n taille du tableau
+ */
+int *array_copy(const int *a, int n)
+{
+        int *A = malloc(n * sizeof(int));
+        if (A == NULL)
+                err(1, "impossible d'allouer un tableau");
+        for (int i = 0; i < n; i++)
+        {
+                A[i] = a[i];
+        }
+        return A;
+}
+
+
+/**
+ * Crée une copie du contexte donné en argument.
+ * 
+ * @param ctx context
+ * @param n nombre d'items
+ */
+struct context_t * copy_ctx(const struct context_t *ctx, int n)
+{
+        struct context_t *ctx_copy = malloc(sizeof(*ctx_copy));
+        if (ctx_copy == NULL)
+                err(1, "impossible d'allouer un contexte");
+
+        /* Copie de level, nodes et solutions */
+        ctx_copy->level = ctx->level;
+        ctx_copy->nodes = ctx->nodes;
+        ctx_copy->solutions = ctx->solutions;
+
+        /* Copie de chosen_options */
+        ctx_copy->chosen_options = array_copy(ctx->chosen_options, n);
+
+        /* Copie de child_num */
+        ctx_copy->child_num = array_copy(ctx->child_num, n);
+
+        /* Copie de num_children */
+        ctx_copy->num_children = array_copy(ctx->num_children, n);
+
+        /* Copie de active_items */
+        ctx_copy->active_items = sparse_array_copy(ctx->active_items);
+
+        /* Copie de active_options */
+        ctx_copy->active_options = malloc(n * sizeof(*ctx_copy->active_options));
+        for (int item = 0; item < n; item++)
+                ctx_copy->active_options[item] = sparse_array_copy(ctx->active_options[item]);
+
+        return ctx_copy;
+}
+
+
+void solve(const struct instance_t *instance, const struct context_t *ctx)
+{
+        /* Copie du contexte */
+        struct context_t * ctx_copy = copy_ctx(ctx, instance->n_items);
+
+        ctx_copy->nodes++;
+        if (ctx_copy->nodes == next_report)
+                progress_report(ctx_copy);
+        if (sparse_array_empty(ctx_copy->active_items)) {
+                solution_found(instance, ctx_copy);
                 return;                         /* succès : plus d'objet actif */
         }
-        int chosen_item = choose_next_item(ctx);
-        struct sparse_array_t *active_options = ctx->active_options[chosen_item];
+        int chosen_item = choose_next_item(ctx_copy);
+        struct sparse_array_t *active_options = ctx_copy->active_options[chosen_item];
         if (sparse_array_empty(active_options))
                 return;           /* échec : impossible de couvrir chosen_item */
-        cover(instance, ctx, chosen_item);
-        ctx->num_children[ctx->level] = active_options->len;
+        cover(instance, ctx_copy, chosen_item);
+        ctx_copy->num_children[ctx_copy->level] = active_options->len;
         for (int k = 0; k < active_options->len; k++) {
                 int option = active_options->p[k];
-                ctx->child_num[ctx->level] = k;
-                choose_option(instance, ctx, option, chosen_item);
-                solve(instance, ctx);
-                if (ctx->solutions >= max_solutions)
+                ctx_copy->child_num[ctx_copy->level] = k;
+                choose_option(instance, ctx_copy, option, chosen_item);
+
+                /* Création d'une tâche */
+                // #pragma omp task
+                solve(instance, ctx_copy);
+
+                if (ctx_copy->solutions >= max_solutions)
                         return;
-                unchoose_option(instance, ctx, option, chosen_item);
+                unchoose_option(instance, ctx_copy, option, chosen_item);
         }
 
-        uncover(instance, ctx, chosen_item);                      /* backtrack */
+        uncover(instance, ctx_copy, chosen_item);                      /* backtrack */
 }
+
 
 int main(int argc, char **argv)
 {
@@ -580,6 +668,8 @@ int main(int argc, char **argv)
         struct context_t * ctx = backtracking_setup(instance);
         start = wtime();
 
+        #pragma omp parallel
+        #pragma omp single
         solve(instance, ctx);
 
         printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions, 
