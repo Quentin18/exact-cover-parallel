@@ -60,9 +60,7 @@ static const char DIGITS[62] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 
 double wtime()
 {
-        struct timeval ts;
-        gettimeofday(&ts, NULL);
-        return (double) ts.tv_sec + ts.tv_usec / 1e6;
+        return MPI_Wtime();
 }
 
 
