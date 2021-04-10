@@ -583,6 +583,12 @@ int main(int argc, char **argv)
         int size, rank;
         MPI_Status status;
 
+        /* Tags des messages */
+        typedef enum Tag{AVAILABLE, WORK_TODO, WORK_DONE, WORK, END};
+
+        /* Buffer pour envoyer le nombre de noeuds explorés et le nombre de solutions trouvées */
+        long long work[2];
+
         /* Initialisation de MPI */
         MPI_Init(&argc, &argv);
 
@@ -596,24 +602,121 @@ int main(int argc, char **argv)
         struct instance_t * instance = load_matrix(in_filename);
         struct context_t * ctx = backtracking_setup(instance);
 
-        printf("[DEBUG] Processeur %d: START\n", rank);
+        /* Variable d'arrêt */
+        bool run = true;
 
-        /* Processeur principal (0) */
+        /* Variables pour gérer le travail à faire */
+        int k = 0, k_done = 0;
+
+        printf("[DEBUG] Processor %d: START\n", rank);
+
+        /* Init solve */
+        int option;
+        int chosen_item = choose_next_item(ctx);
+        struct sparse_array_t *active_options = ctx->active_options[chosen_item];
+        // if (sparse_array_empty(active_options))
+        //         return;           /* échec : impossible de couvrir chosen_item */
+        cover(instance, ctx, chosen_item);
+        ctx->num_children[ctx->level] = active_options->len;
+
+        /* Processeur principal */
         if (rank == ROOT)
         {
                 start = wtime();
-                solve(instance, ctx);
+                ctx->nodes++;
+
+                /* Work loop */
+                while (run)
+                {
+                        /* Reçoit un message d'un ouvrier */
+                        MPI_Recv(NULL, 0, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG,
+                                 MPI_COMM_WORLD, &status);
+
+                        switch (status.MPI_TAG)
+                        {
+                        case AVAILABLE:
+                                /* Envoie le travail à faire s'il en reste */
+                                if (k < active_options->len)
+                                {
+                                        MPI_Send(&k, 1, MPI_INT, status.MPI_SOURCE,
+                                                 WORK_TODO, MPI_COMM_WORLD);
+                                        k++;
+                                }
+                                /* Signale la fin du travail sinon */
+                                else
+                                {
+                                        MPI_Send(&k, 1, MPI_INT, status.MPI_SOURCE,
+                                                 END, MPI_COMM_WORLD);
+                                }
+                                run = k_done < active_options->len;
+                                break;
+
+                        case WORK_DONE:
+                                /* Reçoit le travail fait : nodes et solutions */
+                                MPI_Recv(&work, 2, MPI_LONG_LONG, status.MPI_SOURCE,
+                                         WORK, MPI_COMM_WORLD, &status);
+                                ctx->nodes += work[0];
+                                ctx->solutions += work[1];
+                                k_done++;
+                                break;
+
+                        default:
+                                fprintf(stderr, "Unknown message\n");
+                                break;
+                        }
+                }
+
                 printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions, 
-                                wtime() - start);
+                        wtime() - start);
         }
 
         /* Processeur ouvrier */
         else
         {
+                while (run)
+                {
+                        /* Dit au patron qu'il est disponible */
+                        MPI_Send(NULL, 0, MPI_INT, ROOT, AVAILABLE, MPI_COMM_WORLD);
 
+                        /* Reçoit un message du patron */
+                        MPI_Recv(&k, 1, MPI_INT, ROOT, MPI_ANY_TAG,
+                                        MPI_COMM_WORLD, &status);
+
+                        switch (status.MPI_TAG)
+                        {
+                        case WORK_TODO:
+                                /* Résout le problème pour le sous-arbre demandé */
+                                ctx->nodes = 0;
+                                ctx->solutions = 0;
+                                option = active_options->p[k];
+                                ctx->child_num[ctx->level] = k;
+                                choose_option(instance, ctx, option, chosen_item);
+                                solve(instance, ctx);
+                                unchoose_option(instance, ctx, option, chosen_item);
+                                work[0] = ctx->nodes;
+                                work[1] = ctx->solutions;
+
+                                /* Prévient le patron qu'il va recevoir le travail */
+                                MPI_Send(NULL, 0, MPI_INT, ROOT, WORK_DONE, MPI_COMM_WORLD);
+
+                                /* Envoie au patron le nombre le noeuds explorés
+                                et le nombre de solutions trouvées */
+                                MPI_Send(&work, 2, MPI_LONG_LONG, ROOT, WORK, MPI_COMM_WORLD);
+                                break;
+
+                        case END:
+                                /* Travail terminé */
+                                run = false;
+                                break;
+
+                        default:
+                                fprintf(stderr, "Unknown message\n");
+                                break;
+                        }
+                }
         }
 
-        printf("[DEBUG] Processeur %d: END\n", rank);
+        printf("[DEBUG] Processor %d: END\n", rank);
 
         /* Finalisation MPI */
         MPI_Finalize();
