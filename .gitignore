@@ -1,6 +1,8 @@
 *.o
 *.out
 *.sh
+*.csv
+*.png
 
 docs/
 exact_cover
