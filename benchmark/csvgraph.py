@@ -54,6 +54,7 @@ if __name__ == '__main__':
     ax1.set_ylabel('Time (seconds)')
     ax1.set_title(f'Exact Cover: {name} runtime')
     ax1.legend()
+    ax1.grid(linestyle='--')
 
     # Speedup
     t1 = y_list[0][0]
@@ -64,6 +65,7 @@ if __name__ == '__main__':
     ax2.set_ylabel('Speedup')
     ax2.set_title(f'Exact Cover: {name} speedup')
     ax2.legend()
+    ax2.grid(linestyle='--')
 
     # Save figure
     plt.savefig(name)
