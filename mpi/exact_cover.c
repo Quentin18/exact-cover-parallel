@@ -12,6 +12,9 @@
 
 #include <mpi.h>
 
+/* Rang du processeur principal. */
+#define ROOT 0
+
 
 double start = 0.0;
 
@@ -577,32 +580,40 @@ int main(int argc, char **argv)
         next_report = report_delta;
 
         /* Variables MPI */
-        int size, rank, root = 0;
+        int size, rank;
         MPI_Status status;
 
         /* Initialisation de MPI */
         MPI_Init(&argc, &argv);
 
-        /* Nombre de processus */
+        /* Nombre de processeurs */
         MPI_Comm_size(MPI_COMM_WORLD, &size);
 
         /* Rang du processeur */
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-        printf("[DEBUG] Processus %d: START\n", rank);
+        /* Load instance */
+        struct instance_t * instance = load_matrix(in_filename);
+        struct context_t * ctx = backtracking_setup(instance);
 
-        if (rank == root)
+        printf("[DEBUG] Processeur %d: START\n", rank);
+
+        /* Processeur principal (0) */
+        if (rank == ROOT)
         {
-                struct instance_t * instance = load_matrix(in_filename);
-                struct context_t * ctx = backtracking_setup(instance);
-
                 start = wtime();
                 solve(instance, ctx);
                 printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions, 
                                 wtime() - start);
         }
 
-        printf("[DEBUG] Processus %d: END\n", rank);
+        /* Processeur ouvrier */
+        else
+        {
+
+        }
+
+        printf("[DEBUG] Processeur %d: END\n", rank);
 
         /* Finalisation MPI */
         MPI_Finalize();
