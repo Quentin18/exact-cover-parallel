@@ -63,7 +63,9 @@ static const char DIGITS[62] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 
 double wtime()
 {
-        return MPI_Wtime();
+        struct timeval ts;
+        gettimeofday(&ts, NULL);
+        return (double) ts.tv_sec + ts.tv_usec / 1e6;
 }
 
 
@@ -584,7 +586,7 @@ int main(int argc, char **argv)
         MPI_Status status;
 
         /* Tags des messages */
-        typedef enum Tag{AVAILABLE, WORK_TODO, WORK_DONE, WORK, END};
+        enum Tag{AVAILABLE, WORK_TODO, WORK_DONE, WORK, END};
 
         /* Buffer pour envoyer le nombre de noeuds explorés et le nombre de solutions trouvées */
         long long work[2];
@@ -608,16 +610,14 @@ int main(int argc, char **argv)
         /* Variables pour gérer le travail à faire */
         int k = 0, k_done = 0;
 
+        /* Start solve */
         printf("[DEBUG] Processor %d: START\n", rank);
 
-        /* Init solve */
-        int option;
         int chosen_item = choose_next_item(ctx);
         struct sparse_array_t *active_options = ctx->active_options[chosen_item];
-        // if (sparse_array_empty(active_options))
-        //         return;           /* échec : impossible de couvrir chosen_item */
         cover(instance, ctx, chosen_item);
         ctx->num_children[ctx->level] = active_options->len;
+        int option;
 
         /* Processeur principal */
         if (rank == ROOT)
@@ -680,7 +680,7 @@ int main(int argc, char **argv)
 
                         /* Reçoit un message du patron */
                         MPI_Recv(&k, 1, MPI_INT, ROOT, MPI_ANY_TAG,
-                                        MPI_COMM_WORLD, &status);
+                                 MPI_COMM_WORLD, &status);
 
                         switch (status.MPI_TAG)
                         {
