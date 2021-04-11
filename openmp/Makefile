@@ -1,12 +1,11 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -O3
 LIBS = -fopenmp
-SRC = exact_cover.c
-EXEC = exact_cover
+EXEC = exact_cover_omp.out
 
 all: $(EXEC)
 
-$(EXEC): $(SRC)
+exact_cover_omp.out: exact_cover_omp.c
 	$(CC) $^ -o $@ $(CFLAGS) $(LIBS)
 
 clean:

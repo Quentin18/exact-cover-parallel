@@ -771,7 +771,7 @@ int main(int argc, char **argv)
         /* Variable contenant le nombre de solutions trouvées */
         long long solutions = 0;
 
-        #pragma omp parallel // reduction(+:solutions)
+        #pragma omp parallel
         #pragma omp single
         solve_create_tasks(instance, &solutions);
 
