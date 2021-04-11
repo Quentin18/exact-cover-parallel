@@ -1,11 +1,13 @@
 CC = mpicc
 CFLAGS = -Wall -Wextra -O3
-SRC = exact_cover.c
-EXEC = exact_cover
+EXEC = exact_cover_mpi_dynamic.out exact_cover_mpi_static.out
 
 all: $(EXEC)
 
-$(EXEC): $(SRC)
+exact_cover_mpi_dynamic.out: exact_cover_mpi_dynamic.c
+	$(CC) $^ -o $@ $(CFLAGS)
+
+exact_cover_mpi_static.out: exact_cover_mpi_static.c
 	$(CC) $^ -o $@ $(CFLAGS)
 
 clean:

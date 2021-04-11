@@ -1,5 +1,7 @@
 /**
- * Version MPI
+ * Version MPI : Équilibrage dynamique
+ * 
+ * Quentin Deschamps, 2021
  */
 #include <ctype.h>
 #include <stdio.h>
