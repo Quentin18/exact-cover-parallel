@@ -663,25 +663,49 @@ void free_instance(struct instance_t *instance)
 }
 
 
-void solve(const struct instance_t *instance, struct context_t *ctx,
-           long long *solutions, bool create_task)
+void solve(const struct instance_t *instance, struct context_t *ctx)
 {
         ctx->nodes++;
         if (ctx->nodes == next_report)
                 progress_report(ctx);
         if (sparse_array_empty(ctx->active_items)) {
                 solution_found(instance, ctx);
-
-                #pragma omp atomic
-                (*solutions)++;
-
                 return;                         /* succès : plus d'objet actif */
         }
         int chosen_item = choose_next_item(ctx);
         struct sparse_array_t *active_options = ctx->active_options[chosen_item];
-        if (sparse_array_empty(active_options)) {
+        if (sparse_array_empty(active_options))
                 return;           /* échec : impossible de couvrir chosen_item */
+        cover(instance, ctx, chosen_item);
+        ctx->num_children[ctx->level] = active_options->len;
+        for (int k = 0; k < active_options->len; k++) {
+                int option = active_options->p[k];
+                ctx->child_num[ctx->level] = k;
+                choose_option(instance, ctx, option, chosen_item);
+                solve(instance, ctx);
+                if (ctx->solutions >= max_solutions)
+                        return;
+                unchoose_option(instance, ctx, option, chosen_item);
         }
+
+        uncover(instance, ctx, chosen_item);                      /* backtrack */
+}
+
+/**
+ * Crée les tâches pour trouver les solutions.
+ * 
+ * @param instance instance
+ * @param solutions pointeur vers le nombre de solutions
+ */
+void solve_create_tasks(const struct instance_t *instance, long long *solutions)
+{
+        /* Création d'un contexte */
+        struct context_t * ctx = backtracking_setup(instance);
+
+        /* Début de résolution */
+        ctx->nodes++;
+        int chosen_item = choose_next_item(ctx);
+        struct sparse_array_t *active_options = ctx->active_options[chosen_item];
         cover(instance, ctx, chosen_item);
         ctx->num_children[ctx->level] = active_options->len;
         for (int k = 0; k < active_options->len; k++) {
@@ -690,28 +714,20 @@ void solve(const struct instance_t *instance, struct context_t *ctx,
                 choose_option(instance, ctx, option, chosen_item);
 
                 /* Création d'une tâche */
-                if (create_task)
+                struct context_t *ctx_copy = copy_ctx(ctx, instance->n_items);
+                #pragma omp task
                 {
-                        struct context_t *ctx_copy = copy_ctx(ctx, instance->n_items);
-
-                        #pragma omp task
-                        {
-                                solve(instance, ctx_copy, solutions, false);
-                                free_ctx(ctx_copy, instance->n_items);
-                        }
-                }
-                else
-                {
-                        solve(instance, ctx, solutions, false);
+                        solve(instance, ctx_copy);
+                        #pragma omp atomic
+                        (*solutions) += ctx_copy->solutions;
+                        free_ctx(ctx_copy, instance->n_items);
                 }
 
-                if (ctx->solutions >= max_solutions) {
-                        return;
-                }
                 unchoose_option(instance, ctx, option, chosen_item);
         }
 
-        uncover(instance, ctx, chosen_item);                      /* backtrack */
+        /* Suppression du contexte */
+        free_ctx(ctx, instance->n_items);
 }
 
 
@@ -749,7 +765,6 @@ int main(int argc, char **argv)
 
         /* Load instance */
         struct instance_t * instance = load_matrix(in_filename);
-        struct context_t * ctx = backtracking_setup(instance);
 
         start = wtime();
 
@@ -758,9 +773,9 @@ int main(int argc, char **argv)
 
         #pragma omp parallel // reduction(+:solutions)
         #pragma omp single
-        solve(instance, ctx, &solutions, true);
+        solve_create_tasks(instance, &solutions);
 
-        free_ctx(ctx, instance->n_items);
+        /* Free instance */
         free_instance(instance);
 
         printf("FINI. Trouvé %lld solutions en %.1fs\n", solutions,
