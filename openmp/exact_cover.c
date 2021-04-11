@@ -1,3 +1,8 @@
+/**
+ * Version OpenMP
+ * 
+ * Quentin Deschamps, 2021
+ */
 #include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -6,6 +11,7 @@
 #include <err.h>
 #include <getopt.h>
 #include <sys/time.h>
+
 #include <omp.h>
 
 
@@ -657,16 +663,18 @@ void free_instance(struct instance_t *instance)
 }
 
 
-void solve(const struct instance_t *instance, struct context_t *ctx)
+void solve(const struct instance_t *instance, struct context_t *ctx,
+           long long *solutions, bool create_task)
 {
-        /* Copie du contexte */
-        // struct context_t * ctx_copy = copy_ctx(ctx, instance->n_items);
-
         ctx->nodes++;
         if (ctx->nodes == next_report)
                 progress_report(ctx);
         if (sparse_array_empty(ctx->active_items)) {
                 solution_found(instance, ctx);
+
+                #pragma omp atomic
+                (*solutions)++;
+
                 return;                         /* succès : plus d'objet actif */
         }
         int chosen_item = choose_next_item(ctx);
@@ -682,8 +690,20 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
                 choose_option(instance, ctx, option, chosen_item);
 
                 /* Création d'une tâche */
-                // #pragma omp task
-                solve(instance, ctx);
+                if (create_task)
+                {
+                        struct context_t *ctx_copy = copy_ctx(ctx, instance->n_items);
+
+                        #pragma omp task
+                        {
+                                solve(instance, ctx_copy, solutions, false);
+                                free_ctx(ctx_copy, instance->n_items);
+                        }
+                }
+                else
+                {
+                        solve(instance, ctx, solutions, false);
+                }
 
                 if (ctx->solutions >= max_solutions) {
                         return;
@@ -727,19 +747,23 @@ int main(int argc, char **argv)
                 usage(argv);
         next_report = report_delta;
 
-
+        /* Load instance */
         struct instance_t * instance = load_matrix(in_filename);
         struct context_t * ctx = backtracking_setup(instance);
+
         start = wtime();
 
-        #pragma omp parallel
+        /* Variable contenant le nombre de solutions trouvées */
+        long long solutions = 0;
+
+        #pragma omp parallel // reduction(+:solutions)
         #pragma omp single
-        solve(instance, ctx);
+        solve(instance, ctx, &solutions, true);
 
         free_ctx(ctx, instance->n_items);
         free_instance(instance);
 
-        printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions, 
-                        wtime() - start);
+        printf("FINI. Trouvé %lld solutions en %.1fs\n", solutions,
+                wtime() - start);
         exit(EXIT_SUCCESS);
 }
