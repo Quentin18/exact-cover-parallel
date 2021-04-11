@@ -51,7 +51,12 @@ if __name__ == '__main__':
     with open(csvfilename, 'w') as csvfile:
         # CSV writer
         writer = csv.writer(csvfile)
-        writer.writerow(['Number of processors', 'Sequential', 'Parallel with MPI'])
+        writer.writerow([
+            'Number of processors',
+            'Sequential',
+            'Parallel - MPI - Static',
+            'Parallel - MPI - Dynamic'
+        ])
 
         # Sequential solution
         print('-- Sequential --')
@@ -60,15 +65,17 @@ if __name__ == '__main__':
 
         # Parallel solutions
         print('-- Parallel --')
-        for p in [2, 3]:
+        for p in [2, 4]:
             print('p =', p)
-            t1 = runtime(['mpiexec', '-n', str(p), '../mpi/exact_cover', '--in', filename])
+            t1 = runtime(['mpiexec', '-n', str(p), '../mpi/exact_cover_mpi_static.out', '--in', filename])
             # t1 = runtime([
             #     'mpiexec', '-max-vm-size', str(p), '--map-by', 'ppr:1:node',
             #     '--hostfile', oar_nodefile, '../mpi/exact_cover', '--in', filename
             # ])
             print('\tt1 =', t1)
-            writer.writerow([str(p), str(t), str(t1)])
+            t2 = runtime(['mpiexec', '-n', str(p), '../mpi/exact_cover_mpi_dynamic.out', '--in', filename])
+            print('\tt2 =', t2)
+            writer.writerow([str(p), str(t), str(t1), str(t2)])
 
     t_end_benchmark = time()
     print('Benchmark done in', t_end_benchmark - t_start_benchmark, 'seconds')
