@@ -651,8 +651,8 @@ void free_instance(struct instance_t *instance)
 void solve(const struct instance_t *instance, struct context_t *ctx)
 {
         ctx->nodes++;
-        if (ctx->nodes == next_report)
-                progress_report(ctx);
+        // if (ctx->nodes == next_report)
+        //         progress_report(ctx);
         if (sparse_array_empty(ctx->active_items)) {
                 solution_found(instance, ctx);
                 return;                         /* succès : plus d'objet actif */
@@ -688,8 +688,8 @@ void solve_create_tasks(const struct instance_t *instance, struct context_t *ctx
                         long long *solutions, long long *nodes)
 {
         ctx->nodes++;
-        if (ctx->nodes == next_report)
-                progress_report(ctx);
+        // if (ctx->nodes == next_report)
+        //         progress_report(ctx);
         if (sparse_array_empty(ctx->active_items)) {
                 solution_found(instance, ctx);
                 return;                         /* succès : plus d'objet actif */
@@ -783,7 +783,7 @@ int main(int argc, char **argv)
         bool run = true;
 
         /* Variables pour gérer le travail à faire */
-        int k = 0, k_done = 0;
+        int k = 0, k_done = 0, stopped = 0;
 
         /* Start solve */
         printf("[DEBUG] Processor %d: START\n", rank);
@@ -822,8 +822,9 @@ int main(int argc, char **argv)
                                 {
                                         MPI_Send(&k, 1, MPI_INT, status.MPI_SOURCE,
                                                  END, MPI_COMM_WORLD);
+                                        stopped++;
+                                        run = stopped < size - 1;
                                 }
-                                run = k_done < active_options->len;
                                 break;
 
                         case WORK_DONE:
@@ -843,6 +844,7 @@ int main(int argc, char **argv)
 
                 printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions, 
                         wtime() - start);
+                printf("%lld noeuds explorés\n", ctx->nodes);
         }
 
         /* Processeur ouvrier */
