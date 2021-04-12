@@ -610,7 +610,7 @@ int main(int argc, char **argv)
         bool run = true;
 
         /* Variables pour gérer le travail à faire */
-        int k = 0, k_done = 0;
+        int k = 0, k_done = 0, stopped = 0;
 
         /* Start solve */
         printf("[DEBUG] P%d: START\n", rank);
@@ -651,8 +651,9 @@ int main(int argc, char **argv)
                                 {
                                         MPI_Send(&k, 1, MPI_INT, status.MPI_SOURCE,
                                                  END, MPI_COMM_WORLD);
+                                        stopped++;
+                                        run = stopped < size - 1;
                                 }
-                                run = k_done < active_options->len;
                                 break;
 
                         case WORK_DONE:
