@@ -526,8 +526,8 @@ struct context_t * backtracking_setup(const struct instance_t *instance)
 void solve(const struct instance_t *instance, struct context_t *ctx)
 {
         ctx->nodes++;
-        if (ctx->nodes == next_report)
-                progress_report(ctx);
+        // if (ctx->nodes == next_report)
+        //         progress_report(ctx);
         if (sparse_array_empty(ctx->active_items)) {
                 solution_found(instance, ctx);
                 return;                         /* succès : plus d'objet actif */
@@ -613,7 +613,7 @@ int main(int argc, char **argv)
         int k = 0, k_done = 0;
 
         /* Start solve */
-        printf("[DEBUG] Processor %d: START\n", rank);
+        printf("[DEBUG] P%d: START\n", rank);
 
         int chosen_item = choose_next_item(ctx);
         struct sparse_array_t *active_options = ctx->active_options[chosen_item];
@@ -640,6 +640,8 @@ int main(int argc, char **argv)
                                 /* Envoie le travail à faire s'il en reste */
                                 if (k < active_options->len)
                                 {
+                                        // printf("[DEBUG] P%d: send k = %d/%d to P%d\n",
+                                        //         rank, k, active_options->len - 1, status.MPI_SOURCE);
                                         MPI_Send(&k, 1, MPI_INT, status.MPI_SOURCE,
                                                  WORK_TODO, MPI_COMM_WORLD);
                                         k++;
@@ -668,8 +670,9 @@ int main(int argc, char **argv)
                         }
                 }
 
-                printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions, 
+                printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions,
                         wtime() - start);
+                printf("%lld noeuds explorés\n", ctx->nodes);
         }
 
         /* Processeur ouvrier */
@@ -718,7 +721,7 @@ int main(int argc, char **argv)
                 }
         }
 
-        printf("[DEBUG] Processor %d: END\n", rank);
+        printf("[DEBUG] P%d: END\n", rank);
 
         /* Finalisation MPI */
         MPI_Finalize();
