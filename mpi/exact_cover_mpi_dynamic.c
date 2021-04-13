@@ -566,6 +566,58 @@ struct context_t * backtracking_setup(const struct instance_t *instance)
         return ctx;
 }
 
+
+/**
+ * Nettoie la mémoire pour un tableau creux.
+ * 
+ * @param S tableau creux
+ */
+void sparse_array_free(struct sparse_array_t *S)
+{
+        free(S->p);
+        free(S->q);
+        free(S);
+}
+
+/**
+ * Nettoie la mémoire pour un contexte.
+ * 
+ * @param ctx context
+ * @param n nombre d'items
+ */
+void free_ctx(struct context_t *ctx, int n)
+{
+        sparse_array_free(ctx->active_items);
+        for (int item = 0; item < n; item++)
+                sparse_array_free(ctx->active_options[item]);
+        free(ctx->active_options);
+        free(ctx->chosen_options);
+        free(ctx->child_num);
+        free(ctx->num_children);
+        free(ctx);
+}
+
+/**
+ * Nettoie la mémoire pour une instance.
+ * 
+ * @param instance instance
+ */
+void free_instance(struct instance_t *instance)
+{
+        if (instance->item_name != NULL)
+        {
+                // for (int i = 0; i < instance->n_items; i++)
+                // {
+                //         free(instance->item_name[i]);
+                // }
+                free(instance->item_name);
+        }
+        free(instance->options);
+        free(instance->ptr);
+        free(instance);
+}
+
+
 void solve(const struct instance_t *instance, struct context_t *ctx)
 {
         ctx->nodes++;
@@ -778,6 +830,10 @@ int main(int argc, char **argv)
                         }
                 }
         }
+
+        /* Free memory */
+        free_ctx(ctx, instance->n_items);
+        free_instance(instance);
 
         printf("[DEBUG] P%d: END\n", rank);
 
