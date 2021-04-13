@@ -545,6 +545,7 @@ struct context_t * backtracking_setup(const struct instance_t *instance)
  * 
  * @param a tableau d'entiers
  * @param n taille du tableau
+ * @return copie de a
  */
 int *array_copy(const int *a, int n)
 {
@@ -562,6 +563,7 @@ int *array_copy(const int *a, int n)
  * Copie un tableau creux.
  * 
  * @param s tableau creux
+ * @return copie de s
  */
 struct sparse_array_t *sparse_array_copy(const struct sparse_array_t *s)
 {
@@ -578,8 +580,9 @@ struct sparse_array_t *sparse_array_copy(const struct sparse_array_t *s)
 /**
  * Crée une copie du contexte donné en argument.
  * 
- * @param ctx context
+ * @param ctx contexte
  * @param n nombre d'items
+ * @return copie de ctx
  */
 struct context_t * copy_ctx(const struct context_t *ctx, int n)
 {
