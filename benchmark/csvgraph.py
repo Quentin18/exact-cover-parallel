@@ -35,7 +35,7 @@ if __name__ == '__main__':
         x, y_list = [], []
         for i, row in enumerate(reader):
             if i == 0:
-                labels = row[1:]
+                xlabel, labels = row[0], row[1:]
                 for _ in range(len(labels)):
                     y_list.append([])
             else:
@@ -45,12 +45,12 @@ if __name__ == '__main__':
 
     # Plot data
     fig, (ax1, ax2) = plt.subplots(2, figsize=(10, 10))
-    fmts = ['--', '-s', '-^'][:len(y_list)]
+    fmts = ['--', '-o', '-s', '-p', '-^', '-v'][:len(y_list)]
 
     # Runtime
     for y, fmt, label in zip(y_list, fmts, labels):
         ax1.plot(x, y, fmt, label=label)
-    ax1.set_xlabel('Number of processors')
+    ax1.set_xlabel(xlabel)
     ax1.set_ylabel('Time (seconds)')
     ax1.set_title(f'Exact Cover: {name} runtime')
     ax1.legend()
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     ax2.plot(x, x, fmts[0], label='Optimal')
     for y, fmt, label in zip(y_list[1:], fmts[1:], labels[1:]):
         ax2.plot(x, speedup(t1, y), fmt, label=label)
-    ax2.set_xlabel('Number of processors')
+    ax2.set_xlabel(xlabel)
     ax2.set_ylabel('Speedup')
     ax2.set_title(f'Exact Cover: {name} speedup')
     ax2.legend()
