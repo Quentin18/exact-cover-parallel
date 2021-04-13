@@ -708,13 +708,18 @@ void solve_create_tasks(const struct instance_t *instance, long long *solutions)
         struct sparse_array_t *active_options = ctx->active_options[chosen_item];
         cover(instance, ctx, chosen_item);
         ctx->num_children[ctx->level] = active_options->len;
-        for (int k = 0; k < active_options->len; k++) {
+        for (int k = 0; k < active_options->len; k++)
+        {
                 int option = active_options->p[k];
-                ctx->child_num[ctx->level] = k;
-                choose_option(instance, ctx, option, chosen_item);
 
-                /* Création d'une tâche */
+                /* Copie du contexte */
                 struct context_t *ctx_copy = copy_ctx(ctx, instance->n_items);
+
+                /* Choix de l'option sur la copie */
+                ctx_copy->child_num[ctx_copy->level] = k;
+                choose_option(instance, ctx_copy, option, chosen_item);
+
+                /* Création de la tâche */
                 #pragma omp task
                 {
                         solve(instance, ctx_copy);
@@ -722,8 +727,6 @@ void solve_create_tasks(const struct instance_t *instance, long long *solutions)
                         (*solutions) += ctx_copy->solutions;
                         free_ctx(ctx_copy, instance->n_items);
                 }
-
-                unchoose_option(instance, ctx, option, chosen_item);
         }
 
         /* Suppression du contexte */
