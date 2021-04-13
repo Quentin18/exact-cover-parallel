@@ -842,7 +842,8 @@ int main(int argc, char **argv)
                                          WORK, MPI_COMM_WORLD, &status);
                                 ctx->nodes += work[0];
                                 ctx->solutions += work[1];
-                                // progress_report(ctx);
+                                if (ctx->nodes >= next_report)
+                                        progress_report(ctx);
                                 k_done++;
                                 break;
 
