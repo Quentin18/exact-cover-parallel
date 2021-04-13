@@ -666,8 +666,8 @@ void free_instance(struct instance_t *instance)
 void solve(const struct instance_t *instance, struct context_t *ctx)
 {
         ctx->nodes++;
-        if (ctx->nodes == next_report)
-                progress_report(ctx);
+        // if (ctx->nodes == next_report)
+        //         progress_report(ctx);
         if (sparse_array_empty(ctx->active_items)) {
                 solution_found(instance, ctx);
                 return;                         /* succès : plus d'objet actif */
