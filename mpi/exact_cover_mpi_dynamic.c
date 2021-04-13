@@ -304,7 +304,7 @@ void reactivate(const struct instance_t *instance, struct context_t *ctx,
 }
 
 
-struct instance_t * load_matrix(const char *filename)
+struct instance_t *load_matrix(const char *filename)
 {
         struct instance_t *instance = malloc(sizeof(*instance));
         if (instance == NULL)
@@ -490,6 +490,49 @@ struct instance_t * load_matrix(const char *filename)
         return instance;
 }
 
+/**
+ * Envoie l'instance par le processeur principal à tous les autres processeurs.
+ * 
+ * @param instance instance
+ */
+void send_instance(struct instance_t *instance)
+{
+        MPI_Bcast(&instance->n_items, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(&instance->n_primary, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(&instance->n_options, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->item_name, instance->n_items * sizeof(char*), MPI_CHAR, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->options, instance->n_options * instance->n_items, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->ptr, instance->n_options + 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+}
+
+/**
+ * Reçoit l'instance envoyée par le processeur principal.
+ * 
+ * @return instance
+ */
+struct instance_t *recv_instance()
+{
+        /* Allocation de l'instance */
+        struct instance_t *instance = malloc(sizeof(*instance));
+
+        /* Récupération des entiers */
+        MPI_Bcast(&instance->n_items, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(&instance->n_primary, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(&instance->n_options, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+
+        /* Allocation des tableaux */
+        instance->item_name = malloc(instance->n_items * sizeof(char*));
+        instance->options = malloc(instance->n_options * instance->n_items * sizeof(int));
+        instance->ptr = malloc((instance->n_options + 1) * sizeof(int));
+
+        /* Récupération des données des tableaux */
+        MPI_Bcast(instance->item_name, instance->n_items * sizeof(char*), MPI_CHAR, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->options, instance->n_options * instance->n_items, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->ptr, instance->n_options + 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+
+        return instance;
+}
+
 
 struct context_t * backtracking_setup(const struct instance_t *instance)
 {
@@ -602,8 +645,22 @@ int main(int argc, char **argv)
         /* Rang du processeur */
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-        /* Load instance */
-        struct instance_t * instance = load_matrix(in_filename);
+        /* Récupération de l'instance */
+        struct instance_t *instance;
+        if (rank == ROOT)
+        {
+                /* Lecture de l'instance dans le fichier */
+                instance = load_matrix(in_filename);
+                /* Envoie de l'instance aux autres processeurs */
+                send_instance(instance);
+        }
+        else
+        {
+                /* Reçoit l'instance */
+                instance = recv_instance();
+        }
+
+        /* Création du contexte */
         struct context_t * ctx = backtracking_setup(instance);
 
         /* Variable d'arrêt */
@@ -640,8 +697,6 @@ int main(int argc, char **argv)
                                 /* Envoie le travail à faire s'il en reste */
                                 if (k < active_options->len)
                                 {
-                                        // printf("[DEBUG] P%d: send k = %d/%d to P%d\n",
-                                        //         rank, k, active_options->len - 1, status.MPI_SOURCE);
                                         MPI_Send(&k, 1, MPI_INT, status.MPI_SOURCE,
                                                  WORK_TODO, MPI_COMM_WORLD);
                                         k++;
@@ -662,6 +717,8 @@ int main(int argc, char **argv)
                                          WORK, MPI_COMM_WORLD, &status);
                                 ctx->nodes += work[0];
                                 ctx->solutions += work[1];
+                                if (ctx->nodes >= next_report)
+                                        progress_report(ctx);
                                 k_done++;
                                 break;
 
