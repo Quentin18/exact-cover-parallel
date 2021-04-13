@@ -615,7 +615,7 @@ struct context_t * copy_ctx(const struct context_t *ctx, int n)
 /**
  * Nettoie la mémoire pour un tableau creux.
  * 
- * @param s tableau creux
+ * @param S tableau creux
  */
 void sparse_array_free(struct sparse_array_t *S)
 {
@@ -722,9 +722,12 @@ void solve_create_tasks(const struct instance_t *instance, long long *solutions)
                 /* Création de la tâche */
                 #pragma omp task
                 {
+                        /* Résolution avec la copie */
                         solve(instance, ctx_copy);
+                        /* Mise à jour des solutions */
                         #pragma omp atomic
                         (*solutions) += ctx_copy->solutions;
+                        /* Suppression de la copie */
                         free_ctx(ctx_copy, instance->n_items);
                 }
         }
