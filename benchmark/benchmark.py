@@ -17,6 +17,16 @@ import subprocess
 import csv
 
 
+def make():
+    """Creates the executables."""
+    os.system('cd .. && make')
+
+
+def clean():
+    """Cleans the executables."""
+    os.system('cd .. && make clean')
+
+
 def runtime(command, show=False):
     """Runs the command and returns the runtime."""
     t_start = time()
@@ -45,6 +55,9 @@ if __name__ == '__main__':
     # CSV file
     csvfilename = os.path.basename(filename).replace('.ec', '.csv')
 
+    # Creates executables
+    make()
+
     print('== Start benchmark ==')
     t_start_benchmark = time()
 
@@ -54,29 +67,50 @@ if __name__ == '__main__':
         writer.writerow([
             'Number of processors',
             'Sequential',
-            'Parallel - MPI - Static',
-            'Parallel - MPI - Dynamic'
+            'Parallel: MPI Static',
+            'Parallel: MPI Dynamic',
+            'Parallel: MPI + OpenMP'
         ])
 
         # Sequential solution
         print('-- Sequential --')
-        t = runtime(['../sequencial/exact_cover', '--in', filename])
+        t = runtime(['../sequencial/exact_cover.out', '--in', filename])
         print('t =', t)
 
         # Parallel solutions
         print('-- Parallel --')
         for p in [2, 4]:
             print('p =', p)
-            t1 = runtime(['mpiexec', '-n', str(p), '../mpi/exact_cover_mpi_static.out', '--in', filename])
+
+            # MPI Static
+            t1 = runtime([
+                'mpirun', '-n', str(p), '../mpi/exact_cover_mpi_static.out',
+                '--in', filename
+            ])
             # t1 = runtime([
-            #     'mpiexec', '-max-vm-size', str(p), '--map-by', 'ppr:1:node',
+            #     'mpirun', '-max-vm-size', str(p), '--map-by', 'ppr:1:node',
             #     '--hostfile', oar_nodefile, '../mpi/exact_cover', '--in', filename
             # ])
             print('\tt1 =', t1)
-            t2 = runtime(['mpiexec', '-n', str(p), '../mpi/exact_cover_mpi_dynamic.out', '--in', filename])
+
+            # MPI Dynamic
+            t2 = runtime([
+                'mpirun', '-n', str(p), '../mpi/exact_cover_mpi_dynamic.out',
+                '--in', filename])
             print('\tt2 =', t2)
-            writer.writerow([str(p), str(t), str(t1), str(t2)])
+
+            # MPI + OpenMP
+            t3 = runtime([
+                'mpirun', '-x', 'OMP_NUM_THREADS=2', '-n', str(p),
+                '../hybrid/exact_cover_hybrid.out', '--in', filename
+            ])
+            print('\tt3 =', t3)
+
+            writer.writerow(list(map(str, [p, t, t1, t2, t3])))
 
     t_end_benchmark = time()
     print('Benchmark done in', t_end_benchmark - t_start_benchmark, 'seconds')
     print('== End benchmark ==')
+
+    # Clean executables
+    clean()
