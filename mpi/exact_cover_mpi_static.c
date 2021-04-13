@@ -490,6 +490,49 @@ struct instance_t * load_matrix(const char *filename)
         return instance;
 }
 
+/**
+ * Envoie l'instance par le processeur principal à tous les autres processeurs.
+ * 
+ * @param instance instance
+ */
+void send_instance(struct instance_t *instance)
+{
+        MPI_Bcast(&instance->n_items, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(&instance->n_primary, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(&instance->n_options, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->item_name, instance->n_items * sizeof(char*), MPI_CHAR, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->options, instance->n_options * instance->n_items, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->ptr, instance->n_options + 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+}
+
+/**
+ * Reçoit l'instance envoyée par le processeur principal.
+ * 
+ * @return instance
+ */
+struct instance_t *recv_instance()
+{
+        /* Allocation de l'instance */
+        struct instance_t *instance = malloc(sizeof(*instance));
+
+        /* Récupération des entiers */
+        MPI_Bcast(&instance->n_items, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(&instance->n_primary, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(&instance->n_options, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+
+        /* Allocation des tableaux */
+        instance->item_name = malloc(instance->n_items * sizeof(char*));
+        instance->options = malloc(instance->n_options * instance->n_items * sizeof(int));
+        instance->ptr = malloc((instance->n_options + 1) * sizeof(int));
+
+        /* Récupération des données des tableaux */
+        MPI_Bcast(instance->item_name, instance->n_items * sizeof(char*), MPI_CHAR, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->options, instance->n_options * instance->n_items, MPI_INT, ROOT, MPI_COMM_WORLD);
+        MPI_Bcast(instance->ptr, instance->n_options + 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+
+        return instance;
+}
+
 
 struct context_t * backtracking_setup(const struct instance_t *instance)
 {
@@ -523,11 +566,63 @@ struct context_t * backtracking_setup(const struct instance_t *instance)
         return ctx;
 }
 
+
+/**
+ * Nettoie la mémoire pour un tableau creux.
+ * 
+ * @param S tableau creux
+ */
+void sparse_array_free(struct sparse_array_t *S)
+{
+        free(S->p);
+        free(S->q);
+        free(S);
+}
+
+/**
+ * Nettoie la mémoire pour un contexte.
+ * 
+ * @param ctx contexte
+ * @param n nombre d'items
+ */
+void free_ctx(struct context_t *ctx, int n)
+{
+        sparse_array_free(ctx->active_items);
+        for (int item = 0; item < n; item++)
+                sparse_array_free(ctx->active_options[item]);
+        free(ctx->active_options);
+        free(ctx->chosen_options);
+        free(ctx->child_num);
+        free(ctx->num_children);
+        free(ctx);
+}
+
+/**
+ * Nettoie la mémoire pour une instance.
+ * 
+ * @param instance instance
+ */
+void free_instance(struct instance_t *instance)
+{
+        if (instance->item_name != NULL)
+        {
+                // for (int i = 0; i < instance->n_items; i++)
+                // {
+                //         free(instance->item_name[i]);
+                // }
+                free(instance->item_name);
+        }
+        free(instance->options);
+        free(instance->ptr);
+        free(instance);
+}
+
+
 void solve(const struct instance_t *instance, struct context_t *ctx)
 {
         ctx->nodes++;
-        if (ctx->nodes == next_report)
-                progress_report(ctx);
+        // if (ctx->nodes == next_report)
+        //         progress_report(ctx);
         if (sparse_array_empty(ctx->active_items)) {
                 solution_found(instance, ctx);
                 return;                         /* succès : plus d'objet actif */
@@ -595,8 +690,22 @@ int main(int argc, char **argv)
         /* Rang du processeur */
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-        /* Load instance */
-        struct instance_t * instance = load_matrix(in_filename);
+        /* Récupération de l'instance */
+        struct instance_t *instance;
+        if (rank == ROOT)
+        {
+                /* Lecture de l'instance dans le fichier */
+                instance = load_matrix(in_filename);
+                /* Envoie de l'instance aux autres processeurs */
+                send_instance(instance);
+        }
+        else
+        {
+                /* Reçoit l'instance */
+                instance = recv_instance();
+        }
+
+        /* Création du contexte */
         struct context_t * ctx = backtracking_setup(instance);
 
         /* Start solve */
@@ -622,7 +731,8 @@ int main(int argc, char **argv)
                 exit(EXIT_SUCCESS);
         }
 
-        /* Répartition statique : chaque processeur explore le même nombre de fils de la racine */
+        /* Répartition statique : chaque processeur explore le même nombre de sous-arbres
+        enracinés en un fils de la racine */
         int num_options_per_proc = active_options->len / size;
 
         /* Chaque processeur calcule les solutions de ses sous-arbres */
@@ -643,6 +753,10 @@ int main(int argc, char **argv)
         /* Affichage des résultats */
         if (rank == ROOT)
                 printf("FINI. Trouvé %lld solutions en %.1fs\n", solutions, wtime() - start);
+
+        /* Free memory */
+        free_ctx(ctx, instance->n_items);
+        free_instance(instance);
 
         printf("[DEBUG] Processor %d: END\n", rank);
 
