@@ -687,20 +687,23 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
 void solve_create_tasks(const struct instance_t *instance, struct context_t *ctx,
                         long long *solutions, long long *nodes)
 {
-        ctx->nodes++;
-        // if (ctx->nodes == next_report)
-        //         progress_report(ctx);
-        if (sparse_array_empty(ctx->active_items)) {
+        (*nodes)++;
+        if (sparse_array_empty(ctx->active_items))
+        {
                 solution_found(instance, ctx);
+                (*solutions)++;
                 return;                         /* succès : plus d'objet actif */
         }
         int chosen_item = choose_next_item(ctx);
         struct sparse_array_t *active_options = ctx->active_options[chosen_item];
         if (sparse_array_empty(active_options))
+        {
                 return;           /* échec : impossible de couvrir chosen_item */
+        }
         cover(instance, ctx, chosen_item);
         ctx->num_children[ctx->level] = active_options->len;
-        for (int k = 0; k < active_options->len; k++) {
+        for (int k = 0; k < active_options->len; k++)
+        {
                 int option = active_options->p[k];
                 ctx->child_num[ctx->level] = k;
                 choose_option(instance, ctx, option, chosen_item);
@@ -720,7 +723,7 @@ void solve_create_tasks(const struct instance_t *instance, struct context_t *ctx
                 unchoose_option(instance, ctx, option, chosen_item);
         }
 
-        uncover(instance, ctx, chosen_item);                      /* backtrack */
+        uncover(instance, ctx, chosen_item);                      /* backtrack */                
 }
 
 
@@ -785,6 +788,10 @@ int main(int argc, char **argv)
         /* Variables pour gérer le travail à faire */
         int k = 0, k_done = 0, stopped = 0;
 
+        /* Variable contenant le nombre de solutions trouvées
+        et le nombre de noeuds parcourus */
+        long long solutions, nodes;
+
         /* Start solve */
         printf("[DEBUG] Processor %d: START\n", rank);
 
@@ -842,7 +849,7 @@ int main(int argc, char **argv)
                         }
                 }
 
-                printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions, 
+                printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions,
                         wtime() - start);
                 printf("%lld noeuds explorés\n", ctx->nodes);
         }
@@ -863,15 +870,12 @@ int main(int argc, char **argv)
                         {
                         case WORK_TODO:
                                 /* Résout le problème pour le sous-arbre demandé */
-                                ctx->nodes = 0;
-                                ctx->solutions = 0;
+                                ctx->nodes = ctx->solutions = 0;
                                 option = active_options->p[k];
                                 ctx->child_num[ctx->level] = k;
                                 choose_option(instance, ctx, option, chosen_item);
 
-                                /* Variable contenant le nombre de solutions trouvées
-                                et le nombre de noeuds parcourus */
-                                long long solutions = 0, nodes = 0;
+                                nodes = solutions = 0;
 
                                 #pragma omp parallel
                                 #pragma omp single
