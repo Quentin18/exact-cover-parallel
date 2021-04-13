@@ -582,7 +582,7 @@ void sparse_array_free(struct sparse_array_t *S)
 /**
  * Nettoie la mémoire pour un contexte.
  * 
- * @param ctx context
+ * @param ctx contexte
  * @param n nombre d'items
  */
 void free_ctx(struct context_t *ctx, int n)
