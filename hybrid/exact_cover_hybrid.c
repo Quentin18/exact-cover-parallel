@@ -840,6 +840,7 @@ int main(int argc, char **argv)
                                          WORK, MPI_COMM_WORLD, &status);
                                 ctx->nodes += work[0];
                                 ctx->solutions += work[1];
+                                // progress_report(ctx);
                                 k_done++;
                                 break;
 
@@ -851,7 +852,7 @@ int main(int argc, char **argv)
 
                 printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions,
                         wtime() - start);
-                printf("%lld noeuds explorés\n", ctx->nodes);
+                // printf("%lld noeuds explorés\n", ctx->nodes);
         }
 
         /* Processeur ouvrier */
