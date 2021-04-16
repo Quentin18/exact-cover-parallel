@@ -1,0 +1,11 @@
+{
+    "instance": "../instances/bell12.ec",
+    "csvfile": "./csv/bell12_threads.csv",
+    "xlabel": "Number of threads",
+    "xlist": [2, 4, 6, 8, 10],
+    "sequential": true,
+    "openmp": true,
+    "make": true,
+    "clean": true,
+    "g5k": true
+}
