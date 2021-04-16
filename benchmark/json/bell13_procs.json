@@ -1,0 +1,10 @@
+{
+    "instance": "../instances/bell13.ec",
+    "csvfile": "./csv/bell13_procs.csv",
+    "xlabel": "Number of processors",
+    "xlist": [2, 4],
+    "sequential": true,
+    "mpi_dynamic": true,
+    "hybrid": true,
+    "g5k": false
+}
