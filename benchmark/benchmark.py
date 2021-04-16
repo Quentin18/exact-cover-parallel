@@ -2,8 +2,6 @@
 This program launches a benchmark for an instance of the exact cover problem.
 It writes the results in a csv file.
 
-You need to compile the files with "make" before using this program.
-
 Usage:
 python3 benchmark.py [instance.ec]
 
@@ -60,14 +58,14 @@ def benchmark(instance, csvfilename, p_list, g5k, show=False):
         writer.writerow([
             'Number of processors',
             'Sequential',
-            'Parallel: MPI Static',
+            # 'Parallel: MPI Static',
             'Parallel: MPI Dynamic',
             'Parallel: MPI + OpenMP'
         ])
 
         # Sequential solution
         print('-- Sequential --')
-        t = runtime(['../sequencial/exact_cover.out', '--in', instance])
+        t = runtime(['../sequencial/exact_cover.out', '--in', instance], show)
         print('t =', t)
 
         # Parallel solutions
@@ -75,20 +73,20 @@ def benchmark(instance, csvfilename, p_list, g5k, show=False):
         for p in p_list:
             print('p =', p)
 
-            # MPI Static
-            if g5k:
-                command = [
-                    'mpirun', '-max-vm-size', str(p), '--map-by', 'ppr:1:node',
-                    '--hostfile', oar_nodefile,
-                    '../mpi/exact_cover_mpi_static.out', '--in', instance
-                ]
-            else:
-                command = [
-                    'mpirun', '-n', str(p),
-                    '../mpi/exact_cover_mpi_static.out', '--in', instance
-                ]
-            t1 = runtime(command, show)
-            print('\tt1 =', t1)
+            # # MPI Static
+            # if g5k:
+            #     command = [
+            #         'mpirun', '-max-vm-size', str(p), '--map-by', 'ppr:1:node',
+            #         '--hostfile', oar_nodefile,
+            #         '../mpi/exact_cover_mpi_static.out', '--in', instance
+            #     ]
+            # else:
+            #     command = [
+            #         'mpirun', '-n', str(p),
+            #         '../mpi/exact_cover_mpi_static.out', '--in', instance
+            #     ]
+            # t1 = runtime(command, show)
+            # print('\tt1 =', t1)
 
             # MPI Dynamic
             if g5k:
@@ -110,7 +108,7 @@ def benchmark(instance, csvfilename, p_list, g5k, show=False):
                 command = [
                     'mpirun', '-x', 'OMP_NUM_THREADS=2', '-max-vm-size',
                     str(p), '--map-by', 'ppr:1:node', '--hostfile',
-                    oar_nodefile, '../mpi/exact_cover_mpi_dynamic.out',
+                    oar_nodefile, '../hybrid/exact_cover_hybrid.out',
                     '--in', instance
                 ]
             else:
@@ -122,7 +120,8 @@ def benchmark(instance, csvfilename, p_list, g5k, show=False):
             print('\tt3 =', t3)
 
             # Write results in csvfile
-            writer.writerow(list(map(str, [p, t, t1, t2, t3])))
+            # writer.writerow(list(map(str, [p, t, t1, t2, t3])))
+            writer.writerow(list(map(str, [p, t, t2, t3])))
 
     t_end_benchmark = time()
     print('Benchmark done in', t_end_benchmark - t_start_benchmark, 'seconds')
@@ -144,7 +143,7 @@ if __name__ == '__main__':
     make()
 
     # Launch benchmark
-    benchmark(instance, csvfilename, [2, 4], False, False)
+    benchmark(instance, csvfilename, [2, 4], True, True)
 
     # Clean executables
     clean()
