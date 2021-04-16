@@ -68,7 +68,7 @@ if __name__ == '__main__':
     ax2.grid(linestyle='--')
 
     # Save figure
-    plt.savefig(name)
+    plt.savefig(os.path.join('png', name))
 
     # Show
     plt.show()
