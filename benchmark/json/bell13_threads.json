@@ -4,6 +4,5 @@
     "xlabel": "Number of threads",
     "xlist": [2, 4, 6, 8, 10],
     "sequential": true,
-    "openmp": true,
-    "g5k": false
+    "openmp": true
 }

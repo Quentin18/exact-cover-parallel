@@ -1,6 +1,6 @@
 {
-    "instance": "../instances/bell13.ec",
-    "csvfile": "./csv/bell13_procs.csv",
+    "instance": "../instances/bell14.ec",
+    "csvfile": "./csv/bell14_procs.csv",
     "xlabel": "Number of processors",
     "xlist": [2, 4, 8],
     "sequential": true,
