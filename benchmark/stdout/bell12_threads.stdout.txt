@@ -1,0 +1,72 @@
+cd sequencial && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequencial'
+gcc exact_cover.c -o exact_cover.out -Wall -Wextra -O3
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequencial'
+cd openmp && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+gcc exact_cover_omp.c -o exact_cover_omp.out -Wall -Wextra -O3 -fopenmp
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+mpicc exact_cover_mpi_dynamic.c -o exact_cover_mpi_dynamic.out -Wall -Wextra -O3
+mpicc exact_cover_mpi_static.c -o exact_cover_mpi_static.out -Wall -Wextra -O3
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+mpicc exact_cover_hybrid.c -o exact_cover_hybrid.out -Wall -Wextra -O3 -fopenmp
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+Exploré 1000000 noeuds, trouvé 499997 solutions, temps écoulé 0.1s. 0* ** U* 9w 14 
+Exploré 2000000 noeuds, trouvé 999997 solutions, temps écoulé 0.3s. 3* ** 0* s* 7g 24 
+Exploré 3000000 noeuds, trouvé 1499997 solutions, temps écoulé 0.4s. 8* 0* o* 6w 48 12 
+Exploré 4000000 noeuds, trouvé 1999997 solutions, temps écoulé 0.6s. e* 0* ** 0g 08 04 
+Exploré 5000000 noeuds, trouvé 2499997 solutions, temps écoulé 0.7s. B* ** 04 02 
+Exploré 6000000 noeuds, trouvé 2999998 solutions, temps écoulé 0.8s. Z* y* 7g 
+Exploré 7000000 noeuds, trouvé 3499998 solutions, temps écoulé 1.0s. ** d* cg 02 
+Exploré 8000000 noeuds, trouvé 3999998 solutions, temps écoulé 1.1s. ** 8* 6g 
+FINI. Trouvé 4213597 solutions en 1.3s
+FINI. Trouvé 4213597 solutions en 0.7s
+FINI. Trouvé 4213597 solutions en 0.4s
+FINI. Trouvé 4213597 solutions en 0.3s
+FINI. Trouvé 4213597 solutions en 0.3s
+FINI. Trouvé 4213597 solutions en 0.3s
+cd sequencial && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequencial'
+rm -f exact_cover.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequencial'
+cd openmp && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+rm -f exact_cover_omp.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+rm -f exact_cover_mpi_dynamic.out exact_cover_mpi_static.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+rm -f exact_cover_hybrid.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+{'instance': '../instances/bell12.ec', 'csvfile': './csv/bell12_threads.csv', 'xlabel': 'Number of threads', 'xlist': [2, 4, 6, 8, 10], 'sequential': True, 'openmp': True}
+Instance: ../instances/bell12.ec
+CSV file: ./csv/bell12_threads.csv
+== Start benchmark ==
+-- Sequential --
+START: ../sequencial/exact_cover.out --in ../instances/bell12.ec
+END: runtime = 1.287 seconds
+-- Parallel --
+x = 2
+START: ../openmp/exact_cover_omp.out --in ../instances/bell12.ec
+END: runtime = 0.671 seconds
+x = 4
+START: ../openmp/exact_cover_omp.out --in ../instances/bell12.ec
+END: runtime = 0.359 seconds
+x = 6
+START: ../openmp/exact_cover_omp.out --in ../instances/bell12.ec
+END: runtime = 0.258 seconds
+x = 8
+START: ../openmp/exact_cover_omp.out --in ../instances/bell12.ec
+END: runtime = 0.26 seconds
+x = 10
+START: ../openmp/exact_cover_omp.out --in ../instances/bell12.ec
+END: runtime = 0.271 seconds
+Benchmark done in 3.1077206134796143 seconds
+== End benchmark ==
