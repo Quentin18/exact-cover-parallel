@@ -3,6 +3,7 @@
 Ce répertoire contient des scripts en Python afin de lancer des benchmarks pour tester les différentes solutions de parallélisation sur une instance du problème. Des graphes peuvent être générés à partir de fichiers csv en utilisant `matplotlib`.
 
 ## Commandes
+
 - Copie du répertoire vers Grid5000
 ```
 scp -r exact-cover-parallel qdeschamps@access.grid5000.fr:nancy/exact-cover-parallel
@@ -13,9 +14,9 @@ scp -r exact-cover-parallel qdeschamps@access.grid5000.fr:nancy/exact-cover-para
 ssh nancy.g5k
 ```
 
-- Réservation des noeuds en mode interactif (Cluster Gros, 6 noeuds)
+- Réservation des noeuds en mode interactif (Cluster Gros, 10 noeuds)
 ```
-oarsub -p "cluster='gros'" -l nodes=6,walltime=1 -I
+oarsub -p "cluster='gros'" -l nodes=10,walltime=1 -I
 ```
 
 - Lancement d'un benchmark sur une instance en mode interactif
