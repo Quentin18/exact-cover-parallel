@@ -162,7 +162,7 @@ def benchmark(config: dict):
             if 'hybrid' in config and config['hybrid']:
                 if g5k:
                     command = [
-                        'mpirun', '-x', 'OMP_NUM_THREADS=' + num_threads,
+                        'mpirun', '-x', 'OMP_NUM_THREADS=' + str(num_threads),
                         '-max-vm-size', str(x), '--map-by', 'ppr:1:node',
                         '--hostfile', oar_nodefile,
                         '../hybrid/exact_cover_hybrid.out', '--in', instance
