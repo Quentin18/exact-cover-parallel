@@ -107,7 +107,7 @@ def benchmark(config: dict):
         writer.writerow(headers)
 
         # Sequential solution
-        if config['sequential']:
+        if 'sequential' in config and config['sequential']:
             print('-- Sequential --')
             command = ['../sequencial/exact_cover.out', '--in', instance]
             t_sequential = runtime(command, show)
@@ -169,8 +169,9 @@ def benchmark(config: dict):
                     ]
                 else:
                     command = [
-                        'mpirun', '-x', 'OMP_NUM_THREADS=2', '-n', str(x),
-                        '../hybrid/exact_cover_hybrid.out', '--in', instance
+                        'mpirun', '-x', 'OMP_NUM_THREADS=' + str(num_threads),
+                        '-n', str(x), '../hybrid/exact_cover_hybrid.out',
+                        '--in', instance
                     ]
                 row.append(str(runtime(command, show)))
 
