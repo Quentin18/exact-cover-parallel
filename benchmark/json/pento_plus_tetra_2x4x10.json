@@ -1,0 +1,10 @@
+{
+    "instance": "../instances/pento_plus_tetra_2x4x10.ec",
+    "csvfile": "./csv/pento_plus_tetra_2x4x10.csv",
+    "xlabel": "Number of processors",
+    "xlist": [2, 4, 6, 8, 10],
+    "sequential": true,
+    "mpi_dynamic": true,
+    "hybrid": true,
+    "g5k": true
+}

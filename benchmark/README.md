@@ -46,9 +46,13 @@ python3 csvgraph.py [instance.csv]
 
 ## Liste des benchmarks
 
+Tous les benchmarks ont été lancés sur le cluster *gros* de Nancy.
+
 - [x] `bell12_procs.json`
 - [x] `bell12_threads.json`
 - [x] `bell13_procs.json`
 - [x] `bell13_threads.json`
 - [x] `bell14_procs.json`
 - [x] `bell14_threads.json`
+- [ ] `pento_plus_tetra_2x4x10.json`
+- [ ] `pento_plus_tetra_8x8_secondary.json`
