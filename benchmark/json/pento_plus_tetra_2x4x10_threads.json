@@ -1,0 +1,8 @@
+{
+    "instance": "../instances/pento_plus_tetra_2x4x10.ec",
+    "csvfile": "./csv/pento_plus_tetra_2x4x10_threads.csv",
+    "xlabel": "Number of threads",
+    "xlist": [2, 4, 6, 8, 10],
+    "sequential": true,
+    "openmp": true
+}
