@@ -16,7 +16,8 @@ long long report_delta = 1e6;          // affiche un rapport tous les ... noeuds
 long long next_report;                 // prochain rapport affiché au noeud...
 long long max_solutions = 0x7fffffffffffffff;        // stop après ... solutions
 char *cp_filename = NULL;              // nom du fichier contenant le dernier checkpoint
-double cp_delta = 10;                  // sauvegarde d'un checkpoint toutes les ... secondes
+double cp_delta = 2;                  // sauvegarde d'un checkpoint toutes les ... secondes
+double next_cp;                        // prochain checkpoint à ... secondes
 
 
 struct instance_t {
@@ -517,8 +518,19 @@ struct context_t * backtracking_setup(const struct instance_t *instance)
         return ctx;
 }
 
+void save_checkpoint()
+{
+        printf("OK\n");
+}
+
 void solve(const struct instance_t *instance, struct context_t *ctx, int k_start)
 {
+        /* Sauvegarde d'un checkpoint */
+        if (wtime() - start >= next_cp)
+        {
+                save_checkpoint();
+                next_cp += cp_delta;
+        }
         ctx->nodes++;
         if (ctx->nodes == next_report)
                 progress_report(ctx);
@@ -580,7 +592,7 @@ int main(int argc, char **argv)
         if (in_filename == NULL)
                 usage(argv);
         next_report = report_delta;
-
+        next_cp = cp_delta;
 
         struct instance_t * instance = load_matrix(in_filename);
         struct context_t * ctx = backtracking_setup(instance);
