@@ -716,16 +716,16 @@ void solve_create_tasks(const struct instance_t *instance, long long *solutions)
         {
                 int option = active_options->p[k];
 
-                /* Copie du contexte */
-                struct context_t *ctx_copy = copy_ctx(ctx, instance->n_items);
-
-                /* Choix de l'option sur la copie */
-                ctx_copy->child_num[ctx_copy->level] = k;
-                choose_option(instance, ctx_copy, option, chosen_item);
-
                 /* Création de la tâche */
                 #pragma omp task
                 {
+                        /* Copie du contexte */
+                        struct context_t *ctx_copy = copy_ctx(ctx, instance->n_items);
+
+                        /* Choix de l'option sur la copie */
+                        ctx_copy->child_num[ctx_copy->level] = k;
+                        choose_option(instance, ctx_copy, option, chosen_item);
+
                         /* Résolution avec la copie */
                         solve(instance, ctx_copy);
                         /* Mise à jour des solutions */
@@ -737,6 +737,7 @@ void solve_create_tasks(const struct instance_t *instance, long long *solutions)
         }
 
         /* Suppression du contexte */
+        #pragma omp taskwait
         free_ctx(ctx, instance->n_items);
 }
 
