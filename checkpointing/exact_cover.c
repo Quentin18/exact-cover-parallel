@@ -15,6 +15,8 @@ bool print_solutions = false;          // affiche chaque solution
 long long report_delta = 1e6;          // affiche un rapport tous les ... noeuds
 long long next_report;                 // prochain rapport affiché au noeud...
 long long max_solutions = 0x7fffffffffffffff;        // stop après ... solutions
+char *cp_filename = NULL;              // nom du fichier contenant le dernier checkpoint
+double cp_delta = 10;                  // sauvegarde d'un checkpoint toutes les ... secondes
 
 
 struct instance_t {
@@ -515,7 +517,7 @@ struct context_t * backtracking_setup(const struct instance_t *instance)
         return ctx;
 }
 
-void solve(const struct instance_t *instance, struct context_t *ctx)
+void solve(const struct instance_t *instance, struct context_t *ctx, int k_start)
 {
         ctx->nodes++;
         if (ctx->nodes == next_report)
@@ -530,11 +532,11 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
                 return;           /* échec : impossible de couvrir chosen_item */
         cover(instance, ctx, chosen_item);
         ctx->num_children[ctx->level] = active_options->len;
-        for (int k = 0; k < active_options->len; k++) {
+        for (int k = k_start; k < active_options->len; k++) {
                 int option = active_options->p[k];
                 ctx->child_num[ctx->level] = k;
                 choose_option(instance, ctx, option, chosen_item);
-                solve(instance, ctx);
+                solve(instance, ctx, 0);
                 if (ctx->solutions >= max_solutions)
                         return;
                 unchoose_option(instance, ctx, option, chosen_item);
@@ -545,11 +547,12 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
 
 int main(int argc, char **argv)
 {
-        struct option longopts[5] = {
+        struct option longopts[6] = {
                 {"in", required_argument, NULL, 'i'},
                 {"progress-report", required_argument, NULL, 'v'},
                 {"print-solutions", no_argument, NULL, 'p'},
                 {"stop-after", required_argument, NULL, 's'},
+                {"checkpoint", no_argument, NULL, 'c'},
                 {NULL, 0, NULL, 0}
         };
         char ch;
@@ -566,7 +569,10 @@ int main(int argc, char **argv)
                         break;
                 case 'v':
                         report_delta = atoll(optarg);
-                        break;          
+                        break;
+                case 'c':
+                        cp_filename = optarg;
+                        break;
                 default:
                         errx(1, "Unknown option\n");
                 }
@@ -579,7 +585,7 @@ int main(int argc, char **argv)
         struct instance_t * instance = load_matrix(in_filename);
         struct context_t * ctx = backtracking_setup(instance);
         start = wtime();
-        solve(instance, ctx);
+        solve(instance, ctx, 0);
         printf("FINI. Trouvé %lld solutions en %.1fs\n", ctx->solutions, 
                         wtime() - start);
         // printf("%lld noeuds explorés\n", ctx->nodes);
