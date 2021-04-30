@@ -23,6 +23,8 @@ long long report_delta = 1e6;          // affiche un rapport tous les ... noeuds
 long long next_report;                 // prochain rapport affiché au noeud...
 long long max_solutions = 0x7fffffffffffffff;        // stop après ... solutions
 
+/* Variable contenant le nombre de solutions trouvées */
+long long solutions;
 
 struct instance_t {
         int n_items;
@@ -699,9 +701,8 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
  * Crée les tâches pour trouver les solutions.
  * 
  * @param instance instance
- * @param solutions pointeur vers le nombre de solutions
  */
-void solve_create_tasks(const struct instance_t *instance, long long *solutions)
+void solve_create_tasks(const struct instance_t *instance)
 {
         /* Création d'un contexte */
         struct context_t * ctx = backtracking_setup(instance);
@@ -730,7 +731,7 @@ void solve_create_tasks(const struct instance_t *instance, long long *solutions)
                         solve(instance, ctx_copy);
                         /* Mise à jour des solutions */
                         #pragma omp atomic
-                        (*solutions) += ctx_copy->solutions;
+                        solutions += ctx_copy->solutions;
                         /* Suppression de la copie */
                         free_ctx(ctx_copy, instance->n_items);
                 }
@@ -779,12 +780,9 @@ int main(int argc, char **argv)
 
         start = wtime();
 
-        /* Variable contenant le nombre de solutions trouvées */
-        long long solutions = 0;
-
         #pragma omp parallel
         #pragma omp single
-        solve_create_tasks(instance, &solutions);
+        solve_create_tasks(instance);
 
         /* Free instance */
         free_instance(instance);
