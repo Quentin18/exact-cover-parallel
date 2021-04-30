@@ -109,7 +109,7 @@ def benchmark(config: dict):
         # Sequential solution
         if 'sequential' in config and config['sequential']:
             print('-- Sequential --')
-            command = ['../sequencial/exact_cover.out', '--in', instance]
+            command = ['../sequential/exact_cover.out', '--in', instance]
             t_sequential = runtime(command, show)
 
         # Parallel solutions

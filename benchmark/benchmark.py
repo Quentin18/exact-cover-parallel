@@ -65,7 +65,7 @@ def benchmark(instance, csvfilename, p_list, g5k, show=False):
 
         # Sequential solution
         print('-- Sequential --')
-        t = runtime(['../sequencial/exact_cover.out', '--in', instance], show)
+        t = runtime(['../sequential/exact_cover.out', '--in', instance], show)
         print('t =', t)
 
         # Parallel solutions
