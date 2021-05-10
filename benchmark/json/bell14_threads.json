@@ -2,7 +2,8 @@
     "instance": "../instances/bell14.ec",
     "csvfile": "./csv/bell14_threads.csv",
     "xlabel": "Number of threads",
-    "xlist": [2, 4, 6, 8, 10],
+    "xlist": [2, 4, 6, 8, 10, 12, 14, 16, 18],
     "sequential": true,
-    "openmp": true
+    "omp_bfs": true,
+    "omp_tasks": true
 }
