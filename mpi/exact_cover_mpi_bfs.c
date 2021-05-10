@@ -1,5 +1,5 @@
 /**
- * Version MPI : Équilibrage dynamique
+ * Version MPI : Équilibrage dynamique avec BFS
  * 
  * Quentin Deschamps, 2021
  */
@@ -14,11 +14,11 @@
 
 #include <mpi.h>
 
-/* Rang du processeur principal. */
+/* Rang du processeur principal */
 #define ROOT 0
 
-/* Nombre maximum de tâches */
-#define MAX 1000
+/* Nombre minimum de tâches */
+#define MIN 1000
 
 /* Item null pour appeler chosen_item sans cover */
 #define NULL_ITEM -1
@@ -31,7 +31,7 @@ long long report_delta = 1e6;          // affiche un rapport tous les ... noeuds
 long long next_report;                 // prochain rapport affiché au noeud...
 long long max_solutions = 0x7fffffffffffffff;        // stop après ... solutions
 
-/* Variable de file */
+/* Variables de file */
 struct context_t **queue;
 int queue_front = 0;
 int queue_rear = -1;
@@ -39,10 +39,6 @@ int queue_size = 0;
 
 /* Variable contenant le nombre de solutions trouvées */
 long long solutions = 0;
-
-/* Variable contenant le nombre de noeuds explorés */
-long long nodes = 0;
-
 
 struct instance_t {
         int n_items;
@@ -790,8 +786,7 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
 
 /**
  * Ajoute à la file les contextes à traiter en effectuant un parcours BFS 
- * s'arrêtant à un certain niveau, puis termine la résolution avec la fonction 
- * solve.
+ * s'arrêtant à un certain niveau.
  * 
  * La fonction retourne le niveau de l'arbre où le BFS s'est arrêté.
  * 
@@ -801,6 +796,9 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
  */
 int solve_bfs(const struct instance_t *instance, struct context_t *ctx)
 {
+        /* Variable pour mesurer le temps d'exécution du BFS */
+        double t_start;
+
         /* Compteur de noeud à un certain niveau de l'arbre */
         int count;
 
@@ -812,13 +810,16 @@ int solve_bfs(const struct instance_t *instance, struct context_t *ctx)
         enqueue(ctx);
 
         /* Parcourt BFS */
+        printf("START BFS\n");
+        t_start = wtime();
+
         while (!queue_is_empty())
         {
                 count = queue_size;
-                printf("Level %d: %d nodes\n", level, count);
+                printf("- Level %d: %d nodes\n", level, count);
 
                 /* Condition d'arrêt */
-                if (count > MAX)
+                if (count > MIN)
                 {
                         break;
                 }
@@ -862,7 +863,9 @@ int solve_bfs(const struct instance_t *instance, struct context_t *ctx)
                 }
                 level++;
         }
+        printf("END   BFS: %1.fs\n", wtime() - t_start);
         printf("Tasks: %d\n", queue_size);
+
         return level;
 }
 
@@ -907,9 +910,6 @@ int main(int argc, char **argv)
         /* Tags des messages */
         enum Tag{AVAILABLE, WORK_TODO, WORK_DONE, WORK, END};
 
-        /* Buffer pour envoyer le nombre de noeuds explorés et le nombre de solutions trouvées */
-        long long work[2];
-
         /* Initialisation de MPI */
         MPI_Init(&argc, &argv);
 
@@ -943,6 +943,7 @@ int main(int argc, char **argv)
         /* Variables pour gérer le travail à faire */
         int task, stopped, level;
         int *chosen_options;
+        long long work;
 
         /* Start solve */
         printf("[DEBUG] P%d: START\n", rank);
@@ -978,12 +979,12 @@ int main(int argc, char **argv)
                                 /* Envoie le travail à faire s'il en reste */
                                 if (task <= queue_rear)
                                 {
-                                        printf("%d/%d\n", task - queue_front, queue_size);
                                         /* Envoie les options */
                                         MPI_Send(queue[task]->chosen_options, level,
                                                         MPI_INT, status.MPI_SOURCE,
                                                         WORK_TODO, MPI_COMM_WORLD);
                                         task++;
+                                        printf("%d/%d\n", task - queue_front, queue_size);
                                 }
                                 /* Signale la fin du travail sinon */
                                 else
@@ -996,11 +997,10 @@ int main(int argc, char **argv)
                                 break;
 
                         case WORK_DONE:
-                                /* Reçoit le travail fait : nodes et solutions */
-                                MPI_Recv(work, 2, MPI_LONG_LONG, status.MPI_SOURCE,
+                                /* Reçoit le travail fait : nombre de solutions trouvées */
+                                MPI_Recv(&work, 1, MPI_LONG_LONG, status.MPI_SOURCE,
                                                 WORK, MPI_COMM_WORLD, &status);
-                                nodes += work[0];
-                                solutions += work[1];
+                                solutions += work;
                                 break;
 
                         default:
@@ -1014,7 +1014,6 @@ int main(int argc, char **argv)
 
                 printf("FINI. Trouvé %lld solutions en %.1fs\n", solutions,
                         wtime() - start);
-                printf("%lld noeuds explorés\n", nodes);
         }
 
         /* Processeur ouvrier */
@@ -1051,15 +1050,12 @@ int main(int argc, char **argv)
 
                                 /* Solve */
                                 solve(instance, ctx);
-                                work[0] = ctx->nodes;
-                                work[1] = ctx->solutions;
 
                                 /* Prévient le patron qu'il va recevoir le travail */
                                 MPI_Send(NULL, 0, MPI_INT, ROOT, WORK_DONE, MPI_COMM_WORLD);
 
-                                /* Envoie au patron le nombre le noeuds explorés
-                                et le nombre de solutions trouvées */
-                                MPI_Send(work, 2, MPI_LONG_LONG, ROOT, WORK, MPI_COMM_WORLD);
+                                /* Envoie au patron le nombre de solutions trouvées */
+                                MPI_Send(&ctx->solutions, 1, MPI_LONG_LONG, ROOT, WORK, MPI_COMM_WORLD);
 
                                 /* Libère la mémoire du contexte */
                                 free_ctx(ctx, instance->n_items);

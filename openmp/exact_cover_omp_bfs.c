@@ -761,7 +761,7 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
  */
 long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
 {
-        /* Variable pour mesure le temps de chaque étape */
+        /* Variable pour mesurer le temps de chaque étape */
         double t_start;
 
         /* Compteur de noeud à un certain niveau de l'arbre */
