@@ -14,6 +14,7 @@
 
 #include <omp.h>
 
+/* Nombre maximum de tâches */
 #define MAX 1000
 
 double start = 0.0;
@@ -24,7 +25,7 @@ long long report_delta = 1e6;          // affiche un rapport tous les ... noeuds
 long long next_report;                 // prochain rapport affiché au noeud...
 long long max_solutions = 0x7fffffffffffffff;        // stop après ... solutions
 
-/* Variable de file */
+/* Variables de file */
 struct context_t **queue;
 int queue_front = 0;
 int queue_rear = -1;
@@ -760,6 +761,9 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
  */
 long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
 {
+        /* Variable pour mesure le temps de chaque étape */
+        double t_start;
+
         /* Compteur de noeud à un certain niveau de l'arbre */
         int count;
 
@@ -774,10 +778,13 @@ long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
         enqueue(ctx);
 
         /* Parcourt BFS */
+        printf("START BFS\n");
+        t_start = wtime();
+
         while (!queue_is_empty())
         {
                 count = queue_size;
-                printf("Level %d: %d nodes\n", level, count);
+                printf("- Level %d: %d nodes\n", level, count);
 
                 /* Condition d'arrêt */
                 if (count > MAX)
@@ -804,6 +811,7 @@ long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
                         cover(instance, ctx, chosen_item);
                         ctx->num_children[ctx->level] = active_options->len;
 
+                        #pragma omp parallel for
                         for (int k = 0; k < active_options->len; k++)
                         {
                                 int option = active_options->p[k];
@@ -816,6 +824,7 @@ long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
                                 choose_option(instance, ctx_copy, option, chosen_item);
 
                                 /* Ajout du contexte à la file */
+                                #pragma omp critical
                                 enqueue(ctx_copy);
                         }
 
@@ -824,18 +833,22 @@ long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
                 }
                 level++;
         }
+        printf("END   BFS: %1.fs\n", wtime() - t_start);
 
-        /* Solve */
-        printf("For loop with %d iterations\n", queue_size);
+        /* Solve en parallèle */
+        printf("START For loop: %d iterations\n", queue_size);
+        t_start = wtime();
+
         #pragma omp parallel for reduction(+:solutions) schedule(dynamic)
         for (int i = queue_front; i <= queue_rear; i++)
         {
-                // printf("%d/%d\n", i - queue_front, queue_size);
                 queue[i]->solutions = 0;
                 solve(instance, queue[i]);
                 solutions += queue[i]->solutions;
         }
+        printf("END   For loop: %1.fs\n", wtime() - t_start);
 
+        /* Libère la mémoire occupée par la file */
         free_queue(instance->n_items);
 
         return solutions;
@@ -885,7 +898,7 @@ int main(int argc, char **argv)
         /* Solve */
         long long solutions = solve_bfs(instance, ctx);
 
-        /* Free memory */
+        /* Free instance */
         free_instance(instance);
 
         printf("FINI. Trouvé %lld solutions en %.1fs\n", solutions,
