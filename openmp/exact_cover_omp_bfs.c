@@ -14,8 +14,8 @@
 
 #include <omp.h>
 
-/* Nombre maximum de tâches */
-#define MAX 1000
+/* Nombre minimum de tâches */
+#define MIN 1000
 
 double start = 0.0;
 
@@ -787,7 +787,7 @@ long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
                 printf("- Level %d: %d nodes\n", level, count);
 
                 /* Condition d'arrêt */
-                if (count > MAX)
+                if (count > MIN)
                 {
                         break;
                 }
