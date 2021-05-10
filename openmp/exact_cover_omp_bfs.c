@@ -14,6 +14,7 @@
 
 #include <omp.h>
 
+#define MAX 1000
 
 double start = 0.0;
 
@@ -747,8 +748,6 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
 }
 
 
-
-
 /**
  * Résout l'instance du problème en effectuant un parcours BFS s'arrêtant à un
  * certain niveau, puis termine la résolution avec la fonction solve.
@@ -771,7 +770,7 @@ long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
         long long solutions = 0;
 
         /* Initialise la file */
-        queue = malloc(instance->n_options * sizeof(struct context_t*));
+        queue = malloc(instance->n_options * instance->n_options * sizeof(struct context_t*));
         enqueue(ctx);
 
         /* Parcourt BFS */
@@ -781,7 +780,7 @@ long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
                 printf("Level %d: %d nodes\n", level, count);
 
                 /* Condition d'arrêt */
-                if (count > 10)
+                if (count > MAX)
                 {
                         break;
                 }
