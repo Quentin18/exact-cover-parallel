@@ -1,5 +1,5 @@
 /**
- * Version OpenMP
+ * Version OpenMP avec tâches
  * 
  * Quentin Deschamps, 2021
  */
@@ -24,7 +24,7 @@ long long next_report;                 // prochain rapport affiché au noeud...
 long long max_solutions = 0x7fffffffffffffff;        // stop après ... solutions
 
 /* Variable contenant le nombre de solutions trouvées */
-long long solutions;
+long long solutions = 0;
 
 struct instance_t {
         int n_items;
