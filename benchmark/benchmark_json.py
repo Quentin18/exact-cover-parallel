@@ -10,9 +10,11 @@ Params:
 - xlabel:       "Number of processors" or "Number of threads" in general
 - xlist:        list of values for the number of processors/threads to test
 - sequential:   true to test the sequential program
-- openmp:       true to test the program with OpenMP
-- mpi_static:   true to test the program with MPI (static)
+- omp_bfs:      true to test the program with OpenMP (bfs)
+- omp_tasks:    true to test the program with OpenMP (tasks)
+- mpi_bfs:      true to test the program with MPI (bfs)
 - mpi_dynamic:  true to test the program with MPI (dynamic)
+- mpi_static:   true to test the program with MPI (static)
 - hybrid:       true to test the program with MPI + OpenMP
 - num_threads:  number of threads for the hybrid version (default: 2)
 - make:         true to run "make" command (default: true)
@@ -86,9 +88,11 @@ def benchmark(config: dict):
 
     programs = {
         'sequential': 'Sequential',
-        'openmp': 'Parallel: OpenMP',
-        'mpi_static': 'Parallel: MPI Static',
+        'omp_bfs': 'Parallel: OpenMP BFS',
+        'omp_tasks': 'Parallel: OpenMP Tasks',
+        'mpi_bfs': 'Parallel: MPI BFS',
         'mpi_dynamic': 'Parallel: MPI Dynamic',
+        'mpi_static': 'Parallel: MPI Static',
         'hybrid': 'Parallel: MPI + OpenMP'
     }
 
@@ -123,40 +127,32 @@ def benchmark(config: dict):
                 row.append(str(t_sequential))
 
             # OpenMP
-            if 'openmp' in config and config['openmp']:
-                env = dict(os.environ, OMP_NUM_THREADS=str(x))
-                command = ['../openmp/exact_cover_omp.out', '--in', instance]
-                row.append(str(runtime(command, show, env=env)))
+            for program in ['omp_bfs', 'omp_tasks']:
+                if program in config and config[program]:
+                    env = dict(os.environ, OMP_NUM_THREADS=str(x))
+                    command = [
+                        f'../openmp/exact_cover_{program}.out',
+                        '--in', instance
+                    ]
+                    row.append(str(runtime(command, show, env=env)))
 
-            # MPI Static
-            if 'mpi_static' in config and config['mpi_static']:
-                if g5k:
-                    command = [
-                        'mpirun', '-max-vm-size', str(x), '--map-by',
-                        'ppr:1:node', '--hostfile', oar_nodefile,
-                        '../mpi/exact_cover_mpi_static.out', '--in', instance
-                    ]
-                else:
-                    command = [
-                        'mpirun', '-n', str(x),
-                        '../mpi/exact_cover_mpi_static.out', '--in', instance
-                    ]
-                row.append(str(runtime(command, show)))
-
-            # MPI Dynamic
-            if 'mpi_dynamic' in config and config['mpi_dynamic']:
-                if g5k:
-                    command = [
-                        'mpirun', '-max-vm-size', str(x), '--map-by',
-                        'ppr:1:node', '--hostfile', oar_nodefile,
-                        '../mpi/exact_cover_mpi_dynamic.out', '--in', instance
-                    ]
-                else:
-                    command = [
-                        'mpirun', '-n', str(x),
-                        '../mpi/exact_cover_mpi_dynamic.out', '--in', instance
-                    ]
-                row.append(str(runtime(command, show)))
+            # MPI
+            for program in ['mpi_bfs', 'mpi_dynamic', 'mpi_static']:
+                if program in config and config[program]:
+                    if g5k:
+                        command = [
+                            'mpirun', '-max-vm-size', str(x), '--map-by',
+                            'ppr:1:node', '--hostfile', oar_nodefile,
+                            f'../mpi/exact_cover_{program}.out',
+                            '--in', instance
+                        ]
+                    else:
+                        command = [
+                            'mpirun', '-n', str(x),
+                            f'../mpi/exact_cover_{program}.out',
+                            '--in', instance
+                        ]
+                    row.append(str(runtime(command, show)))
 
             # MPI + OpenMP
             if 'hybrid' in config and config['hybrid']:
