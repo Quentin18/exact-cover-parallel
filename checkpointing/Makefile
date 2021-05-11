@@ -1,12 +1,12 @@
-CC = gcc
+CC = mpicc
 CFLAGS = -Wall -Wextra -O3
-SRC = exact_cover.c
-EXEC = exact_cover.out
+LIBS = -fopenmp
+EXEC = exact_cover_hybrid_cp.out
 
 all: $(EXEC)
 
-$(EXEC): $(SRC)
-	$(CC) $^ -o $@ $(CFLAGS)
+exact_cover_hybrid_cp.out: exact_cover_hybrid_cp.c
+	$(CC) $^ -o $@ $(CFLAGS) $(LIBS)
 
 clean:
 	rm -f $(EXEC)
