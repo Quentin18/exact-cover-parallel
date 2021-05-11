@@ -783,7 +783,6 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
 }
 
 
-
 /**
  * Ajoute à la file les contextes à traiter en effectuant un parcours BFS 
  * s'arrêtant à un certain niveau.
@@ -827,6 +826,7 @@ int solve_bfs(const struct instance_t *instance, struct context_t *ctx)
                 while (count > 0)
                 {
                         ctx = dequeue();
+                        count--;
                         if (sparse_array_empty(ctx->active_items))
                         {
                                 solutions++;
@@ -859,7 +859,6 @@ int solve_bfs(const struct instance_t *instance, struct context_t *ctx)
                         }
 
                         free_ctx(ctx, instance->n_items);
-                        count--;
                 }
                 level++;
         }
