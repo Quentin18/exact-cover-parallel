@@ -707,16 +707,15 @@ struct context_t *dequeue()
 
 /**
  * Libère la mémoire de la file.
+ * 
+ * @param n nombre d'items
  */
 void free_queue(int n)
 {
-        if (!queue_is_empty())
+        int size = queue_size;
+        for (int i = 0; i < size; i++)
         {
-                int size = queue_size;
-                for (int i = 0; i < size; i++)
-                {
-                        free_ctx(dequeue(), n);
-                }
+                free_ctx(dequeue(), n);
         }
         free(queue);
 }
