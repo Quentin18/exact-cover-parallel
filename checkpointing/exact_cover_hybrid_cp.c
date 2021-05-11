@@ -11,6 +11,7 @@
 #include <err.h>
 #include <getopt.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 #include <mpi.h>
 #include <omp.h>
@@ -32,7 +33,6 @@ long long report_delta = 1e6;          // affiche un rapport tous les ... noeuds
 long long next_report;                 // prochain rapport affiché au noeud...
 long long max_solutions = 0x7fffffffffffffff;        // stop après ... solutions
 
-char *cp_filename = NULL;              // nom du fichier contenant le dernier checkpoint
 double cp_delta = 2;                   // sauvegarde d'un checkpoint toutes les ... secondes
 double next_cp;                        // prochain checkpoint à ... secondes
 
@@ -987,10 +987,31 @@ long long solve_bfs_worker(const struct instance_t *instance, struct context_t *
         return solutions;
 }
 
-
-void save_checkpoint()
+/**
+ * Sauvegarde un checkpoint.
+ * 
+ * @param filename nom du fichier de checkpoint
+ * @param task_done indice de la dernière tâche réalisée
+ * @param level longueur des listes d'options
+ * @param options listes d'options à faire
+ */
+void save_checkpoint(char *filename, int task_done)
 {
         printf("CHECKPOINT\n");
+
+        /* Ouverture du fichier */
+        FILE *cp = fopen(filename, "w");
+        if (cp == NULL)
+                err(1, "Impossible d'ouvrir %s en écriture", filename);
+
+        /* Nombre de solutions */
+        fprintf(cp, "%lld\n", solutions);
+
+        /* Remplacement de l'ancien checkpoint */
+        // rename();
+
+        /* Fermeture du fichier */
+        fclose(cp);
 }
 
 
@@ -1025,6 +1046,9 @@ int main(int argc, char **argv)
         if (in_filename == NULL)
                 usage(argv);
         next_report = report_delta;
+
+        /* Nom du fichier de checkpoint */
+        char cp_filename[100];
 
         /* Variables MPI */
         int size, rank;
@@ -1064,7 +1088,7 @@ int main(int argc, char **argv)
         bool run = true;
 
         /* Variables pour gérer le travail à faire */
-        int task, stopped, level;
+        int task, task_done, stopped, level;
         int *chosen_options;
         long long work;
 
@@ -1074,6 +1098,19 @@ int main(int argc, char **argv)
         /* Processeur principal */
         if (rank == ROOT)
         {
+                /* Nom du fichier de checkpoint : in_filename.cp */
+                strcpy(cp_filename, in_filename);
+                strcat(cp_filename, ".cp");
+
+                if (access(cp_filename, F_OK) == 0)
+                {
+                        printf("File %s exists\n", cp_filename);
+                }
+                else
+                {
+                        printf("File %s doesn't exist\n", cp_filename);
+                }
+
                 start = wtime();
 
                 /* Création du contexte */
@@ -1087,7 +1124,8 @@ int main(int argc, char **argv)
 
                 /* Initialisation des variables */
                 stopped = 0;
-                task = queue_front;
+                task  = queue_front;
+                task_done = 0;
                 next_cp = wtime() + cp_delta;
 
                 /* Work loop */
@@ -1125,11 +1163,12 @@ int main(int argc, char **argv)
                                 MPI_Recv(&work, 1, MPI_LONG_LONG, status.MPI_SOURCE,
                                                 WORK, MPI_COMM_WORLD, &status);
                                 solutions += work;
+                                task_done++;
 
                                 /* Sauvegarde d'un checkpoint */
                                 if (next_cp - wtime() < 0)
                                 {
-                                        save_checkpoint();
+                                        save_checkpoint(cp_filename, task_done);
                                         next_cp += cp_delta;
                                 }
                                 break;
