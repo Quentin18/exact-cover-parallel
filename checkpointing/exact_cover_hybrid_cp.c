@@ -1096,11 +1096,11 @@ void save_checkpoint(char *cp_filename, int tasks, const bool *task_done,
         {
                 if (!task_done[i])
                 {
-                        for (int j = 0; j < level; j++)
+                        for (int j = 0; j < level - 1; j++)
                         {
                                 fprintf(cp, "%d ", options[i][j]);
                         }
-                        fprintf(cp, "\n");
+                        fprintf(cp, "%d\n", options[i][level - 1]);
                 }
         }
 
