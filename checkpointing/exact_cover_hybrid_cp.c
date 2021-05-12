@@ -1010,11 +1010,14 @@ long long solve_bfs_worker(const struct instance_t *instance, struct context_t *
  * Sauvegarde un checkpoint.
  * 
  * @param filename nom du fichier de checkpoint
+ * @param tasks nombre total de tâches à effectuer
  * @param task_done tableau de booléens pour connaître les tâches effectuées
+ * @param tasks_done nombre de tâches terminées
  * @param level longueur des listes d'options
  * @param options listes d'options à faire
  */
-void save_checkpoint(char *filename, const bool *task_done)
+void save_checkpoint(char *filename, int tasks, const bool *task_done,
+                        int tasks_done, int level, int **options)
 {
         printf("CHECKPOINT\n");
 
@@ -1025,6 +1028,22 @@ void save_checkpoint(char *filename, const bool *task_done)
 
         /* Nombre de solutions */
         fprintf(cp, "%lld\n", solutions);
+
+        /* Nombre et longueur des listes d'options */
+        fprintf(cp, "%d %d\n", tasks - tasks_done, level);
+
+        /* Listes d'options à faire */
+        for (int i = tasks_done; i < tasks; i++)
+        {
+                if (!task_done[i])
+                {
+                        for (int j = 0; j < level; j++)
+                        {
+                                fprintf(cp, "%d ", options[i][j]);
+                        }
+                        fprintf(cp, "\n");
+                }
+        }
 
         /* Remplacement de l'ancien checkpoint */
         // rename();
@@ -1111,6 +1130,7 @@ int main(int argc, char **argv)
         int task_recv;          // numéro de tâche reçue par root
         int tasks;              // nombre total de tâches à effectuer
         bool *task_done;        // tableau de booléens pour connaître les tâches effectuées
+        int tasks_done;         // nombre de tâches terminées
         int stopped;            // nombre de processeurs arrêtés
         int level;              // niveau d'arrêt du BFS correspondant à la longueur des listes d'options
         int **options;          // liste de listes d'options de longueur level
@@ -1149,8 +1169,12 @@ int main(int argc, char **argv)
                 task_done = malloc(tasks * sizeof(bool));
                 for (int i = 0; i < tasks; i++)
                         task_done[i] = false;
+                tasks_done = 0;
                 stopped = 0;
                 buffer = malloc((level + 1) * sizeof(int));
+
+                /* Sauvegarde du premier checkpoint */
+                save_checkpoint(cp_filename, tasks, task_done, tasks_done, level, options);
                 next_cp = wtime() + cp_delta;
 
                 /* Work loop */
@@ -1191,11 +1215,12 @@ int main(int argc, char **argv)
                                 MPI_Recv(&work, 1, MPI_LONG_LONG, status.MPI_SOURCE,
                                                 WORK, MPI_COMM_WORLD, &status);
                                 solutions += work;
+                                tasks_done++;
 
                                 /* Sauvegarde d'un checkpoint */
                                 if (next_cp - wtime() < 0)
                                 {
-                                        save_checkpoint(cp_filename, task_done);
+                                        save_checkpoint(cp_filename, tasks, task_done, tasks_done, level, options);
                                         next_cp = wtime() + cp_delta;
                                 }
                                 break;
