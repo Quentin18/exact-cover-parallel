@@ -55,5 +55,5 @@ Tous les benchmarks ont été lancés sur le cluster *gros* de Nancy.
 - [x] `bell14_procs.json`
 - [x] `bell14_threads.json`
 - [ ] `pento_plus_tetra_2x4x10.json`
-- [ ] `pento_plus_tetra_2x4x10_threads.json`
+- [x] `pento_plus_tetra_2x4x10_threads.json` : 895536 solutions
 - [ ] `pento_plus_tetra_8x8_secondary.json`
