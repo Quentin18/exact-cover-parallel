@@ -35,26 +35,34 @@ Répertoire : `sequential`
 Répertoire : `openmp`
 
 ```
-./exact_cover_omp.out --in ../instances/bell13.ec
+./exact_cover_omp_bfs.out --in ../instances/bell13.ec
 ```
 
 ### Parallèle avec MPI
 
 Répertoire : `mpi`
 
+En local :
 ```
-mpirun -n 4 ./exact_cover_mpi_static.out --in ../instances/bell13.ec
+mpirun -n 4 ./exact_cover_mpi_bfs.out --in ../instances/bell13.ec
 ```
+Sur Grid5000 :
 ```
-mpirun -n 4 ./exact_cover_mpi_dynamic.out --in ../instances/bell13.ec
+mpirun -np 4 --map-by ppr:1:core --hostfile $OAR_NODEFILE ./exact_cover_mpi_bfs.out --in ../instances/bell13.ec
 ```
+
 
 ### Parallèle hybride MPI + OpenMP
 
 Répertoire : `hybrid`
 
+En local :
 ```
-mpirun -x OMP_NUM_THREADS=2 -n 4 ./exact_cover_hybrid.out --in ../instances/bell13.ec
+mpirun -x OMP_NUM_THREADS=2 -n 4 ./exact_cover_mpi_bfs.out --in ../instances/bell13.ec
+```
+Sur Grid5000 :
+```
+mpirun -np 4 --map-by ppr:1:core --hostfile $OAR_NODEFILE ./exact_cover_mpi_bfs.out --in ../instances/bell13.ec
 ```
 
 ## Auteur
