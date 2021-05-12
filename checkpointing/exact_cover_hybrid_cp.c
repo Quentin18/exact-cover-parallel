@@ -809,17 +809,15 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
 
 /**
  * Ajoute à la file les contextes à traiter en effectuant un parcours BFS 
- * s'arrêtant à un certain niveau.
- * 
- * La fonction retourne le niveau de l'arbre où le BFS s'est arrêté et crée 
- * la liste de listes d'options à envoyer aux ouvriers.
+ * s'arrêtant à un certain niveau, puis crée la liste de listes d'options à 
+ * envoyer aux ouvriers.
  * 
  * @param instance instance
- * @param options liste de listes d'options à envoyer aux ouvriers
- * @param tasks nombre de tâche correspondant à la longueur de la liste options
- * @return level correspondant à la longueur des listes d'options
+ * @param tasks nombre de tâches correspondant à la longueur de la liste retournée
+ * @param level longueur des listes d'options
+ * @return liste de listes d'options à envoyer aux ouvriers
  */
-int** solve_bfs_root(const struct instance_t *instance, int *level, int *tasks)
+int **solve_bfs_root(const struct instance_t *instance, int *tasks, int *level)
 {
         /* Variable pour mesurer le temps d'exécution du BFS */
         double t_start;
@@ -1009,6 +1007,60 @@ long long solve_bfs_worker(const struct instance_t *instance, struct context_t *
 }
 
 /**
+ * Charge un checkpoint en retournant la liste de listes d'options restantes 
+ * à traiter.
+ * 
+ * @param cp_filename nom du fichier de checkpoint
+ * @param tasks nombre de tâches correspondant à la longueur de la liste retournée
+ * @param level longueur des listes d'options
+ * @return liste de listes d'options à envoyer aux ouvriers
+ */
+int **load_checkpoint(char *cp_filename, int *tasks, int *level)
+{
+        /* Liste de listes d'options */
+        int **options;
+
+        printf("Load checkpoint %s\n", cp_filename);
+
+        /* Ouverture du fichier */
+        FILE *cp = fopen(cp_filename, "r");
+        if (cp == NULL)
+                err(1, "Impossible d'ouvrir %s en lecture", cp_filename);
+
+        /* Nombre de solutions */
+        if (fscanf(cp, "%lld\n", &solutions) != 1)
+                err(1, "Erreur de lecture du fichier %s\n", cp_filename);
+        printf("- Solutions: %lld\n", solutions);
+
+        /* Nombre et longueur des listes d'options */
+        if (fscanf(cp, "%d %d\n", tasks, level) != 2)
+                err(1, "Erreur de lecture du fichier %s\n", cp_filename);
+        printf("- Tasks: %d\n- Level: %d\n", *tasks, *level);
+
+        /* Création de la liste de listes d'options */
+        options = malloc((*tasks) * sizeof(int*));
+        printf("Loading options...\n");
+        for (int i = 0; i < (*tasks); i++) {
+                options[i] = malloc((*level) * sizeof(int));
+                for (int j = 0; j < (*level); j++)
+                {
+                        if (fscanf(cp, "%d ", &options[i][j]) != 1)
+                        {
+                                err(1, "Erreur de lecture du fichier %s\n", cp_filename);
+                        }
+                }
+        }
+        printf("End load options\n");
+
+        /* Fermeture du fichier */
+        fclose(cp);
+
+        printf("End load checkpoint\n");
+
+        return options;
+}
+
+/**
  * Sauvegarde un checkpoint.
  * 
  * @param cp_filename nom du fichier de checkpoint
@@ -1150,38 +1202,35 @@ int main(int argc, char **argv)
         /* Processeur principal */
         if (rank == ROOT)
         {
+                start = wtime();
+
                 /* Nom du fichier de checkpoint : in_filename.cp */
                 strcpy(cp_filename, in_filename);
                 strcat(cp_filename, ".cp");
 
+                /* Cherche un checkpoint */
                 if (access(cp_filename, F_OK) == 0)
                 {
-                        printf("File %s exists\n", cp_filename);
+                        /* Charge le checkpoint */
+                        printf("Checkpoint %s found\n", cp_filename);
+                        options = load_checkpoint(cp_filename, &tasks, &level);
                 }
                 else
                 {
-                        printf("File %s doesn't exist\n", cp_filename);
+                        /* Débute la résolution et crée les contextes à envoyer aux ouvriers */
+                        printf("No checkpoint found\n");
+                        options = solve_bfs_root(instance, &tasks, &level);
                 }
-
-                start = wtime();
-
-                /* Débute la résolution et crée les contextes à envoyer aux ouvriers */
-                options = solve_bfs_root(instance, &level, &tasks);
 
                 /* Le patron envoie le nombre d'options aux ouvriers */
                 MPI_Bcast(&level, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
                 /* Initialisation des variables */
-                task = 0;
                 task_done = malloc(tasks * sizeof(bool));
                 for (int i = 0; i < tasks; i++)
                         task_done[i] = false;
-                tasks_done = 0;
-                stopped = 0;
                 buffer = malloc((level + 1) * sizeof(int));
-
-                /* Sauvegarde du premier checkpoint */
-                save_checkpoint(cp_filename, tasks, task_done, tasks_done, level, options);
+                task = tasks_done = stopped = 0;
                 next_cp = wtime() + cp_delta;
 
                 /* Work loop */
