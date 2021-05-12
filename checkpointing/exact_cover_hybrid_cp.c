@@ -25,6 +25,8 @@
 /* Item null pour appeler chosen_item sans cover */
 #define NULL_ITEM -1
 
+#define BUFFERSIZE 100
+
 double start = 0.0;
 
 char *in_filename = NULL;              // nom du fichier contenant la matrice
@@ -1009,22 +1011,27 @@ long long solve_bfs_worker(const struct instance_t *instance, struct context_t *
 /**
  * Sauvegarde un checkpoint.
  * 
- * @param filename nom du fichier de checkpoint
+ * @param cp_filename nom du fichier de checkpoint
  * @param tasks nombre total de tâches à effectuer
  * @param task_done tableau de booléens pour connaître les tâches effectuées
  * @param tasks_done nombre de tâches terminées
  * @param level longueur des listes d'options
  * @param options listes d'options à faire
  */
-void save_checkpoint(char *filename, int tasks, const bool *task_done,
+void save_checkpoint(char *cp_filename, int tasks, const bool *task_done,
                         int tasks_done, int level, int **options)
 {
         printf("CHECKPOINT\n");
 
+        /* Nom du fichier de checkpoint temporaire : cp_filename.tmp */
+        char cp_tmp_filename[BUFFERSIZE];
+        strcpy(cp_tmp_filename, cp_filename);
+        strcat(cp_tmp_filename, ".tmp");
+
         /* Ouverture du fichier */
-        FILE *cp = fopen(filename, "w");
+        FILE *cp = fopen(cp_tmp_filename, "w");
         if (cp == NULL)
-                err(1, "Impossible d'ouvrir %s en écriture", filename);
+                err(1, "Impossible d'ouvrir %s en écriture", cp_tmp_filename);
 
         /* Nombre de solutions */
         fprintf(cp, "%lld\n", solutions);
@@ -1045,11 +1052,11 @@ void save_checkpoint(char *filename, int tasks, const bool *task_done,
                 }
         }
 
-        /* Remplacement de l'ancien checkpoint */
-        // rename();
-
         /* Fermeture du fichier */
         fclose(cp);
+
+        /* Écrasement de l'ancien checkpoint */
+        rename(cp_tmp_filename, cp_filename);
 }
 
 
@@ -1086,7 +1093,7 @@ int main(int argc, char **argv)
         next_report = report_delta;
 
         /* Nom du fichier de checkpoint */
-        char cp_filename[100];
+        char cp_filename[BUFFERSIZE];
 
         /* Variables MPI */
         int size, rank;
