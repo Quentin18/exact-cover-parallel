@@ -1164,7 +1164,7 @@ int main(int argc, char **argv)
                         {
                         case AVAILABLE:
                                 /* Envoie le travail à faire s'il en reste */
-                                if (task <= tasks)
+                                if (task < tasks)
                                 {
                                         /* Envoie les options */
                                         buffer[0] = task;
