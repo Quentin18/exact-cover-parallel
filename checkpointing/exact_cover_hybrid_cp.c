@@ -1295,6 +1295,10 @@ int main(int argc, char **argv)
 
                 printf("FINI. Trouvé %lld solutions en %.1fs\n", solutions,
                         wtime() - start);
+
+                /* Suppression du checkpoint */
+                if (remove(cp_filename) != 0)
+                        fprintf(stderr, "Error: cannot remove the checkpoint file %s\n", cp_filename);
         }
 
         /* Processeur ouvrier */
