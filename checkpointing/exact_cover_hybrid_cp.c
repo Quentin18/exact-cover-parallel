@@ -809,13 +809,15 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
  * Ajoute à la file les contextes à traiter en effectuant un parcours BFS 
  * s'arrêtant à un certain niveau.
  * 
- * La fonction retourne le niveau de l'arbre où le BFS s'est arrêté.
+ * La fonction retourne le niveau de l'arbre où le BFS s'est arrêté et crée 
+ * la liste de listes d'options à envoyer aux ouvriers.
  * 
  * @param instance instance
- * @param ctx contexte
- * @return level
+ * @param options liste de listes d'options à envoyer aux ouvriers
+ * @param tasks nombre de tâche correspondant à la longueur de la liste options
+ * @return level correspondant à la longueur des listes d'options
  */
-int solve_bfs_root(const struct instance_t *instance, struct context_t *ctx)
+int** solve_bfs_root(const struct instance_t *instance, int *level, int *tasks)
 {
         /* Variable pour mesurer le temps d'exécution du BFS */
         double t_start;
@@ -824,10 +826,14 @@ int solve_bfs_root(const struct instance_t *instance, struct context_t *ctx)
         int count;
 
         /* Niveau de l'arbre */
-        int level = 0;
+        *level = 0;
+
+        /* Liste de listes d'options */
+        int **options;
 
         /* Initialise la file */
         queue = malloc(instance->n_options * instance->n_options * sizeof(struct context_t*));
+        struct context_t *ctx = backtracking_setup(instance);
         enqueue(ctx);
 
         /* Parcourt BFS */
@@ -837,7 +843,7 @@ int solve_bfs_root(const struct instance_t *instance, struct context_t *ctx)
         while (!queue_is_empty())
         {
                 count = queue_size;
-                printf("- Level %d: %d nodes\n", level, count);
+                printf("- Level %d: %d nodes\n", *level, count);
 
                 /* Condition d'arrêt */
                 if (count > MIN)
@@ -883,12 +889,29 @@ int solve_bfs_root(const struct instance_t *instance, struct context_t *ctx)
 
                         free_ctx(ctx, instance->n_items);
                 }
-                level++;
+                (*level)++;
         }
         printf("END   BFS: %1.fs\n", wtime() - t_start);
         printf("Tasks: %d\n", queue_size);
 
-        return level;
+        /* Création de la liste de listes d'options à envoyer aux ouvriers */
+        *tasks = queue_size;
+        options = malloc((*tasks) * sizeof(int*));
+        for (int i = 0; i < (*tasks); i++)
+        {
+                options[i] = malloc((*level) * sizeof(int));
+                ctx = dequeue();
+                for (int j = 0; j < (*level); j++)
+                {
+                        options[i][j] = ctx->chosen_options[j];
+                }
+                free_ctx(ctx, instance->n_items);
+        }
+
+        /* Libère la mémoire de la file */
+        free_queue(instance->n_items);
+
+        return options;
 }
 
 /**
@@ -977,12 +1000,8 @@ long long solve_bfs_worker(const struct instance_t *instance, struct context_t *
                 solutions += queue[i]->solutions;
         }
 
-        /* Libère la mémoire occupée par les contextes de la file */
-        int size = queue_size;
-        for (int i = 0; i < size; i++)
-        {
-                free_ctx(dequeue(), instance->n_items);
-        }
+        /* Reset la file */
+        reset_queue(instance->n_items);
 
         return solutions;
 }
@@ -991,11 +1010,11 @@ long long solve_bfs_worker(const struct instance_t *instance, struct context_t *
  * Sauvegarde un checkpoint.
  * 
  * @param filename nom du fichier de checkpoint
- * @param task_done indice de la dernière tâche réalisée
+ * @param task_done tableau de booléens pour connaître les tâches effectuées
  * @param level longueur des listes d'options
  * @param options listes d'options à faire
  */
-void save_checkpoint(char *filename, int task_done)
+void save_checkpoint(char *filename, const bool *task_done)
 {
         printf("CHECKPOINT\n");
 
@@ -1088,9 +1107,15 @@ int main(int argc, char **argv)
         bool run = true;
 
         /* Variables pour gérer le travail à faire */
-        int task, task_done, stopped, level;
-        int *chosen_options;
-        long long work;
+        int task;               // numéro de tâche à attribuer
+        int task_recv;          // numéro de tâche reçue par root
+        int tasks;              // nombre total de tâches à effectuer
+        bool *task_done;        // tableau de booléens pour connaître les tâches effectuées
+        int stopped;            // nombre de processeurs arrêtés
+        int level;              // niveau d'arrêt du BFS correspondant à la longueur des listes d'options
+        int **options;          // liste de listes d'options de longueur level
+        int *buffer;            // buffer d'envoi des tâches avec numéro de tâche + liste d'options
+        long long work;         // variable pour recevoir le travail effectué
 
         /* Start solve */
         printf("[DEBUG] P%d: START\n", rank);
@@ -1113,40 +1138,42 @@ int main(int argc, char **argv)
 
                 start = wtime();
 
-                /* Création du contexte */
-                ctx = backtracking_setup(instance);
-
                 /* Débute la résolution et crée les contextes à envoyer aux ouvriers */
-                level = solve_bfs_root(instance, ctx);
+                options = solve_bfs_root(instance, &level, &tasks);
 
                 /* Le patron envoie le nombre d'options aux ouvriers */
                 MPI_Bcast(&level, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
                 /* Initialisation des variables */
+                task = 0;
+                task_done = malloc(tasks * sizeof(bool));
+                for (int i = 0; i < tasks; i++)
+                        task_done[i] = false;
                 stopped = 0;
-                task  = queue_front;
-                task_done = 0;
+                buffer = malloc((level + 1) * sizeof(int));
                 next_cp = wtime() + cp_delta;
 
                 /* Work loop */
                 while (run)
                 {
                         /* Reçoit un message d'un ouvrier */
-                        MPI_Recv(NULL, 0, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG,
+                        MPI_Recv(&task_recv, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG,
                                         MPI_COMM_WORLD, &status);
 
                         switch (status.MPI_TAG)
                         {
                         case AVAILABLE:
                                 /* Envoie le travail à faire s'il en reste */
-                                if (task <= queue_rear)
+                                if (task <= tasks)
                                 {
                                         /* Envoie les options */
-                                        MPI_Send(queue[task]->chosen_options, level,
-                                                        MPI_INT, status.MPI_SOURCE,
+                                        buffer[0] = task;
+                                        for (int i = 0; i < level; i++)
+                                                buffer[i + 1] = options[task][i];
+                                        MPI_Send(buffer, level + 1, MPI_INT, status.MPI_SOURCE,
                                                         WORK_TODO, MPI_COMM_WORLD);
                                         task++;
-                                        printf("%d/%d\n", task - queue_front, queue_size);
+                                        printf("%d/%d\n", task, tasks);
                                 }
                                 /* Signale la fin du travail sinon */
                                 else
@@ -1160,16 +1187,16 @@ int main(int argc, char **argv)
 
                         case WORK_DONE:
                                 /* Reçoit le travail fait : nombre de solutions trouvées */
+                                task_done[task_recv] = true;
                                 MPI_Recv(&work, 1, MPI_LONG_LONG, status.MPI_SOURCE,
                                                 WORK, MPI_COMM_WORLD, &status);
                                 solutions += work;
-                                task_done++;
 
                                 /* Sauvegarde d'un checkpoint */
                                 if (next_cp - wtime() < 0)
                                 {
                                         save_checkpoint(cp_filename, task_done);
-                                        next_cp += cp_delta;
+                                        next_cp = wtime() + cp_delta;
                                 }
                                 break;
 
@@ -1179,8 +1206,11 @@ int main(int argc, char **argv)
                         }
                 }
 
-                /* Libère la mémoire de la file */
-                free_queue(instance->n_items);
+                /* Libère la mémoire */
+                free(task_done);
+                for (int i = 0; i < tasks; i++)
+                        free(options[i]);
+                free(options);
 
                 printf("FINI. Trouvé %lld solutions en %.1fs\n", solutions,
                         wtime() - start);
@@ -1195,8 +1225,8 @@ int main(int argc, char **argv)
                 /* Reçoit le nombre d'options */
                 MPI_Bcast(&level, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-                /* Allocation du tableau d'options pour recevoir les messages */
-                chosen_options = malloc(level * sizeof(int));
+                /* Allocation du buffer pour recevoir les messages */
+                buffer = malloc((level + 1) * sizeof(int));
 
                 /* Work loop */
                 while (run)
@@ -1205,8 +1235,8 @@ int main(int argc, char **argv)
                         MPI_Send(NULL, 0, MPI_INT, ROOT, AVAILABLE, MPI_COMM_WORLD);
 
                         /* Reçoit un message du patron */
-                        MPI_Recv(chosen_options, level, MPI_INT, ROOT, MPI_ANY_TAG,
-                                 MPI_COMM_WORLD, &status);
+                        MPI_Recv(buffer, level + 1, MPI_INT, ROOT, MPI_ANY_TAG,
+                                        MPI_COMM_WORLD, &status);
 
                         switch (status.MPI_TAG)
                         {
@@ -1217,22 +1247,20 @@ int main(int argc, char **argv)
 
                                 /* On choisit les options */
                                 for (int i = 0; i < level; i++)
-                                {
-                                        choose_option(instance, ctx, chosen_options[i], NULL_ITEM);
-                                }
+                                        choose_option(instance, ctx, buffer[i + 1], NULL_ITEM);
 
                                 /* Solve */
                                 solutions = 0;
                                 solutions = solve_bfs_worker(instance, ctx);
 
-                                /* Prévient le patron qu'il va recevoir le travail */
-                                MPI_Send(NULL, 0, MPI_INT, ROOT, WORK_DONE, MPI_COMM_WORLD);
+                                /*
+                                Prévient le patron qu'il va recevoir le travail
+                                en envoyant le numéro de tâche.
+                                */
+                                MPI_Send(&buffer[0], 1, MPI_INT, ROOT, WORK_DONE, MPI_COMM_WORLD);
 
                                 /* Envoie au patron le nombre de solutions trouvées */
                                 MPI_Send(&solutions, 1, MPI_LONG_LONG, ROOT, WORK, MPI_COMM_WORLD);
-
-                                /* Reset la file */
-                                reset_queue(instance->n_items);
                                 break;
 
                         case END:
@@ -1248,8 +1276,9 @@ int main(int argc, char **argv)
                 }
         }
 
-        /* Free instance */
+        /* Libère la mémoire */
         free_instance(instance);
+        free(buffer);
 
         printf("[DEBUG] P%d: END\n", rank);
 
