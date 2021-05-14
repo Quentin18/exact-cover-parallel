@@ -1199,7 +1199,7 @@ int main(int argc, char **argv)
         int **options;          // liste de listes d'options de longueur level
         int *buffer;            // buffer d'envoi des tâches avec numéro de tâche + liste d'options
         long long work;         // variable pour recevoir le travail effectué
-        long long solutions;    // nombre de solutions trouvées */
+        long long solutions;    // nombre de solutions trouvées
 
         /* Start solve */
         printf("[DEBUG] P%d: START\n", rank);
