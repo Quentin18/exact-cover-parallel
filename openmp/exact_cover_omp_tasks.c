@@ -14,7 +14,6 @@
 
 #include <omp.h>
 
-
 double start = 0.0;
 
 char *in_filename = NULL;              // nom du fichier contenant la matrice
