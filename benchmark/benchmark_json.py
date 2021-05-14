@@ -15,7 +15,8 @@ Params:
 - mpi_bfs:      true to test the program with MPI (bfs)
 - mpi_dynamic:  true to test the program with MPI (dynamic)
 - mpi_static:   true to test the program with MPI (static)
-- hybrid:       true to test the program with MPI + OpenMP
+- hybrid_bfs:   true to test the program with MPI + OpenMP (bfs)
+- hybrid_tasks: true to test the program with MPI + OpenMP (tasks)
 - num_threads:  number of threads for the hybrid version (default: 2)
 - make:         true to run "make" command (default: true)
 - clean:        true to run "make clean" command (default: true)
@@ -93,7 +94,8 @@ def benchmark(config: dict):
         'mpi_bfs': 'Parallel: MPI BFS',
         'mpi_dynamic': 'Parallel: MPI Dynamic',
         'mpi_static': 'Parallel: MPI Static',
-        'hybrid': 'Parallel: MPI + OpenMP'
+        'hybrid_bfs': 'Parallel: MPI + OpenMP BFS',
+        'hybrid_tasks': 'Parallel: MPI + OpenMP Tasks'
     }
 
     print('== Start benchmark ==')
@@ -155,21 +157,26 @@ def benchmark(config: dict):
                     row.append(str(runtime(command, show)))
 
             # MPI + OpenMP
-            if 'hybrid' in config and config['hybrid']:
-                if g5k:
-                    command = [
-                        'mpirun', '-x', 'OMP_NUM_THREADS=' + str(num_threads),
-                        '-max-vm-size', str(x), '--map-by', 'ppr:1:node',
-                        '--hostfile', oar_nodefile,
-                        '../hybrid/exact_cover_hybrid.out', '--in', instance
-                    ]
-                else:
-                    command = [
-                        'mpirun', '-x', 'OMP_NUM_THREADS=' + str(num_threads),
-                        '-n', str(x), '../hybrid/exact_cover_hybrid.out',
-                        '--in', instance
-                    ]
-                row.append(str(runtime(command, show)))
+            for program in ['hybrid_bfs', 'hybrid_tasks']:
+                if program in config and config[program]:
+                    if g5k:
+                        command = [
+                            'mpirun', '-x',
+                            'OMP_NUM_THREADS=' + str(num_threads),
+                            '-max-vm-size', str(x), '--map-by', 'ppr:1:node',
+                            '--hostfile', oar_nodefile,
+                            f'../hybrid/exact_cover_{program}.out',
+                            '--in', instance
+                        ]
+                    else:
+                        command = [
+                            'mpirun', '-x',
+                            'OMP_NUM_THREADS=' + str(num_threads),
+                            '-n', str(x),
+                            f'../hybrid/exact_cover_{program}.out',
+                            '--in', instance
+                        ]
+                    row.append(str(runtime(command, show)))
 
             # Write results in csvfile
             writer.writerow(row)
