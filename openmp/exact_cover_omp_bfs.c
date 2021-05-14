@@ -777,7 +777,7 @@ long long solve_bfs(const struct instance_t *instance, struct context_t *ctx)
         queue = malloc(instance->n_options * instance->n_options * sizeof(struct context_t*));
         enqueue(ctx);
 
-        /* Parcourt BFS */
+        /* Parcours BFS */
         printf("START BFS\n");
         t_start = wtime();
 

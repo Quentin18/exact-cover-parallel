@@ -837,7 +837,7 @@ int **solve_bfs_root(const struct instance_t *instance, long long *solutions, in
         struct context_t *ctx = backtracking_setup(instance);
         enqueue(ctx);
 
-        /* Parcourt BFS */
+        /* Parcours BFS */
         printf("START BFS\n");
         t_start = wtime();
 
@@ -917,7 +917,7 @@ int **solve_bfs_root(const struct instance_t *instance, long long *solutions, in
 }
 
 /**
- * Résout l'instance du problème en effectuant un parcours BFS s'arrêtant à un
+ * Résout l'instance du problème en effectuant un parcours BFS s'arrêtant à un 
  * certain niveau, puis termine la résolution en parallèle avec la fonction solve. 
  * 
  * La fonction retourne le nombre de solutions trouvées.
@@ -940,7 +940,7 @@ long long solve_bfs_worker(const struct instance_t *instance, struct context_t *
         /* Initialise la file */
         enqueue(ctx);
 
-        /* Parcourt BFS */
+        /* Parcours BFS */
         while (!queue_is_empty())
         {
                 count = queue_size;
