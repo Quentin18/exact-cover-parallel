@@ -44,9 +44,6 @@ int queue_front = 0;
 int queue_rear = -1;
 int queue_size = 0;
 
-/* Variable contenant le nombre de solutions trouvées */
-long long solutions = 0;
-
 struct instance_t {
         int n_items;
         int n_primary;
@@ -712,8 +709,9 @@ void free_instance(struct instance_t *instance)
         free(instance);
 }
 
+
 /**
- * Retourne True si la file est vide.
+ * Retourne true si la file est vide.
  * 
  * @return file vide
  */
@@ -745,7 +743,7 @@ struct context_t *dequeue()
 }
 
 /**
- * Libère la mémoire de la file.
+ * Libère la mémoire occupée par la file.
  * 
  * @param n nombre d'items
  */
@@ -773,9 +771,8 @@ void reset_queue(int n)
         }
         queue_front = 0;
         queue_rear = -1;
-        queue_size = 0; 
+        queue_size = 0;
 }
-
 
 
 void solve(const struct instance_t *instance, struct context_t *ctx)
@@ -808,28 +805,32 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
 
 
 /**
- * Ajoute à la file les contextes à traiter en effectuant un parcours BFS 
- * s'arrêtant à un certain niveau, puis crée la liste de listes d'options à 
- * envoyer aux ouvriers.
+ * Ajoute à la file les contextes à traiter en parallèle en effectuant un 
+ * parcours BFS s'arrêtant à un certain niveau, puis crée la liste de listes 
+ * d'options à envoyer aux ouvriers.
  * 
  * @param instance instance
+ * @param solutions nombre de solutions trouvées
  * @param tasks nombre de tâches correspondant à la longueur de la liste retournée
  * @param level longueur des listes d'options
  * @return liste de listes d'options à envoyer aux ouvriers
  */
-int **solve_bfs_root(const struct instance_t *instance, int *tasks, int *level)
+int **solve_bfs_root(const struct instance_t *instance, long long *solutions, int *tasks, int *level)
 {
         /* Variable pour mesurer le temps d'exécution du BFS */
         double t_start;
 
-        /* Compteur de noeud à un certain niveau de l'arbre */
+        /* Compteur de noeuds à un certain niveau de l'arbre */
         int count;
+
+        /* Liste de listes d'options */
+        int **options;
 
         /* Niveau de l'arbre */
         *level = 0;
 
-        /* Liste de listes d'options */
-        int **options;
+        /* Initialise le nombre de solutions */
+        *solutions = 0;
 
         /* Initialise la file */
         queue = malloc(instance->n_options * instance->n_options * sizeof(struct context_t*));
@@ -857,7 +858,7 @@ int **solve_bfs_root(const struct instance_t *instance, int *tasks, int *level)
                         count--;
                         if (sparse_array_empty(ctx->active_items))
                         {
-                                solutions++;
+                                (*solutions)++;
                                 free_ctx(ctx, instance->n_items);
                                 continue;       /* succès : plus d'objet actif */
                         }
@@ -916,7 +917,7 @@ int **solve_bfs_root(const struct instance_t *instance, int *tasks, int *level)
 
 /**
  * Résout l'instance du problème en effectuant un parcours BFS s'arrêtant à un
- * certain niveau, puis termine la résolution avec la fonction solve.
+ * certain niveau, puis termine la résolution en parallèle avec la fonction solve. 
  * 
  * La fonction retourne le nombre de solutions trouvées.
  * 
@@ -926,13 +927,13 @@ int **solve_bfs_root(const struct instance_t *instance, int *tasks, int *level)
  */
 long long solve_bfs_worker(const struct instance_t *instance, struct context_t *ctx)
 {
-        /* Compteur de noeud à un certain niveau de l'arbre */
+        /* Compteur de noeuds à un certain niveau de l'arbre */
         int count;
 
         /* Niveau de l'arbre */
         int level = 0;
 
-        /* Variable contenant le nombre de solutions trouvées */
+        /* Nombre de solutions trouvées */
         long long solutions = 0;
 
         /* Initialise la file */
@@ -1011,11 +1012,12 @@ long long solve_bfs_worker(const struct instance_t *instance, struct context_t *
  * à traiter.
  * 
  * @param cp_filename nom du fichier de checkpoint
+ * @param solutions nombre de solutions trouvées
  * @param tasks nombre de tâches correspondant à la longueur de la liste retournée
  * @param level longueur des listes d'options
  * @return liste de listes d'options à envoyer aux ouvriers
  */
-int **load_checkpoint(char *cp_filename, int *tasks, int *level)
+int **load_checkpoint(const char *cp_filename, long long *solutions, int *tasks, int *level)
 {
         /* Liste de listes d'options */
         int **options;
@@ -1028,13 +1030,13 @@ int **load_checkpoint(char *cp_filename, int *tasks, int *level)
                 err(1, "Impossible d'ouvrir %s en lecture", cp_filename);
 
         /* Nombre de solutions */
-        if (fscanf(cp, "%lld\n", &solutions) != 1)
-                err(1, "Erreur de lecture du fichier %s\n", cp_filename);
-        printf("- Solutions: %lld\n", solutions);
+        if (fscanf(cp, "%lld\n", solutions) != 1)
+                err(1, "Erreur de lecture du fichier %s", cp_filename);
+        printf("- Solutions: %lld\n", *solutions);
 
         /* Nombre et longueur des listes d'options */
         if (fscanf(cp, "%d %d\n", tasks, level) != 2)
-                err(1, "Erreur de lecture du fichier %s\n", cp_filename);
+                err(1, "Erreur de lecture du fichier %s", cp_filename);
         printf("- Tasks: %d\n- Level: %d\n", *tasks, *level);
 
         /* Création de la liste de listes d'options */
@@ -1046,7 +1048,7 @@ int **load_checkpoint(char *cp_filename, int *tasks, int *level)
                 {
                         if (fscanf(cp, "%d ", &options[i][j]) != 1)
                         {
-                                err(1, "Erreur de lecture du fichier %s\n", cp_filename);
+                                err(1, "Erreur de lecture du fichier %s", cp_filename);
                         }
                 }
         }
@@ -1064,14 +1066,15 @@ int **load_checkpoint(char *cp_filename, int *tasks, int *level)
  * Sauvegarde un checkpoint.
  * 
  * @param cp_filename nom du fichier de checkpoint
+ * @param solutions nombre de solutions trouvées
  * @param tasks nombre total de tâches à effectuer
- * @param task_done tableau de booléens pour connaître les tâches effectuées
- * @param tasks_done nombre de tâches terminées
  * @param level longueur des listes d'options
  * @param options listes d'options à faire
+ * @param task_done tableau de booléens pour connaître les tâches effectuées
+ * @param tasks_done nombre de tâches terminées
  */
-void save_checkpoint(char *cp_filename, int tasks, const bool *task_done,
-                        int tasks_done, int level, int **options)
+void save_checkpoint(const char *cp_filename, long long solutions, int tasks, int level,
+                        int **options, const bool *task_done, int tasks_done)
 {
         printf("CHECKPOINT\n");
 
@@ -1092,7 +1095,7 @@ void save_checkpoint(char *cp_filename, int tasks, const bool *task_done,
         fprintf(cp, "%d %d\n", tasks - tasks_done, level);
 
         /* Listes d'options à faire */
-        for (int i = tasks_done; i < tasks; i++)
+        for (int i = 0; i < tasks; i++)
         {
                 if (!task_done[i])
                 {
@@ -1195,6 +1198,7 @@ int main(int argc, char **argv)
         int **options;          // liste de listes d'options de longueur level
         int *buffer;            // buffer d'envoi des tâches avec numéro de tâche + liste d'options
         long long work;         // variable pour recevoir le travail effectué
+        long long solutions;    // nombre de solutions trouvées */
 
         /* Start solve */
         printf("[DEBUG] P%d: START\n", rank);
@@ -1213,13 +1217,13 @@ int main(int argc, char **argv)
                 {
                         /* Charge le checkpoint */
                         printf("Checkpoint %s found\n", cp_filename);
-                        options = load_checkpoint(cp_filename, &tasks, &level);
+                        options = load_checkpoint(cp_filename, &solutions, &tasks, &level);
                 }
                 else
                 {
                         /* Débute la résolution et crée les contextes à envoyer aux ouvriers */
                         printf("No checkpoint found\n");
-                        options = solve_bfs_root(instance, &tasks, &level);
+                        options = solve_bfs_root(instance, &solutions, &tasks, &level);
                 }
 
                 /* Le patron envoie le nombre d'options aux ouvriers */
@@ -1247,7 +1251,7 @@ int main(int argc, char **argv)
                                 if (task < tasks)
                                 {
                                         /* Envoie les options */
-                                        buffer[0] = task;
+                                        buffer[0] = task;       // numéro de tâche
                                         for (int i = 0; i < level; i++)
                                                 buffer[i + 1] = options[task][i];
                                         MPI_Send(buffer, level + 1, MPI_INT, status.MPI_SOURCE,
@@ -1276,7 +1280,8 @@ int main(int argc, char **argv)
                                 /* Sauvegarde d'un checkpoint */
                                 if (next_cp - wtime() < 0)
                                 {
-                                        save_checkpoint(cp_filename, tasks, task_done, tasks_done, level, options);
+                                        save_checkpoint(cp_filename, solutions, tasks, level,
+                                                        options, task_done, tasks_done);
                                         next_cp = wtime() + cp_delta;
                                 }
                                 break;
@@ -1335,7 +1340,6 @@ int main(int argc, char **argv)
                                         choose_option(instance, ctx, buffer[i + 1], NULL_ITEM);
 
                                 /* Solve */
-                                solutions = 0;
                                 solutions = solve_bfs_worker(instance, ctx);
 
                                 /*
