@@ -1,7 +1,7 @@
 {
     "instance": "../instances/pento_plus_tetra_8x8_secondary.ec",
     "csvfile": "./csv/pento_plus_tetra_8x8_secondary.csv",
-    "xlabel": "Number of processors",
+    "xlabel": "Number of nodes",
     "xlist": [10],
     "num_threads": 8,
     "hybrid": true,

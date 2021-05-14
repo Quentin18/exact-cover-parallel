@@ -1,11 +1,12 @@
 {
     "instance": "../instances/bell14.ec",
     "csvfile": "./csv/bell14_procs.csv",
-    "xlabel": "Number of processors",
-    "xlist": [2, 4, 8],
+    "xlabel": "Number of nodes",
+    "xlist": [2, 4, 6, 8, 10],
     "sequential": true,
-    "mpi_static": true,
+    "mpi_bfs": true,
     "mpi_dynamic": true,
-    "hybrid": true,
+    "hybrid_bfs": true,
+    "hybrid_tasks": true,
     "g5k": true
 }

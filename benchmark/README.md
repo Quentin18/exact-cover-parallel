@@ -54,6 +54,22 @@ Tous les benchmarks ont été lancés sur le cluster *gros* de Nancy.
 - [x] `bell13_threads.json`
 - [x] `bell14_procs.json`
 - [x] `bell14_threads.json`
-- [ ] `pento_plus_tetra_2x4x10.json`
-- [x] `pento_plus_tetra_2x4x10_threads.json` : 895536 solutions
-- [ ] `pento_plus_tetra_8x8_secondary.json`
+- [ ] `pento_plus_tetra_2x4x10_procs.json`
+- [x] `pento_plus_tetra_2x4x10_threads.json`
+- [x] `pento_plus_tetra_8x8_secondary` : 1372.6 secondes avec 3x18 coeurs
+
+## Résultats
+
+Instance | Solutions
+--- | ---
+bell12 | 4 213 597
+bell13 | 27 644 437
+bell14 | 190 899 322
+matching8 | 2 027 025
+matching9 | 34 459 425
+matching10 | 654 729 075
+pentomino_6_10 | 9 356
+pento_plus_tetra_2x4x10 | 895 536
+pento_plus_tetra_8x10 | **TODO**
+pento_plus_tetra_8x8_secondary | 1 207 328
+rmols10 | **TODO**
