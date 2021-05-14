@@ -32,13 +32,10 @@ long long next_report;                 // prochain rapport affiché au noeud...
 long long max_solutions = 0x7fffffffffffffff;        // stop après ... solutions
 
 /* Variables de file */
-struct context_t **queue;
-int queue_front = 0;
-int queue_rear = -1;
-int queue_size = 0;
-
-/* Variable contenant le nombre de solutions trouvées */
-long long solutions = 0;
+struct context_t **queue;               // file de contextes
+int queue_front = 0;                    // tête de la file
+int queue_rear = -1;                    // queue de la file
+int queue_size = 0;                     // nombre de contextes dans la file
 
 struct instance_t {
         int n_items;
@@ -705,8 +702,9 @@ void free_instance(struct instance_t *instance)
         free(instance);
 }
 
+
 /**
- * Retourne True si la file est vide.
+ * Retourne true si la file est vide.
  * 
  * @return file vide
  */
@@ -738,7 +736,7 @@ struct context_t *dequeue()
 }
 
 /**
- * Libère la mémoire de la file.
+ * Libère la mémoire occupée par la file.
  * 
  * @param n nombre d'items
  */
@@ -783,38 +781,43 @@ void solve(const struct instance_t *instance, struct context_t *ctx)
 
 
 /**
- * Ajoute à la file les contextes à traiter en effectuant un parcours BFS 
- * s'arrêtant à un certain niveau.
+ * Ajoute à la file les contextes à traiter en parallèle en effectuant un 
+ * parcours BFS s'arrêtant à un certain niveau. À la fin de l'exécution de la 
+ * fonction, la file contient les contextes à distribuer aux autres processeurs. 
  * 
- * La fonction retourne le niveau de l'arbre où le BFS s'est arrêté.
+ * La fonction retourne le nombre de solutions trouvées pendant le BFS.
  * 
  * @param instance instance
- * @param ctx contexte
- * @return level
+ * @param level niveau d'arrêt du BFS correspondant à la longueur des listes d'options
+ * @return solutions
  */
-int solve_bfs(const struct instance_t *instance, struct context_t *ctx)
+long long solve_bfs_root(const struct instance_t *instance, int *level)
 {
         /* Variable pour mesurer le temps d'exécution du BFS */
         double t_start;
 
-        /* Compteur de noeud à un certain niveau de l'arbre */
+        /* Compteur de noeuds à un certain niveau de l'arbre */
         int count;
 
+        /* Nombre de solutions trouvées */
+        long long solutions = 0;
+
         /* Niveau de l'arbre */
-        int level = 0;
+        *level = 0;
 
         /* Initialise la file */
         queue = malloc(instance->n_options * instance->n_options * sizeof(struct context_t*));
+        struct context_t *ctx = backtracking_setup(instance);
         enqueue(ctx);
 
-        /* Parcourt BFS */
+        /* Parcours BFS */
         printf("START BFS\n");
         t_start = wtime();
 
         while (!queue_is_empty())
         {
                 count = queue_size;
-                printf("- Level %d: %d nodes\n", level, count);
+                printf("- Level %d: %d nodes\n", *level, count);
 
                 /* Condition d'arrêt */
                 if (count > MIN)
@@ -859,12 +862,12 @@ int solve_bfs(const struct instance_t *instance, struct context_t *ctx)
 
                         free_ctx(ctx, instance->n_items);
                 }
-                level++;
+                (*level)++;
         }
         printf("END   BFS: %1.fs\n", wtime() - t_start);
         printf("Tasks: %d\n", queue_size);
 
-        return level;
+        return solutions;
 }
 
 
@@ -939,9 +942,12 @@ int main(int argc, char **argv)
         bool run = true;
 
         /* Variables pour gérer le travail à faire */
-        int task, stopped, level;
-        int *chosen_options;
-        long long work;
+        int task;               // numéro de tâche à attribuer
+        int stopped;            // nombre de processeurs arrêtés
+        int level;              // niveau d'arrêt du BFS correspondant à la longueur des listes d'options
+        int *chosen_options;    // buffer pour recevoir les options
+        long long work;         // variable pour recevoir le travail effectué
+        long long solutions;    // nombre de solutions trouvées
 
         /* Start solve */
         printf("[DEBUG] P%d: START\n", rank);
@@ -951,11 +957,8 @@ int main(int argc, char **argv)
         {
                 start = wtime();
 
-                /* Création du contexte */
-                ctx = backtracking_setup(instance);
-
                 /* Débute la résolution et crée les contextes à envoyer aux ouvriers */
-                level = solve_bfs(instance, ctx);
+                solutions = solve_bfs_root(instance, &level);
 
                 /* Le patron envoie le nombre d'options aux ouvriers */
                 MPI_Bcast(&level, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
@@ -1007,7 +1010,7 @@ int main(int argc, char **argv)
                         }
                 }
 
-                /* Libère la mémoire de la file */
+                /* Libère la mémoire occupée par la file */
                 free_queue(instance->n_items);
 
                 printf("FINI. Trouvé %lld solutions en %.1fs\n", solutions,
@@ -1042,9 +1045,7 @@ int main(int argc, char **argv)
 
                                 /* On choisit les options */
                                 for (int i = 0; i < level; i++)
-                                {
                                         choose_option(instance, ctx, chosen_options[i], NULL_ITEM);
-                                }
 
                                 /* Solve */
                                 solve(instance, ctx);
@@ -1055,7 +1056,7 @@ int main(int argc, char **argv)
                                 /* Envoie au patron le nombre de solutions trouvées */
                                 MPI_Send(&ctx->solutions, 1, MPI_LONG_LONG, ROOT, WORK, MPI_COMM_WORLD);
 
-                                /* Libère la mémoire du contexte */
+                                /* Libère la mémoire occupée par le contexte */
                                 free_ctx(ctx, instance->n_items);
                                 break;
 
