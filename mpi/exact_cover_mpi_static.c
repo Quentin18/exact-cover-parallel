@@ -14,7 +14,7 @@
 
 #include <mpi.h>
 
-/* Rang du processeur principal. */
+/* Rang du processeur principal */
 #define ROOT 0
 
 
