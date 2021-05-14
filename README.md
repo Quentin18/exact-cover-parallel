@@ -48,9 +48,8 @@ mpirun -n 4 ./exact_cover_mpi_bfs.out --in ../instances/bell13.ec
 ```
 Sur Grid5000 :
 ```
-mpirun -np 4 --map-by ppr:1:core --hostfile $OAR_NODEFILE ./exact_cover_mpi_bfs.out --in ../instances/bell13.ec
+mpirun --map-by ppr:1:core --hostfile $OAR_NODEFILE ./exact_cover_mpi_bfs.out --in ../instances/bell13.ec
 ```
-
 
 ### Parallèle hybride MPI + OpenMP
 
@@ -62,7 +61,7 @@ mpirun -x OMP_NUM_THREADS=2 -n 4 ./exact_cover_hybrid_bfs.out --in ../instances/
 ```
 Sur Grid5000 :
 ```
-mpirun -np 4 --map-by ppr:1:core --hostfile $OAR_NODEFILE ./exact_cover_hybrid_bfs.out --in ../instances/bell13.ec
+mpirun -x OMP_NUM_THREADS=1 --map-by ppr:1:node --hostfile $OAR_NODEFILE ./exact_cover_hybrid_bfs.out --in ../instances/bell13.ec
 ```
 
 ## Auteur
