@@ -39,10 +39,10 @@ double cp_delta = 2;                   // sauvegarde d'un checkpoint toutes les 
 double next_cp;                        // prochain checkpoint à ... secondes
 
 /* Variables de file */
-struct context_t **queue;
-int queue_front = 0;
-int queue_rear = -1;
-int queue_size = 0;
+struct context_t **queue;               // file de contextes
+int queue_front = 0;                    // tête de la file
+int queue_rear = -1;                    // queue de la file
+int queue_size = 0;                     // nombre de contextes dans la file
 
 struct instance_t {
         int n_items;
@@ -885,6 +885,7 @@ int **solve_bfs_root(const struct instance_t *instance, long long *solutions, in
                                 choose_option(instance, ctx_copy, option, chosen_item);
 
                                 /* Ajout du contexte à la file */
+                                #pragma omp critical
                                 enqueue(ctx_copy);
                         }
 
