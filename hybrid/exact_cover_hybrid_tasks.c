@@ -1,5 +1,5 @@
 /**
- * Version Hybride : MPI + OpenMP
+ * Version Hybride : MPI + OpenMP avec tâches
  * 
  * Quentin Deschamps, 2021
  */
@@ -15,7 +15,7 @@
 #include <mpi.h>
 #include <omp.h>
 
-/* Rang du processeur principal. */
+/* Rang du processeur principal */
 #define ROOT 0
 
 
