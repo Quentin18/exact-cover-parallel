@@ -19,7 +19,8 @@
 #define ROOT 0
 
 /* Nombre minimum de tâches */
-#define MIN 1000
+#define MIN_ROOT 500
+#define MIN_WORKER 50
 
 /* Item null pour appeler chosen_item sans cover */
 #define NULL_ITEM -1
@@ -839,7 +840,7 @@ long long solve_bfs_root(const struct instance_t *instance, int *level)
                 printf("- Level %d: %d nodes\n", *level, count);
 
                 /* Condition d'arrêt */
-                if (count > MIN)
+                if (count > MIN_ROOT)
                 {
                         break;
                 }
@@ -921,7 +922,7 @@ long long solve_bfs_worker(const struct instance_t *instance, struct context_t *
                 count = queue_size;
 
                 /* Condition d'arrêt */
-                if (count > MIN)
+                if (count > MIN_WORKER)
                 {
                         break;
                 }

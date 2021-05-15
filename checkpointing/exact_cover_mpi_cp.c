@@ -19,7 +19,7 @@
 #define ROOT 0
 
 /* Nombre minimum de tâches */
-#define MIN 1000
+#define MIN 500
 
 /* Item null pour appeler chosen_item sans cover */
 #define NULL_ITEM -1
