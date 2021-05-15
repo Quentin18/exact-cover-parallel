@@ -1,6 +1,6 @@
 {
     "instance": "../instances/pento_plus_tetra_2x4x10.ec",
-    "csvfile": "./csv/pento_plus_tetra_2x4x10.csv",
+    "csvfile": "./csv/pento_plus_tetra_2x4x10_procs.csv",
     "xlabel": "Number of nodes",
     "xlist": [2, 4, 6, 8, 10],
     "sequential": true,
