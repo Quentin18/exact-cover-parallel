@@ -17,7 +17,7 @@ Params:
 - mpi_static:   true to test the program with MPI (static)
 - hybrid_bfs:   true to test the program with MPI + OpenMP (bfs)
 - hybrid_tasks: true to test the program with MPI + OpenMP (tasks)
-- num_threads:  number of threads for the hybrid version (default: 1)
+- num_threads:  number of threads for the hybrid version (default: 18)
 - make:         true to run "make" command (default: true)
 - clean:        true to run "make clean" command (default: true)
 - show:         true to show the output of the executions (default: true)
@@ -80,7 +80,7 @@ def benchmark(config: dict):
     g5k = config['g5k'] if 'g5k' in config else False
     show = config['show'] if 'show' in config else True
     xlist = config['xlist']
-    num_threads = config['num_threads'] if 'num_threads' in config else 1
+    num_threads = config['num_threads'] if 'num_threads' in config else 18
 
     # Get $OAR_NODE_FILE
     if g5k:
