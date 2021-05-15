@@ -34,7 +34,7 @@ long long report_delta = 1e6;          // affiche un rapport tous les ... noeuds
 long long next_report;                 // prochain rapport affiché au noeud...
 long long max_solutions = 0x7fffffffffffffff;        // stop après ... solutions
 
-double cp_delta = 2;                   // sauvegarde d'un checkpoint toutes les ... secondes
+double cp_delta = 60;                  // sauvegarde d'un checkpoint toutes les ... secondes
 double next_cp;                        // prochain checkpoint à ... secondes
 
 /* Variables de file */
