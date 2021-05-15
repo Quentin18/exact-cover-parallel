@@ -1,0 +1,9 @@
+{
+    "instance": "../instances/pento_plus_tetra_8x10.ec",
+    "csvfile": "./csv/pento_plus_tetra_8x10.csv",
+    "xlabel": "Number of nodes",
+    "xlist": [10],
+    "hybrid_bfs": true,
+    "cp": true,
+    "g5k": true
+}
