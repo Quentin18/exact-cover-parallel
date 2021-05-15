@@ -17,6 +17,7 @@ Params:
 - mpi_static:   true to test the program with MPI (static)
 - hybrid_bfs:   true to test the program with MPI + OpenMP (bfs)
 - hybrid_tasks: true to test the program with MPI + OpenMP (tasks)
+- cp:           true to use programs with checkpointing (default: false)
 - num_threads:  number of threads for the hybrid version (default: 18)
 - make:         true to run "make" command (default: true)
 - clean:        true to run "make clean" command (default: true)
@@ -81,6 +82,7 @@ def benchmark(config: dict):
     show = config['show'] if 'show' in config else True
     xlist = config['xlist']
     num_threads = config['num_threads'] if 'num_threads' in config else 18
+    cp = config['cp'] if 'cp' in config else False
 
     # Get $OAR_NODE_FILE
     if g5k:
@@ -141,40 +143,43 @@ def benchmark(config: dict):
             # MPI
             for program in ['mpi_bfs', 'mpi_dynamic', 'mpi_static']:
                 if program in config and config[program]:
+                    # Checkpointing
+                    if cp and program == 'mpi_bfs':
+                        exec = '../checkpointing/exact_cover_mpi_cp.out'
+                    else:
+                        exec = f'../mpi/exact_cover_{program}.out'
                     if g5k:
                         command = [
                             'mpirun', '-max-vm-size', str(x), '--map-by',
                             'ppr:1:core', '--hostfile', oar_nodefile,
-                            f'../mpi/exact_cover_{program}.out',
-                            '--in', instance
+                            exec, '--in', instance
                         ]
                     else:
                         command = [
-                            'mpirun', '-n', str(x),
-                            f'../mpi/exact_cover_{program}.out',
-                            '--in', instance
+                            'mpirun', '-n', str(x), exec, '--in', instance
                         ]
                     row.append(str(runtime(command, show)))
 
             # MPI + OpenMP
             for program in ['hybrid_bfs', 'hybrid_tasks']:
                 if program in config and config[program]:
+                    # Checkpointing
+                    if cp and program == 'hybrid_bfs':
+                        exec = '../checkpointing/exact_cover_hybrid_cp.out'
+                    else:
+                        exec = f'../hybrid/exact_cover_{program}.out'
                     if g5k:
                         command = [
                             'mpirun', '-x',
                             'OMP_NUM_THREADS=' + str(num_threads),
                             '-max-vm-size', str(x), '--map-by', 'ppr:1:node',
-                            '--hostfile', oar_nodefile,
-                            f'../hybrid/exact_cover_{program}.out',
-                            '--in', instance
+                            '--hostfile', oar_nodefile, exec, '--in', instance
                         ]
                     else:
                         command = [
                             'mpirun', '-x',
                             'OMP_NUM_THREADS=' + str(num_threads),
-                            '-n', str(x),
-                            f'../hybrid/exact_cover_{program}.out',
-                            '--in', instance
+                            '-n', str(x), exec, '--in', instance
                         ]
                     row.append(str(runtime(command, show)))
 
