@@ -8,8 +8,10 @@ Parallélisation d'un solver du problème de couverture exacte.
 - `openmp` : parallélisation avec OpenMP
 - `mpi` : parallélisation avec MPI
 - `hybrid` : parallélisation avec MPI et OpenMP
+- `checkpointing` : parallélisation avec checkpointing
 - `instances` : instances du problème de couverture exacte
-- `benchmark` : scripts en Python pour lancer des benchmarks et visualiser les résultats, fichiers de configuration (json) et fichiers de résultats (csv, png)
+- `benchmark` : scripts en Python pour lancer des benchmarks et visualiser les
+résultats, fichiers de configuration (json) et fichiers de résultats (csv, png)
 
 ## Compilation
 
@@ -20,7 +22,7 @@ Parallélisation d'un solver du problème de couverture exacte.
 
 ## Versions
 
-Voici 4 versions du solver du problème de couverture exacte.
+Voici les différentes versions du solver du problème de couverture exacte.
 
 ### Séquentielle
 
@@ -42,11 +44,11 @@ Répertoire : `openmp`
 
 Répertoire : `mpi`
 
-En local :
+En local (pour tester) :
 ```
 mpirun -n 4 ./exact_cover_mpi_bfs.out --in ../instances/bell13.ec
 ```
-Sur Grid5000 :
+Sur Grid5000 (avec un processus par coeur) :
 ```
 mpirun --map-by ppr:1:core --hostfile $OAR_NODEFILE ./exact_cover_mpi_bfs.out --in ../instances/bell13.ec
 ```
@@ -55,13 +57,13 @@ mpirun --map-by ppr:1:core --hostfile $OAR_NODEFILE ./exact_cover_mpi_bfs.out --
 
 Répertoire : `hybrid`
 
-En local :
+En local (pour tester) :
 ```
 mpirun -x OMP_NUM_THREADS=2 -n 4 ./exact_cover_hybrid_bfs.out --in ../instances/bell13.ec
 ```
-Sur Grid5000 :
+Sur Grid5000 (avec un processus par noeud) :
 ```
-mpirun -x OMP_NUM_THREADS=1 --map-by ppr:1:node --hostfile $OAR_NODEFILE ./exact_cover_hybrid_bfs.out --in ../instances/bell13.ec
+mpirun --map-by ppr:1:node --hostfile $OAR_NODEFILE ./exact_cover_hybrid_bfs.out --in ../instances/bell13.ec
 ```
 
 ## Auteur
