@@ -1,0 +1,48 @@
+cd sequential && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+[DEBUG] P0: START
+No checkpoint found
+[DEBUG] P1: START
+[DEBUG] P5: START
+[DEBUG] P2: START
+START BFS
+- Level 0: 1 nodes
+[DEBUG] P6: START
+[DEBUG] P9: START
+[DEBUG] P8: START
+[DEBUG] P4: START
+[DEBUG] P3: START
+[DEBUG] P7: START
+- Level 1: 48 nodes
+- Level 2: 1152 nodes
+END   BFS: 2s
+Tasks: 1152
+1/1152
+2/1152
+3/1152
+4/1152
+5/1152
+6/1152
+7/1152
+8/1152
+9/1152
+CHECKPOINT
+10/1152
