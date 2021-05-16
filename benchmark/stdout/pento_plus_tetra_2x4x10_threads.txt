@@ -1,0 +1,444 @@
+cd sequential && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+Exploré 1000000 noeuds, trouvé 0 solutions, temps écoulé 2.1s. 1w 03 03 0h 03 mo 5e 49 7b 03 fj 13 
+Exploré 2000000 noeuds, trouvé 367 solutions, temps écoulé 4.1s. 1w 03 03 5h 0f 7q 0d 0j 67 4b 5i 03 05 59 
+Exploré 3000000 noeuds, trouvé 952 solutions, temps écoulé 6.2s. 1w 03 03 5h df 9f fo 6c ej 7a ij 8d 
+Exploré 4000000 noeuds, trouvé 2868 solutions, temps écoulé 8.1s. 1w 03 13 3g af bo 04 24 78 02 
+Exploré 5000000 noeuds, trouvé 5748 solutions, temps écoulé 10.0s. 1w 03 13 7g 3u 2d 48 48 dh fk 
+Exploré 6000000 noeuds, trouvé 10001 solutions, temps écoulé 12.1s. 1w 03 13 9g 9c 2b 0c bd 6o 0j 09 39 04 14 
+Exploré 7000000 noeuds, trouvé 20271 solutions, temps écoulé 13.7s. 1w 03 23 1g 37 0e 02 24 1o 47 37 bf 39 38 04 
+Exploré 8000000 noeuds, trouvé 33836 solutions, temps écoulé 15.2s. 1w 03 23 4g 37 0z 2h 35 69 8a 
+Exploré 9000000 noeuds, trouvé 40028 solutions, temps écoulé 16.9s. 1w 03 23 4g 37 dz 35 04 cd 7p 68 02 1e 68 02 
+Exploré 10000000 noeuds, trouvé 46158 solutions, temps écoulé 18.5s. 1w 03 23 4g 37 pz ah 12 im 4a 7e ik 16 23 
+Exploré 11000000 noeuds, trouvé 46640 solutions, temps écoulé 20.4s. 1w 03 23 fg 78 uA bj 4b fg 34 02 4b 
+Exploré 12000000 noeuds, trouvé 47308 solutions, temps écoulé 22.5s. 1w 13 04 bg 02 iq 4k 13 28 7d 28 
+Exploré 13000000 noeuds, trouvé 47528 solutions, temps écoulé 24.5s. 1w 13 14 4f 5b 8q 0k 9d 03 6b 
+Exploré 14000000 noeuds, trouvé 48024 solutions, temps écoulé 26.6s. 1w 23 02 4g ep gq ab 17 5f cf 06 
+Exploré 15000000 noeuds, trouvé 51180 solutions, temps écoulé 28.6s. 1w 23 02 7g cu 2n 18 38 7a hi 4c 
+Exploré 16000000 noeuds, trouvé 57658 solutions, temps écoulé 30.4s. 1w 23 02 9g 9c 36 24 04 fm 9d 38 14 35 03 
+Exploré 17000000 noeuds, trouvé 66432 solutions, temps écoulé 32.0s. 1w 23 02 fg 28 go 1g 24 
+Exploré 18000000 noeuds, trouvé 66940 solutions, temps écoulé 34.1s. 2w 0c 6e 02 4f 1o 2b 67 46 16 48 13 
+Exploré 19000000 noeuds, trouvé 67244 solutions, temps écoulé 36.0s. 2w 0c 8e 13 8e pA 3c aj 18 12 57 19 
+Exploré 20000000 noeuds, trouvé 67368 solutions, temps écoulé 38.0s. 2w 1c 09 13 dg no bn ac 09 ae 8a 12 
+Exploré 21000000 noeuds, trouvé 68836 solutions, temps écoulé 39.9s. 2w 4c 48 06 ef 5y 25 02 4r 36 04 37 2d 35 
+Exploré 22000000 noeuds, trouvé 71072 solutions, temps écoulé 41.7s. 2w 4c 48 16 ef 5o 7e 89 6b cj cg 2c 12 
+Exploré 23000000 noeuds, trouvé 73552 solutions, temps écoulé 43.7s. 2w 4c 48 26 1a 15 7b 34 er 7j 12 4b 5a 12 
+Exploré 24000000 noeuds, trouvé 87690 solutions, temps écoulé 45.1s. 2w 4c 48 26 7a 9d 12 04 1r be 5a 38 12 24 
+Exploré 25000000 noeuds, trouvé 92550 solutions, temps écoulé 46.7s. 2w 4c 48 36 ad 7o 7q 09 46 5a 6f 2e 
+Exploré 26000000 noeuds, trouvé 94608 solutions, temps écoulé 48.4s. 2w 4c 48 36 ad jo bc 28 02 hk 9d 5h 05 
+Exploré 27000000 noeuds, trouvé 96748 solutions, temps écoulé 50.2s. 2w 4c 48 56 be 0o 7l ae 02 8c ek 39 04 
+Exploré 28000000 noeuds, trouvé 96748 solutions, temps écoulé 52.2s. 2w 5c 4b 13 de lu 7b 68 25 16 02 
+Exploré 29000000 noeuds, trouvé 99608 solutions, temps écoulé 54.0s. 2w 7c 12 25 ce 2o br 7b 5d ef 67 46 
+Exploré 30000000 noeuds, trouvé 99608 solutions, temps écoulé 56.0s. 3w 3i 2h 37 9o co 69 ab dg 
+Exploré 31000000 noeuds, trouvé 100145 solutions, temps écoulé 57.9s. 3w 4i 06 03 6b 36 69 12 8q 05 57 03 5a 04 03 13 
+Exploré 32000000 noeuds, trouvé 109395 solutions, temps écoulé 59.4s. 3w 9i 13 13 5c 46 ad 04 jq 02 cf 3a 03 36 14 
+Exploré 33000000 noeuds, trouvé 115743 solutions, temps écoulé 61.2s. 3w ei 4i mx 7l gm 69 8t 7h 37 cd 56 02 
+Exploré 34000000 noeuds, trouvé 119950 solutions, temps écoulé 63.0s. 3w fi 1c 34 6a 15 9b 34 or 34 69 fj 49 69 02 
+Exploré 35000000 noeuds, trouvé 128224 solutions, temps écoulé 64.6s. 4w 1i 0c 24 1a cd 02 34 9r 7m 29 36 
+Exploré 36000000 noeuds, trouvé 134184 solutions, temps écoulé 66.3s. 4w 7i 0h 45 5f 9o 9a 47 28 bd 5b ad 02 
+Exploré 37000000 noeuds, trouvé 134484 solutions, temps écoulé 68.2s. 4w 8i 1h 34 5d 
+Exploré 38000000 noeuds, trouvé 136016 solutions, temps écoulé 70.2s. 4w bi gi 02 4o 2d 49 4d 7f 02 56 
+Exploré 39000000 noeuds, trouvé 143207 solutions, temps écoulé 71.9s. 4w hi 03 13 2c 3d 8k 02 5n 3j 8a 25 12 23 03 
+Exploré 40000000 noeuds, trouvé 153532 solutions, temps écoulé 73.4s. 4w hi 23 12 7c ab 27 23 bo 48 68 5b 28 04 03 
+Exploré 41000000 noeuds, trouvé 155076 solutions, temps écoulé 75.4s. 5w 2c 9e 23 de jA ag go ef 08 27 05 03 
+Exploré 42000000 noeuds, trouvé 155588 solutions, temps écoulé 77.3s. 5w 2c de 02 0f 2o ej 9a df 59 26 12 
+Exploré 43000000 noeuds, trouvé 169376 solutions, temps écoulé 78.7s. 5w 3c 08 06 1a 25 23 03 no 6m eh 5e 7b 02 24 
+Exploré 44000000 noeuds, trouvé 175700 solutions, temps écoulé 80.4s. 5w 3c 08 16 ad 5o 4b 57 ij 03 8g 4c 02 
+Exploré 45000000 noeuds, trouvé 178262 solutions, temps écoulé 82.1s. 5w 3c 08 16 cd 9o 9q ai 2j 49 06 06 34 
+Exploré 46000000 noeuds, trouvé 180610 solutions, temps écoulé 83.8s. 5w 3c 08 16 cd io 4c 8e hj gi be 8a 
+Exploré 47000000 noeuds, trouvé 181188 solutions, temps écoulé 85.6s. 5w 3c 08 26 ef ao 8e 59 5f lp jo 5d 14 
+Exploré 48000000 noeuds, trouvé 182507 solutions, temps écoulé 87.6s. 5w 3c 08 36 ef by 25 14 qr ah 13 12 57 34 12 
+Exploré 49000000 noeuds, trouvé 184164 solutions, temps écoulé 89.6s. 5w 3c 78 12 be fo 8b fg 56 37 14 4b 8b 
+Exploré 50000000 noeuds, trouvé 184188 solutions, temps écoulé 91.6s. 5w 7c ab 03 6g ko 89 12 58 05 6d 
+Exploré 51000000 noeuds, trouvé 184888 solutions, temps écoulé 93.5s. 5w 8c 59 13 ef 1o kn 7c 14 79 
+Exploré 52000000 noeuds, trouvé 185388 solutions, temps écoulé 95.4s. 5w bc 02 45 be 7o 2i 0b 28 4a 
+Exploré 53000000 noeuds, trouvé 196116 solutions, temps écoulé 96.9s. 6w 03 03 ag 37 5z 8w 6u 09 23 39 
+Exploré 54000000 noeuds, trouvé 201074 solutions, temps écoulé 98.6s. 6w 03 03 ag 37 gz sv 9b 79 ce 17 06 25 
+Exploré 55000000 noeuds, trouvé 205972 solutions, temps écoulé 100.3s. 6w 03 03 bg 78 8A 37 58 cf 09 05 
+Exploré 56000000 noeuds, trouvé 205972 solutions, temps écoulé 102.3s. 6w 03 03 cg 56 pu 0l 6e 02 7b 35 14 
+Exploré 57000000 noeuds, trouvé 214316 solutions, temps écoulé 104.0s. 6w 03 13 1h cf dp 9d 37 08 8b 46 79 
+Exploré 58000000 noeuds, trouvé 215092 solutions, temps écoulé 106.1s. 6w 03 13 6h 0d 8d 9o kl 07 02 3a 13 26 03 
+Exploré 59000000 noeuds, trouvé 215624 solutions, temps écoulé 108.1s. 6w 03 13 dh 23 2o 0u 38 79 19 25 17 
+Exploré 60000000 noeuds, trouvé 215624 solutions, temps écoulé 110.2s. 6w 03 23 0g 0u cu 34 2b 15 18 
+Exploré 61000000 noeuds, trouvé 215654 solutions, temps écoulé 112.5s. 6w 03 23 1g 7p hp jm 02 7b 0h 47 8c 03 
+Exploré 62000000 noeuds, trouvé 224673 solutions, temps écoulé 114.1s. 6w 03 23 4g 8f dj 6f 12 mo 69 13 02 56 34 
+Exploré 63000000 noeuds, trouvé 233332 solutions, temps écoulé 115.7s. 6w 03 23 ag 3a 2o 6n 56 02 1a 02 
+Exploré 64000000 noeuds, trouvé 234392 solutions, temps écoulé 117.8s. 6w 13 02 0g 9u mn 25 7b 9f 1a 02 
+Exploré 65000000 noeuds, trouvé 235284 solutions, temps écoulé 119.9s. 6w 13 02 2g 26 4e 15 03 fr 5o 09 03 7c 78 04 
+Exploré 66000000 noeuds, trouvé 245424 solutions, temps écoulé 121.5s. 6w 13 02 6g go lo 9n 25 48 25 26 13 
+Exploré 67000000 noeuds, trouvé 252860 solutions, temps écoulé 123.1s. 6w 13 02 cg df 4o fo 17 4a cj dh 15 
+Exploré 68000000 noeuds, trouvé 253208 solutions, temps écoulé 125.2s. 6w 13 12 df 12 io aq 23 ce 05 57 
+Exploré 69000000 noeuds, trouvé 253536 solutions, temps écoulé 127.2s. 6w 23 24 df 02 co bn bf 3a 23 47 
+Exploré 70000000 noeuds, trouvé 254220 solutions, temps écoulé 129.3s. 6w 23 34 bg 56 3r 7p 23 9e 48 35 02 
+Exploré 71000000 noeuds, trouvé 254352 solutions, temps écoulé 131.4s. 9w 03 14 6f 12 no hr 59 df 48 38 06 
+Exploré 72000000 noeuds, trouvé 255048 solutions, temps écoulé 133.5s. 9w 03 24 5g ip 2c no 8p 79 cd 06 15 03 
+Exploré 73000000 noeuds, trouvé 259601 solutions, temps écoulé 135.4s. 9w 13 02 0g df 45 36 12 0o 9m 6b 05 9d 
+Exploré 74000000 noeuds, trouvé 265584 solutions, temps écoulé 137.4s. 9w 13 02 5g gu 7d 58 2e 68 29 48 
+Exploré 75000000 noeuds, trouvé 268086 solutions, temps écoulé 139.3s. 9w 13 02 9g 9q 12 gj 04 9n 36 13 47 1a 
+Exploré 76000000 noeuds, trouvé 272588 solutions, temps écoulé 141.1s. 9w 13 02 eg 6c 4d 0f 12 1r 48 0i 15 27 13 23 
+Exploré 77000000 noeuds, trouvé 274072 solutions, temps écoulé 143.2s. 9w 23 03 1h 5a bp 9d 37 78 04 ag 14 
+Exploré 78000000 noeuds, trouvé 274100 solutions, temps écoulé 145.2s. 9w 23 03 6h 03 co cu 34 ei 69 8b 5c 03 
+Exploré 79000000 noeuds, trouvé 274364 solutions, temps écoulé 147.2s. 9w 23 03 8h bd ij mo 8c 46 49 eh 2a 24 
+Exploré 80000000 noeuds, trouvé 275352 solutions, temps écoulé 149.3s. 9w 23 03 ch 5f 1p op 5e 9a 03 45 13 
+Exploré 81000000 noeuds, trouvé 282875 solutions, temps écoulé 151.1s. 9w 23 13 4g 37 ae 12 24 2o 7k 24 04 
+Exploré 82000000 noeuds, trouvé 297900 solutions, temps écoulé 152.5s. 9w 23 13 8g 27 wz fg 02 mr 03 12 78 56 25 
+Exploré 83000000 noeuds, trouvé 301944 solutions, temps écoulé 154.3s. 9w 23 13 fg 38 rA 02 cf fq 5b 38 
+Exploré 84000000 noeuds, trouvé 309218 solutions, temps écoulé 156.0s. 9w 23 23 0g 9f 05 36 12 jo 7m eh 9k 2a 
+Exploré 85000000 noeuds, trouvé 314667 solutions, temps écoulé 157.7s. 9w 23 23 8g 5a 45 8c 24 4o jk 3b 78 1d 03 25 02 
+Exploré 86000000 noeuds, trouvé 314912 solutions, temps écoulé 160.0s. 9w 23 23 cg 6p hq 8j 05 26 05 13 49 
+Exploré 87000000 noeuds, trouvé 320712 solutions, temps écoulé 161.7s. 9w 23 23 fg 28 6o fg 39 ab 67 15 
+Exploré 88000000 noeuds, trouvé 323624 solutions, temps écoulé 163.6s. aw 3c 12 35 9e 0o hr 9e an 89 25 17 6a 
+Exploré 89000000 noeuds, trouvé 324068 solutions, temps écoulé 165.5s. aw 4c 29 03 5f no bn 29 68 
+Exploré 90000000 noeuds, trouvé 324328 solutions, temps écoulé 167.4s. aw 5c 4e 03 ae 6A 9k 8c 23 15 15 14 
+Exploré 91000000 noeuds, trouvé 324704 solutions, temps écoulé 169.4s. aw 5c 7e 14 4e 9a 4a fk 3o 58 14 
+Exploré 92000000 noeuds, trouvé 333691 solutions, temps écoulé 171.0s. aw 7c 18 06 5a 9d 8c 34 2r ae 24 12 
+Exploré 93000000 noeuds, trouvé 346740 solutions, temps écoulé 172.4s. aw 7c 18 26 2d fq 2c 23 0a 16 8d 23 
+Exploré 94000000 noeuds, trouvé 348708 solutions, temps écoulé 174.2s. aw 7c 18 26 bd 4o 0c 78 5a 8k 6i 2a 
+Exploré 95000000 noeuds, trouvé 350802 solutions, temps écoulé 175.9s. aw 7c 18 26 bd fo 9c 14 03 34 57 2e 25 48 
+Exploré 96000000 noeuds, trouvé 353784 solutions, temps écoulé 177.6s. aw 7c 18 46 ce bo kl 13 03 4c 
+Exploré 97000000 noeuds, trouvé 353792 solutions, temps écoulé 179.6s. aw 7c 18 56 ef 9o 6e 2l ab al 1c 
+Exploré 98000000 noeuds, trouvé 353792 solutions, temps écoulé 181.6s. aw 7c 28 12 ef 2o 0b 38 7d 67 17 56 37 
+Exploré 99000000 noeuds, trouvé 353892 solutions, temps écoulé 183.6s. bw 0i 2h 27 8o 1b 12 bg 56 6e 0d 
+Exploré 100000000 noeuds, trouvé 354988 solutions, temps écoulé 185.5s. bw 5i 26 03 ab 16 69 12 5q 2b 6d 
+Exploré 101000000 noeuds, trouvé 365602 solutions, temps écoulé 186.9s. bw 6i 23 23 9c 4d 0f 12 0r 67 48 12 24 04 34 
+Exploré 102000000 noeuds, trouvé 368112 solutions, temps écoulé 188.9s. bw 9i 4b 05 05 de 8o 0c 17 8a 5g 7c 
+Exploré 103000000 noeuds, trouvé 374108 solutions, temps écoulé 190.6s. bw bi bc 34 9a bc co bm ce 23 bc 7c 26 24 
+Exploré 104000000 noeuds, trouvé 382931 solutions, temps écoulé 192.2s. cw 2i 03 12 9c 4d 4f 02 2r 04 23 57 0d 29 15 04 
+Exploré 105000000 noeuds, trouvé 392904 solutions, temps écoulé 193.7s. cw 3i 0b 05 35 1e 8b af or 67 02 06 14 
+Exploré 106000000 noeuds, trouvé 401744 solutions, temps écoulé 195.4s. cw 8i 12 78 45 9d co hk 37 8e 78 7b 
+Exploré 107000000 noeuds, trouvé 407977 solutions, temps écoulé 197.1s. cw ei 7i 5x 4l 8m et 89 1a 2b 
+Exploré 108000000 noeuds, trouvé 408412 solutions, temps écoulé 199.2s. cw ei gi 3g mo cd 48 4b 1h 02 2e 0c 
+Exploré 109000000 noeuds, trouvé 408856 solutions, temps écoulé 201.1s. dw 0c 28 06 2f 0o lu 24 49 bj fh 67 67 
+Exploré 110000000 noeuds, trouvé 408856 solutions, temps écoulé 203.1s. dw 0c 28 06 2f no 1u 12 8a 9m cd 18 04 
+Exploré 111000000 noeuds, trouvé 408948 solutions, temps écoulé 205.1s. dw 0c 28 16 de do bo 4a 59 0e eg 03 
+Exploré 112000000 noeuds, trouvé 410042 solutions, temps écoulé 207.0s. dw 0c 28 26 9d 1o ac 5a 2d bc 12 26 
+Exploré 113000000 noeuds, trouvé 412128 solutions, temps écoulé 208.7s. dw 0c 28 26 9d ho 6q 3b ad 57 13 03 12 
+Exploré 114000000 noeuds, trouvé 420653 solutions, temps écoulé 210.2s. dw 0c 28 36 0a 8b 1g 02 go 02 15 04 03 48 
+Exploré 115000000 noeuds, trouvé 431748 solutions, temps écoulé 211.6s. dw 0c 28 36 9a 15 8b 12 mr 13 3c 58 2a 34 27 
+Exploré 116000000 noeuds, trouvé 437480 solutions, temps écoulé 213.4s. dw 3c 12 05 0e 9o 6i 24 13 3g 18 03 
+Exploré 117000000 noeuds, trouvé 440316 solutions, temps écoulé 215.2s. dw 5c 0e 03 7e 3A 8g 6c 0i eg cg 12 
+Exploré 118000000 noeuds, trouvé 440316 solutions, temps écoulé 217.1s. dw 5c 0e 03 7e wA 9c 35 6a 29 78 23 
+Exploré 119000000 noeuds, trouvé 441534 solutions, temps écoulé 219.0s. dw 6c 29 12 df 5g 1m 29 7o ck 07 7a 04 
+Exploré 120000000 noeuds, trouvé 441860 solutions, temps écoulé 220.9s. dw 7c 8b 13 de ru il 23 9e 12 be 8a 12 
+Exploré 121000000 noeuds, trouvé 441960 solutions, temps écoulé 223.0s. dw bc 12 34 4e 2d ik 06 
+Exploré 122000000 noeuds, trouvé 443476 solutions, temps écoulé 225.0s. ew 03 12 2g lo 0o an 3b 0j 02 18 47 
+Exploré 123000000 noeuds, trouvé 446380 solutions, temps écoulé 226.9s. ew 03 12 9g 8f jo 9o 7c 1a 59 45 46 
+Exploré 124000000 noeuds, trouvé 457020 solutions, temps écoulé 228.4s. ew 03 12 cg 6f gj 3f 02 no jm 34 12 25 35 38 
+Exploré 125000000 noeuds, trouvé 460800 solutions, temps écoulé 230.3s. ew 03 12 eg 8u fn 39 ab 13 4j 12 27 
+Exploré 126000000 noeuds, trouvé 465118 solutions, temps écoulé 232.3s. ew 13 03 6g 0p 6p 5d 89 9c 14 07 
+Exploré 127000000 noeuds, trouvé 467853 solutions, temps écoulé 234.2s. ew 13 03 ag 7c 6b 37 13 co gk dh 16 0a 04 35 
+Exploré 128000000 noeuds, trouvé 476723 solutions, temps écoulé 235.8s. ew 13 03 cg cf 7d 2f 02 1o 19 26 68 3a 
+Exploré 129000000 noeuds, trouvé 479568 solutions, temps écoulé 238.0s. ew 13 03 eg iu 8d 08 9e 45 7k 58 57 
+Exploré 130000000 noeuds, trouvé 480510 solutions, temps écoulé 240.1s. ew 13 13 6h 1f lp fp 0e 12 68 17 25 
+Exploré 131000000 noeuds, trouvé 480852 solutions, temps écoulé 242.2s. ew 13 13 bh 23 1o 0e bl 8b 67 9i 12 18 
+Exploré 132000000 noeuds, trouvé 480852 solutions, temps écoulé 244.2s. ew 13 13 bh 23 no eu 12 5b 9l 12 5a 
+Exploré 133000000 noeuds, trouvé 489179 solutions, temps écoulé 245.9s. ew 13 23 1g 57 ae 02 34 mo 29 45 12 03 
+Exploré 134000000 noeuds, trouvé 494496 solutions, temps écoulé 247.7s. ew 13 23 7g 78 oA km 6b 6a 3f 12 4a 
+Exploré 135000000 noeuds, trouvé 500137 solutions, temps écoulé 249.4s. ew 13 23 dg 07 7z dg 04 cm 48 7c 46 35 
+Exploré 136000000 noeuds, trouvé 507964 solutions, temps écoulé 251.2s. ew 23 04 4g cp 12 ko 39 08 
+Exploré 137000000 noeuds, trouvé 508256 solutions, temps écoulé 253.4s. ew 23 34 bf 02 1o 8b 67 4b 34 12 
+Exploré 138000000 noeuds, trouvé 509036 solutions, temps écoulé 255.5s. hw 03 02 6e 7b 09 39 3r 02 47 03 69 
+Exploré 139000000 noeuds, trouvé 509881 solutions, temps écoulé 257.6s. hw 03 12 6f 1n 9a 8f 02 mo 38 6c 8b 57 35 
+Exploré 140000000 noeuds, trouvé 512496 solutions, temps écoulé 259.6s. hw 03 12 9f do 4c 78 4a df 0f 
+Exploré 141000000 noeuds, trouvé 517554 solutions, temps écoulé 261.5s. hw 03 12 cf cu 8e im bc 3n 12 47 
+Exploré 142000000 noeuds, trouvé 520102 solutions, temps écoulé 263.6s. hw 13 03 6g 0e 7q 2d 16 4a 1j 
+Exploré 143000000 noeuds, trouvé 521868 solutions, temps écoulé 265.9s. hw 13 03 9g 02 5e ko 8n ag 28 
+Exploré 144000000 noeuds, trouvé 523436 solutions, temps écoulé 268.0s. hw 13 13 6f 9a 3A 7i 8d 8c 04 04 
+Exploré 145000000 noeuds, trouvé 523436 solutions, temps écoulé 270.1s. hw 13 13 6f 9a jA 56 14 kq ai ad 04 
+Exploré 146000000 noeuds, trouvé 530207 solutions, temps écoulé 272.0s. hw 13 13 bf 18 ex 9b 24 9r 8o 7i 12 23 14 
+Exploré 147000000 noeuds, trouvé 542612 solutions, temps écoulé 273.6s. hw 13 23 0f 17 4o 9c 78 3a 2c 0h 46 
+Exploré 148000000 noeuds, trouvé 543532 solutions, temps écoulé 275.7s. hw 13 23 6f in 2o 1d 2o 9b dk 69 2c 
+Exploré 149000000 noeuds, trouvé 547386 solutions, temps écoulé 277.6s. hw 13 23 af 06 cd 2j 02 mo 39 8j af 78 56 
+Exploré 150000000 noeuds, trouvé 551672 solutions, temps écoulé 279.5s. hw 13 23 df iu 0e ag hm 1f 0i 47 02 
+Exploré 151000000 noeuds, trouvé 552912 solutions, temps écoulé 281.7s. hw 23 34 3f 3e 24 12 12 ho 7k 12 46 78 
+Exploré 152000000 noeuds, trouvé 557634 solutions, temps écoulé 283.9s. hw 23 34 df in 5b 0o 4r ag 0l ei 23 af 19 12 
+Exploré 153000000 noeuds, trouvé 558749 solutions, temps écoulé 286.0s. iw 1b 6b 03 1f 9h 5a 8a ck 13 6b 37 
+Exploré 154000000 noeuds, trouvé 559036 solutions, temps écoulé 288.1s. iw 1b 7b 03 8e 5b 
+Exploré 155000000 noeuds, trouvé 564056 solutions, temps écoulé 290.0s. iw 3b 02 35 5a 05 1b 24 io 49 1d 47 14 49 
+Exploré 156000000 noeuds, trouvé 568536 solutions, temps écoulé 292.0s. iw 6b 28 13 df fo 4d ci 02 9f 45 
+Exploré 157000000 noeuds, trouvé 570851 solutions, temps écoulé 294.1s. iw 6b 68 12 0e hl 08 27 it 7c 03 24 1b 12 
+Exploré 158000000 noeuds, trouvé 575092 solutions, temps écoulé 296.1s. iw 6b 78 23 de 0A 8i 8s 15 15 25 
+Exploré 159000000 noeuds, trouvé 575092 solutions, temps écoulé 298.3s. iw 6b 78 23 de gA 06 14 mq ci 03 05 
+Exploré 160000000 noeuds, trouvé 575528 solutions, temps écoulé 300.4s. iw 9b 17 02 4d 3o bc 14 6b 08 16 78 46 
+Exploré 161000000 noeuds, trouvé 577396 solutions, temps écoulé 302.5s. iw ab 8a 02 3e 18 0b 1e 6q ai 37 
+Exploré 162000000 noeuds, trouvé 581084 solutions, temps écoulé 304.6s. jw 5h 13 36 15 6c 58 12 1o cd 23 29 14 
+Exploré 163000000 noeuds, trouvé 584481 solutions, temps écoulé 306.7s. jw 6h 4h 89 45 57 0e ho 37 8e 8c 
+Exploré 164000000 noeuds, trouvé 586968 solutions, temps écoulé 308.8s. jw 6h ch 02 ao 8e bm 12 eg eh 27 
+Exploré 165000000 noeuds, trouvé 588000 solutions, temps écoulé 310.9s. jw 8h 19 38 5d lo 04 
+Exploré 166000000 noeuds, trouvé 595781 solutions, temps écoulé 312.7s. jw ch 8h 17 35 12 2j 34 6m 15 bc 56 13 02 
+Exploré 167000000 noeuds, trouvé 600948 solutions, temps écoulé 314.8s. jw fh 3g 9m 02 39 8a 04 dr im 29 79 
+Exploré 168000000 noeuds, trouvé 605192 solutions, temps écoulé 316.6s. jw gh cg 8g 5d 26 02 29 5m 08 2e 
+Exploré 169000000 noeuds, trouvé 607892 solutions, temps écoulé 318.7s. kw 3h 12 15 5a 2c 9a 12 kl 18 07 23 
+Exploré 170000000 noeuds, trouvé 612808 solutions, temps écoulé 320.8s. kw 5h 6h 3a 68 45 12 1e 9o 4j 27 02 28 13 
+Exploré 171000000 noeuds, trouvé 615092 solutions, temps écoulé 322.9s. kw 5h bh 12 7o 1e 9i cg 46 28 03 
+Exploré 172000000 noeuds, trouvé 617535 solutions, temps écoulé 324.9s. kw 7h 1g gm 02 27 69 04 ao 12 23 68 57 04 13 
+Exploré 173000000 noeuds, trouvé 621728 solutions, temps écoulé 326.8s. kw ch 03 79 ac 0a eg no 2j 37 26 13 58 02 
+Exploré 174000000 noeuds, trouvé 628717 solutions, temps écoulé 328.7s. kw eh eg 2o 1i 13 12 69 go 36 04 04 17 
+Exploré 175000000 noeuds, trouvé 633242 solutions, temps écoulé 330.7s. lw 0b 12 15 cd 0o et 8b 8k 26 
+Exploré 176000000 noeuds, trouvé 640147 solutions, temps écoulé 332.4s. lw 1b 12 6e 4m 1l 27 bo ce 0c 45 15 
+Exploré 177000000 noeuds, trouvé 643404 solutions, temps écoulé 334.5s. lw 3b 5a 12 de 7b 67 15 1o 0i 09 
+Exploré 178000000 noeuds, trouvé 644700 solutions, temps écoulé 336.7s. lw 6b 08 12 ae 16 ak 5g cn 02 05 1a 46 
+Exploré 179000000 noeuds, trouvé 647524 solutions, temps écoulé 338.7s. lw 6b 38 13 ae 4A 4i 23 59 7f 04 47 13 
+Exploré 180000000 noeuds, trouvé 647524 solutions, temps écoulé 340.8s. lw 6b 38 13 ae lA 06 35 bm fj 09 13 
+Exploré 181000000 noeuds, trouvé 649866 solutions, temps écoulé 343.0s. lw 6b 58 12 ce ac 4j 37 ar 06 0f 
+Exploré 182000000 noeuds, trouvé 650196 solutions, temps écoulé 345.1s. lw 8b 57 12 2d 6o 8c 68 9a 1f 48 79 
+Exploré 183000000 noeuds, trouvé 650476 solutions, temps écoulé 347.2s. lw 9b 2b 23 fg fo 8l 56 12 8k 3f 16 
+Exploré 184000000 noeuds, trouvé 654547 solutions, temps écoulé 349.3s. mw 03 04 7f gn 4b 0m 49 ar 68 af 2a 02 4a 
+Exploré 185000000 noeuds, trouvé 657862 solutions, temps écoulé 351.5s. mw 03 04 bf 8e 56 qs bk 36 15 
+Exploré 186000000 noeuds, trouvé 660032 solutions, temps écoulé 353.6s. mw 13 03 af 9a 0A 36 12 hm 34 56 08 46 
+Exploré 187000000 noeuds, trouvé 660032 solutions, temps écoulé 355.7s. mw 13 03 af 9a fA fy du bc 02 gi 8e 56 
+Exploré 188000000 noeuds, trouvé 662331 solutions, temps écoulé 357.8s. mw 13 03 ef 38 48 29 23 mr 7d 17 15 35 
+Exploré 189000000 noeuds, trouvé 677056 solutions, temps écoulé 359.3s. mw 13 03 ef 68 tx bg 02 ir 3d 12 36 fi 35 12 02 
+Exploré 190000000 noeuds, trouvé 680700 solutions, temps écoulé 361.4s. mw 13 13 ag 1e 6q ov dg 9b 57 4i 14 04 
+Exploré 191000000 noeuds, trouvé 682452 solutions, temps écoulé 363.6s. mw 13 13 dg 9a 4c 13 
+Exploré 192000000 noeuds, trouvé 685671 solutions, temps écoulé 365.7s. mw 13 23 1f lu cp 5a 02 5k 1c 14 
+Exploré 193000000 noeuds, trouvé 687441 solutions, temps écoulé 367.7s. mw 13 23 6f 79 25 9b 12 an jl 16 0b 59 24 36 
+Exploré 194000000 noeuds, trouvé 689648 solutions, temps écoulé 369.7s. mw 13 23 df 0f io 6q 15 6k 
+Exploré 195000000 noeuds, trouvé 693891 solutions, temps écoulé 371.7s. mw 23 12 0f 06 18 12 24 jm 6c 45 06 04 24 
+Exploré 196000000 noeuds, trouvé 695912 solutions, temps écoulé 374.0s. mw 23 12 3f 5e 9o 2c fo 2a 14 17 8a 
+Exploré 197000000 noeuds, trouvé 700288 solutions, temps écoulé 375.8s. mw 23 12 8f 9o 29 7c 12 jn 5c 04 49 05 24 06 
+Exploré 198000000 noeuds, trouvé 701917 solutions, temps écoulé 377.9s. mw 23 12 df cf 25 04 03 cm 48 28 13 
+Exploré 199000000 noeuds, trouvé 704936 solutions, temps écoulé 380.0s. pw 03 24 3f 8e 34 4b 6a bn 34 05 23 24 
+Exploré 200000000 noeuds, trouvé 708115 solutions, temps écoulé 382.1s. pw 03 24 cf gn 5c bm 0a 6v 56 23 07 
+Exploré 201000000 noeuds, trouvé 719696 solutions, temps écoulé 383.8s. pw 13 03 4f 78 4x 0b 04 fn el 37 3b 46 37 16 
+Exploré 202000000 noeuds, trouvé 727704 solutions, temps écoulé 385.7s. pw 13 03 df 0a 4A 09 12 1u 5i 45 8f 
+Exploré 203000000 noeuds, trouvé 727704 solutions, temps écoulé 387.8s. pw 13 03 df 0a kA 9y ou bc 12 gi 34 14 
+Exploré 204000000 noeuds, trouvé 729842 solutions, temps écoulé 389.9s. pw 13 13 3g 7a 25 18 cd 6r 38 2b 04 13 02 
+Exploré 205000000 noeuds, trouvé 731611 solutions, temps écoulé 392.0s. pw 13 13 dg be 0m fi 08 dk 78 
+Exploré 206000000 noeuds, trouvé 732808 solutions, temps écoulé 394.2s. pw 13 23 2f 3f go be 7p 3a 36 38 23 
+Exploré 207000000 noeuds, trouvé 737045 solutions, temps écoulé 396.1s. pw 13 23 8f lo 09 ac 02 an 27 67 34 
+Exploré 208000000 noeuds, trouvé 741676 solutions, temps écoulé 398.0s. pw 13 23 df en bd 15 6c lo 59 17 46 
+Exploré 209000000 noeuds, trouvé 741996 solutions, temps écoulé 400.2s. pw 23 02 2f bf 5o de 78 7c 6f 1e 13 
+Exploré 210000000 noeuds, trouvé 745595 solutions, temps écoulé 402.1s. pw 23 02 7f 69 4b 0a 02 bk 4i 02 56 
+Exploré 211000000 noeuds, trouvé 750224 solutions, temps écoulé 404.1s. pw 23 02 df dn 6o np cg 4a ae 57 03 
+Exploré 212000000 noeuds, trouvé 751104 solutions, temps écoulé 406.3s. pw 23 02 ef ru 59 9b 2d 0p 68 35 03 
+Exploré 213000000 noeuds, trouvé 752276 solutions, temps écoulé 408.5s. qw 0b 12 12 ad do 2p 24 eh cg 1c 03 
+Exploré 214000000 noeuds, trouvé 752756 solutions, temps écoulé 410.6s. qw 2b 2b 13 3g io 1e 24 56 0f 46 13 
+Exploré 215000000 noeuds, trouvé 754042 solutions, temps écoulé 412.8s. qw 5b 12 24 3e 9c 27 69 rv 29 05 12 06 
+Exploré 216000000 noeuds, trouvé 760728 solutions, temps écoulé 414.6s. qw 6b 02 35 bd 9o 1n 12 29 15 8b 8d 
+Exploré 217000000 noeuds, trouvé 764168 solutions, temps écoulé 416.6s. qw 9b 0a 24 de 5g 0h 07 7o 17 28 27 34 25 
+Exploré 218000000 noeuds, trouvé 768696 solutions, temps écoulé 418.7s. qw ab 18 23 de 1A 0i 2g ac ab 25 
+Exploré 219000000 noeuds, trouvé 768696 solutions, temps écoulé 420.8s. qw ab 18 23 de dA 8l 02 24 2i 24 12 03 
+Exploré 220000000 noeuds, trouvé 768736 solutions, temps écoulé 422.9s. qw ab 48 13 4f ao ip bg 67 19 35 
+Exploré 221000000 noeuds, trouvé 770844 solutions, temps écoulé 425.0s. qw ab 78 02 2e 0c 9k 5e oq 19 57 35 
+Exploré 222000000 noeuds, trouvé 775686 solutions, temps écoulé 427.0s. rw 3h 79 34 9b 5b 3e 02 dp 6l cf 58 3b 12 
+Exploré 223000000 noeuds, trouvé 781808 solutions, temps écoulé 428.9s. rw 5h 23 69 8c 46 0k 7a 15 45 06 
+Exploré 224000000 noeuds, trouvé 784771 solutions, temps écoulé 430.9s. rw 8h gh 02 9b 6c hj 14 7m 48 27 36 07 
+Exploré 225000000 noeuds, trouvé 790916 solutions, temps écoulé 432.9s. rw eh 6g 1a 58 04 02 5f 3n 02 36 6d 
+Exploré 226000000 noeuds, trouvé 793936 solutions, temps écoulé 434.9s. rw gh 4h 02 2o de bi 4g 12 
+Exploré 227000000 noeuds, trouvé 797052 solutions, temps écoulé 437.0s. rw gh 8h 38 5a 89 0g 6o 13 9b 6a 
+Exploré 228000000 noeuds, trouvé 798768 solutions, temps écoulé 439.1s. rw gh gh 12 08 04 68 07 dn 7c 
+Exploré 229000000 noeuds, trouvé 802256 solutions, temps écoulé 441.1s. sw 3h 15 7a 34 bd 45 46 
+Exploré 230000000 noeuds, trouvé 805612 solutions, temps écoulé 443.2s. sw 6h ab 6d 03 7d 04 13 1m 46 ce ac 
+Exploré 231000000 noeuds, trouvé 810428 solutions, temps écoulé 445.0s. sw 8h cg km 12 29 5a 04 pr 5d 38 18 9b ce 39 
+Exploré 232000000 noeuds, trouvé 819808 solutions, temps écoulé 446.8s. sw fh 2h bx 03 02 dk 7e nq 89 02 24 
+Exploré 233000000 noeuds, trouvé 823332 solutions, temps écoulé 449.0s. sw fh 7h 59 57 05 12 3g 6o 19 12 
+Exploré 234000000 noeuds, trouvé 824532 solutions, temps écoulé 451.1s. sw fh ch ei 58 45 34 5a 4k 2b 02 13 03 
+Exploré 235000000 noeuds, trouvé 826644 solutions, temps écoulé 453.1s. tw 0b 02 25 2d go hn 0e 02 cd fl 02 02 0c 
+Exploré 236000000 noeuds, trouvé 833684 solutions, temps écoulé 454.9s. tw 1b 12 4e 3c 58 46 hm 35 27 26 02 
+Exploré 237000000 noeuds, trouvé 838296 solutions, temps écoulé 457.0s. tw 2b 38 13 8d ag 4o ac 12 6b 5a 
+Exploré 238000000 noeuds, trouvé 838784 solutions, temps écoulé 459.0s. tw 2b 38 23 de bA 16 05 4m 06 29 35 
+Exploré 239000000 noeuds, trouvé 838784 solutions, temps écoulé 461.1s. tw 2b 38 23 de qA my ou 69 14 7a 26 
+Exploré 240000000 noeuds, trouvé 840260 solutions, temps écoulé 463.3s. tw 2b 68 12 ae 45 7a 02 7m 3e ac 1c 56 
+Exploré 241000000 noeuds, trouvé 842774 solutions, temps écoulé 465.4s. tw 3b 7a 12 ae 45 1b 56 1o 59 24 5c 8a 46 
+Exploré 242000000 noeuds, trouvé 843964 solutions, temps écoulé 467.5s. tw 4b 9b 23 ef co jl 9c 04 25 2d 8b 
+Exploré 243000000 noeuds, trouvé 845408 solutions, temps écoulé 469.6s. tw 7b 12 12 2d ao kl 0d 12 19 12 8c 23 
+Exploré 244000000 noeuds, trouvé 845520 solutions, temps écoulé 471.8s. uw 03 03 1f 7f 4o pq 37 13 37 38 03 25 
+Exploré 245000000 noeuds, trouvé 845951 solutions, temps écoulé 474.0s. uw 03 03 5f eu de 6a ei 3d 
+Exploré 246000000 noeuds, trouvé 850692 solutions, temps écoulé 476.0s. uw 03 03 9f kn no hp ac 24 8l 34 0c 
+Exploré 247000000 noeuds, trouvé 855815 solutions, temps écoulé 477.8s. uw 03 13 9f 0a al 7j 68 or aj 45 14 03 
+Exploré 248000000 noeuds, trouvé 855816 solutions, temps écoulé 479.9s. uw 03 13 9f 2a fA 0i 02 no 7b 1a 4c 
+Exploré 249000000 noeuds, trouvé 857483 solutions, temps écoulé 481.9s. uw 03 13 bf 18 0b 2f 12 er jq 09 28 12 58 
+Exploré 250000000 noeuds, trouvé 871032 solutions, temps écoulé 483.5s. uw 03 13 bf 68 mx 12 24 mn ad 12 29 45 
+Exploré 251000000 noeuds, trouvé 876438 solutions, temps écoulé 485.5s. uw 03 23 9g 6e 8q 1p 46 12 ej 49 
+Exploré 252000000 noeuds, trouvé 877875 solutions, temps écoulé 487.7s. uw 03 23 bg 7c 3q 7p 9a bi 39 5f 4b 04 
+Exploré 253000000 noeuds, trouvé 880992 solutions, temps écoulé 489.8s. uw 13 04 2f kn 89 4k 13 lo 27 68 02 15 08 
+Exploré 254000000 noeuds, trouvé 884946 solutions, temps écoulé 492.0s. uw 13 14 2e 7f 69 1f 12 no 27 26 24 
+Exploré 255000000 noeuds, trouvé 885516 solutions, temps écoulé 494.2s. uw 23 02 1f 2f eo 2e 3c 15 48 2h 
+Exploré 256000000 noeuds, trouvé 886056 solutions, temps écoulé 496.5s. uw 23 02 4f fo bc 38 3a ad 5e 2a 
+Exploré 257000000 noeuds, trouvé 893273 solutions, temps écoulé 498.2s. uw 23 02 bf 2n hn 1b 7f 8m 25 67 03 34 
+Exploré 258000000 noeuds, trouvé 895376 solutions, temps écoulé 500.3s. uw 23 12 be 0b iq 1r 6d 0a 23 cg 
+FINI. Trouvé 895536 solutions en 500.6s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 256 nodes
+- Level 3: 1508 nodes
+END   BFS: 1s
+START For loop: 1508 iterations
+END   For loop: 273s
+FINI. Trouvé 895536 solutions en 273.8s
+FINI. Trouvé 895536 solutions en 273.8s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 256 nodes
+- Level 3: 1508 nodes
+END   BFS: 1s
+START For loop: 1508 iterations
+END   For loop: 143s
+FINI. Trouvé 895536 solutions en 144.3s
+FINI. Trouvé 895536 solutions en 159.3s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 256 nodes
+- Level 3: 1508 nodes
+END   BFS: 1s
+START For loop: 1508 iterations
+END   For loop: 98s
+FINI. Trouvé 895536 solutions en 99.1s
+FINI. Trouvé 895536 solutions en 110.3s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 256 nodes
+- Level 3: 1508 nodes
+END   BFS: 1s
+START For loop: 1508 iterations
+END   For loop: 75s
+FINI. Trouvé 895536 solutions en 77.0s
+FINI. Trouvé 895536 solutions en 87.4s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 256 nodes
+- Level 3: 1508 nodes
+END   BFS: 2s
+START For loop: 1508 iterations
+END   For loop: 70s
+FINI. Trouvé 895536 solutions en 71.9s
+FINI. Trouvé 895536 solutions en 79.4s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 256 nodes
+- Level 3: 1508 nodes
+END   BFS: 2s
+START For loop: 1508 iterations
+END   For loop: 59s
+FINI. Trouvé 895536 solutions en 61.1s
+FINI. Trouvé 895536 solutions en 67.2s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 256 nodes
+- Level 3: 1508 nodes
+END   BFS: 2s
+START For loop: 1508 iterations
+END   For loop: 61s
+FINI. Trouvé 895536 solutions en 63.0s
+FINI. Trouvé 895536 solutions en 67.6s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 256 nodes
+- Level 3: 1508 nodes
+END   BFS: 2s
+START For loop: 1508 iterations
+END   For loop: 55s
+FINI. Trouvé 895536 solutions en 56.6s
+FINI. Trouvé 895536 solutions en 55.4s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 256 nodes
+- Level 3: 1508 nodes
+END   BFS: 2s
+START For loop: 1508 iterations
+END   For loop: 44s
+FINI. Trouvé 895536 solutions en 45.8s
+FINI. Trouvé 895536 solutions en 53.2s
+cd sequential && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+rm -f exact_cover.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+rm -f exact_cover_omp_bfs.out exact_cover_omp_tasks.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+rm -f exact_cover_mpi_dynamic.out exact_cover_mpi_static.out exact_cover_mpi_bfs.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+rm -f exact_cover_hybrid_bfs.out exact_cover_hybrid_tasks.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+rm -f exact_cover_hybrid_cp.out exact_cover_mpi_cp.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+{'instance': '../instances/pento_plus_tetra_2x4x10.ec', 'csvfile': './csv/pento_plus_tetra_2x4x10_threads.csv', 'xlabel': 'Number of threads', 'xlist': [2, 4, 6, 8, 10, 12, 14, 16, 18], 'sequential': True, 'omp_bfs': True, 'omp_tasks': True}
+Instance: ../instances/pento_plus_tetra_2x4x10.ec
+CSV file: ./csv/pento_plus_tetra_2x4x10_threads.csv
+== Start benchmark ==
+-- Sequential --
+START: ../sequential/exact_cover.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 500.614 seconds
+-- Parallel --
+x = 2
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 273.826 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 273.785 seconds
+x = 4
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 144.347 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 159.331 seconds
+x = 6
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 99.165 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 110.354 seconds
+x = 8
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 77.051 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 87.409 seconds
+x = 10
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 71.928 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 79.439 seconds
+x = 12
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 61.205 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 67.233 seconds
+x = 14
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 63.048 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 67.637 seconds
+x = 16
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 56.642 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 55.379 seconds
+x = 18
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 45.858 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 53.238 seconds
+Benchmark done in 2347.4909386634827 seconds
+== End benchmark ==
