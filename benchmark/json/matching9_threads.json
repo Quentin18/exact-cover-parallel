@@ -1,0 +1,9 @@
+{
+    "instance": "../instances/matching9.ec",
+    "csvfile": "./csv/matching9_threads.csv",
+    "xlabel": "Number of threads",
+    "xlist": [2, 4, 6, 8, 10, 12, 14, 16, 18],
+    "sequential": true,
+    "omp_bfs": true,
+    "omp_tasks": true
+}
