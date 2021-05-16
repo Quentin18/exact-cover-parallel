@@ -48,15 +48,22 @@ python3 csvgraph.py [instance.csv]
 
 Tous les benchmarks ont été lancés sur le cluster *gros* de Nancy.
 
-- [x] `bell12_procs.json`
+- [ ] `bell12_procs.json`
 - [x] `bell12_threads.json`
-- [x] `bell13_procs.json`
+- [ ] `bell13_procs.json`
 - [x] `bell13_threads.json`
-- [x] `bell14_procs.json`
+- [ ] `bell14_procs.json`
 - [x] `bell14_threads.json`
-- [ ] `pento_plus_tetra_2x4x10_procs.json`
+- [ ] `matching8_procs.json`
+- [ ] `matching8_threads.json`
+- [ ] `matching9_procs.json`
+- [ ] `matching9_threads.json`
+- [ ] `matching10_procs.json`
+- [ ] `matching10_threads.json`
+- [x] `pento_plus_tetra_2x4x10_procs.json`
 - [x] `pento_plus_tetra_2x4x10_threads.json`
 - [x] `pento_plus_tetra_8x8_secondary` : 1372.6 secondes avec 3x18 coeurs
+- [ ] `pento_plus_tetra_8x10.json`
 
 ## Résultats
 
