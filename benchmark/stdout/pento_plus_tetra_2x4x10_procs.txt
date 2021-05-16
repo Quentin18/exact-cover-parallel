@@ -1,0 +1,127 @@
+cd sequential && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+{'instance': '../instances/pento_plus_tetra_2x4x10.ec', 'csvfile': './csv/pento_plus_tetra_2x4x10.csv', 'xlabel': 'Number of nodes', 'xlist': [2, 4, 6, 8, 10], 'sequential': True, 'mpi_bfs': True, 'mpi_dynamic': True, 'hybrid_bfs': True, 'hybrid_tasks': True, 'g5k': True, 'show': False}
+Instance: ../instances/pento_plus_tetra_2x4x10.ec
+CSV file: ./csv/pento_plus_tetra_2x4x10.csv
+$OAR_NODE_FILE: /var/lib/oar/3013007
+== Start benchmark ==
+-- Sequential --
+START: ../sequential/exact_cover.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 504.266 seconds
+-- Parallel --
+x = 2
+START: mpirun -max-vm-size 2 --map-by ppr:1:core --hostfile /var/lib/oar/3013007 ../mpi/exact_cover_mpi_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+cd sequential && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+cd sequential && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+rm -f exact_cover.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+rm -f exact_cover_omp_bfs.out exact_cover_omp_tasks.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+rm -f exact_cover_mpi_dynamic.out exact_cover_mpi_static.out exact_cover_mpi_bfs.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+rm -f exact_cover_hybrid_bfs.out exact_cover_hybrid_tasks.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+rm -f exact_cover_hybrid_cp.out exact_cover_mpi_cp.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+{'instance': '../instances/pento_plus_tetra_2x4x10.ec', 'csvfile': './csv/pento_plus_tetra_2x4x10_procs.csv', 'xlabel': 'Number of nodes', 'xlist': [2, 4, 6, 8, 10], 'sequential': True, 'mpi_bfs': True, 'mpi_dynamic': True, 'hybrid_bfs': True, 'hybrid_tasks': True, 'g5k': True, 'show': False}
+Instance: ../instances/pento_plus_tetra_2x4x10.ec
+CSV file: ./csv/pento_plus_tetra_2x4x10_procs.csv
+$OAR_NODE_FILE: /var/lib/oar/3013018
+== Start benchmark ==
+-- Sequential --
+START: ../sequential/exact_cover.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 505.601 seconds
+-- Parallel --
+x = 2
+START: mpirun -max-vm-size 2 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 31.328 seconds
+START: mpirun -max-vm-size 2 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_dynamic.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 52.86 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 2 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 479.5 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 2 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 461.306 seconds
+x = 4
+START: mpirun -max-vm-size 4 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 21.822 seconds
+START: mpirun -max-vm-size 4 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_dynamic.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 52.963 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 4 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 61.983 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 4 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 104.34 seconds
+x = 6
+START: mpirun -max-vm-size 6 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 20.962 seconds
+START: mpirun -max-vm-size 6 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_dynamic.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 52.315 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 6 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 38.545 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 6 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 69.451 seconds
+x = 8
+START: mpirun -max-vm-size 8 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 20.605 seconds
+START: mpirun -max-vm-size 8 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_dynamic.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 52.103 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 8 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 30.594 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 8 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 52.652 seconds
+x = 10
+START: mpirun -max-vm-size 10 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 20.171 seconds
+START: mpirun -max-vm-size 10 --map-by ppr:1:core --hostfile /var/lib/oar/3013018 ../mpi/exact_cover_mpi_dynamic.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 52.966 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 10 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_bfs.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 23.295 seconds
+START: mpirun -x OMP_NUM_THREADS=18 -max-vm-size 10 --map-by ppr:1:node --hostfile /var/lib/oar/3013018 ../hybrid/exact_cover_hybrid_tasks.out --in ../instances/pento_plus_tetra_2x4x10.ec
+END: runtime = 43.402 seconds
+Benchmark done in 2248.7671761512756 seconds
+== End benchmark ==

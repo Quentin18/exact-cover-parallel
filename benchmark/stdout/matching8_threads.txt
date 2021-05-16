@@ -1,0 +1,190 @@
+cd sequential && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+Exploré 1000000 noeuds, trouvé 414818 solutions, temps écoulé 0.1s. 3f 0d 9b 89 47 25 23 
+Exploré 2000000 noeuds, trouvé 829637 solutions, temps écoulé 0.1s. 6f 1d 8b 89 27 05 23 
+Exploré 3000000 noeuds, trouvé 1244457 solutions, temps écoulé 0.2s. 9f 2d 7b 79 67 45 03 
+Exploré 4000000 noeuds, trouvé 1659277 solutions, temps écoulé 0.2s. cf 3d 6b 79 47 25 13 
+FINI. Trouvé 2027025 solutions en 0.3s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 15 nodes
+- Level 2: 195 nodes
+- Level 3: 2145 nodes
+END   BFS: 0s
+START For loop: 2145 iterations
+END   For loop: 0s
+FINI. Trouvé 2027025 solutions en 0.2s
+FINI. Trouvé 2027025 solutions en 0.2s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 15 nodes
+- Level 2: 195 nodes
+- Level 3: 2145 nodes
+END   BFS: 0s
+START For loop: 2145 iterations
+END   For loop: 0s
+FINI. Trouvé 2027025 solutions en 0.1s
+FINI. Trouvé 2027025 solutions en 0.1s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 15 nodes
+- Level 2: 195 nodes
+- Level 3: 2145 nodes
+END   BFS: 0s
+START For loop: 2145 iterations
+END   For loop: 0s
+FINI. Trouvé 2027025 solutions en 0.1s
+FINI. Trouvé 2027025 solutions en 0.1s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 15 nodes
+- Level 2: 195 nodes
+- Level 3: 2145 nodes
+END   BFS: 0s
+START For loop: 2145 iterations
+END   For loop: 0s
+FINI. Trouvé 2027025 solutions en 0.1s
+FINI. Trouvé 2027025 solutions en 0.0s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 15 nodes
+- Level 2: 195 nodes
+- Level 3: 2145 nodes
+END   BFS: 0s
+START For loop: 2145 iterations
+END   For loop: 0s
+FINI. Trouvé 2027025 solutions en 0.1s
+FINI. Trouvé 2027025 solutions en 0.0s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 15 nodes
+- Level 2: 195 nodes
+- Level 3: 2145 nodes
+END   BFS: 0s
+START For loop: 2145 iterations
+END   For loop: 0s
+FINI. Trouvé 2027025 solutions en 0.1s
+FINI. Trouvé 2027025 solutions en 0.0s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 15 nodes
+- Level 2: 195 nodes
+- Level 3: 2145 nodes
+END   BFS: 0s
+START For loop: 2145 iterations
+END   For loop: 0s
+FINI. Trouvé 2027025 solutions en 0.1s
+FINI. Trouvé 2027025 solutions en 0.0s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 15 nodes
+- Level 2: 195 nodes
+- Level 3: 2145 nodes
+END   BFS: 0s
+START For loop: 2145 iterations
+END   For loop: 0s
+FINI. Trouvé 2027025 solutions en 0.1s
+FINI. Trouvé 2027025 solutions en 0.0s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 15 nodes
+- Level 2: 195 nodes
+- Level 3: 2145 nodes
+END   BFS: 0s
+START For loop: 2145 iterations
+END   For loop: 0s
+FINI. Trouvé 2027025 solutions en 0.1s
+FINI. Trouvé 2027025 solutions en 0.0s
+cd sequential && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+rm -f exact_cover.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+rm -f exact_cover_omp_bfs.out exact_cover_omp_tasks.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+rm -f exact_cover_mpi_dynamic.out exact_cover_mpi_static.out exact_cover_mpi_bfs.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+rm -f exact_cover_hybrid_bfs.out exact_cover_hybrid_tasks.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+rm -f exact_cover_hybrid_cp.out exact_cover_mpi_cp.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+{'instance': '../instances/matching8.ec', 'csvfile': './csv/matching8_threads.csv', 'xlabel': 'Number of threads', 'xlist': [2, 4, 6, 8, 10, 12, 14, 16, 18], 'sequential': True, 'omp_bfs': True, 'omp_tasks': True}
+Instance: ../instances/matching8.ec
+CSV file: ./csv/matching8_threads.csv
+== Start benchmark ==
+-- Sequential --
+START: ../sequential/exact_cover.out --in ../instances/matching8.ec
+END: runtime = 0.319 seconds
+-- Parallel --
+x = 2
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/matching8.ec
+END: runtime = 0.191 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/matching8.ec
+END: runtime = 0.165 seconds
+x = 4
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/matching8.ec
+END: runtime = 0.126 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/matching8.ec
+END: runtime = 0.107 seconds
+x = 6
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/matching8.ec
+END: runtime = 0.11 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/matching8.ec
+END: runtime = 0.08 seconds
+x = 8
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/matching8.ec
+END: runtime = 0.094 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/matching8.ec
+END: runtime = 0.054 seconds
+x = 10
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/matching8.ec
+END: runtime = 0.088 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/matching8.ec
+END: runtime = 0.057 seconds
+x = 12
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/matching8.ec
+END: runtime = 0.084 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/matching8.ec
+END: runtime = 0.059 seconds
+x = 14
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/matching8.ec
+END: runtime = 0.084 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/matching8.ec
+END: runtime = 0.057 seconds
+x = 16
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/matching8.ec
+END: runtime = 0.072 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/matching8.ec
+END: runtime = 0.035 seconds
+x = 18
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/matching8.ec
+END: runtime = 0.07 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/matching8.ec
+END: runtime = 0.048 seconds
+Benchmark done in 1.9132418632507324 seconds
+== End benchmark ==

@@ -1,0 +1,181 @@
+cd sequential && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+gcc exact_cover.c -o exact_cover.out -Wall -Wextra -O3
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+gcc exact_cover_omp_bfs.c -o exact_cover_omp_bfs.out -Wall -Wextra -O3 -fopenmp
+gcc exact_cover_omp_tasks.c -o exact_cover_omp_tasks.out -Wall -Wextra -O3 -fopenmp
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+mpicc exact_cover_mpi_dynamic.c -o exact_cover_mpi_dynamic.out -Wall -Wextra -O3
+mpicc exact_cover_mpi_static.c -o exact_cover_mpi_static.out -Wall -Wextra -O3
+mpicc exact_cover_mpi_bfs.c -o exact_cover_mpi_bfs.out -Wall -Wextra -O3
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+mpicc exact_cover_hybrid_bfs.c -o exact_cover_hybrid_bfs.out -Wall -Wextra -O3 -fopenmp
+mpicc exact_cover_hybrid_tasks.c -o exact_cover_hybrid_tasks.out -Wall -Wextra -O3 -fopenmp
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+mpicc exact_cover_hybrid_cp.c -o exact_cover_hybrid_cp.out -Wall -Wextra -O3 -fopenmp
+mpicc exact_cover_mpi_cp.c -o exact_cover_mpi_cp.out -Wall -Wextra -O3
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+Exploré 1000000 noeuds, trouvé 499997 solutions, temps écoulé 0.1s. 0* ** U* 9w 14 
+Exploré 2000000 noeuds, trouvé 999997 solutions, temps écoulé 0.3s. 3* ** 0* s* 7g 24 
+Exploré 3000000 noeuds, trouvé 1499997 solutions, temps écoulé 0.4s. 8* 0* o* 6w 48 12 
+Exploré 4000000 noeuds, trouvé 1999997 solutions, temps écoulé 0.6s. e* 0* ** 0g 08 04 
+Exploré 5000000 noeuds, trouvé 2499997 solutions, temps écoulé 0.7s. B* ** 04 02 
+Exploré 6000000 noeuds, trouvé 2999998 solutions, temps écoulé 0.9s. Z* y* 7g 
+Exploré 7000000 noeuds, trouvé 3499998 solutions, temps écoulé 1.0s. ** d* cg 02 
+Exploré 8000000 noeuds, trouvé 3999998 solutions, temps écoulé 1.1s. ** 8* 6g 
+FINI. Trouvé 4213597 solutions en 1.3s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 2048 nodes
+END   BFS: 0s
+START For loop: 2048 iterations
+END   For loop: 1s
+FINI. Trouvé 4213597 solutions en 0.8s
+FINI. Trouvé 4213597 solutions en 0.7s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 2048 nodes
+END   BFS: 0s
+START For loop: 2048 iterations
+END   For loop: 0s
+FINI. Trouvé 4213597 solutions en 0.6s
+FINI. Trouvé 4213597 solutions en 0.3s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 2048 nodes
+END   BFS: 0s
+START For loop: 2048 iterations
+END   For loop: 0s
+FINI. Trouvé 4213597 solutions en 0.5s
+FINI. Trouvé 4213597 solutions en 0.2s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 2048 nodes
+END   BFS: 0s
+START For loop: 2048 iterations
+END   For loop: 0s
+FINI. Trouvé 4213597 solutions en 0.6s
+FINI. Trouvé 4213597 solutions en 0.2s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 2048 nodes
+END   BFS: 0s
+START For loop: 2048 iterations
+END   For loop: 0s
+FINI. Trouvé 4213597 solutions en 0.6s
+FINI. Trouvé 4213597 solutions en 0.2s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 2048 nodes
+END   BFS: 0s
+START For loop: 2048 iterations
+END   For loop: 0s
+FINI. Trouvé 4213597 solutions en 0.6s
+FINI. Trouvé 4213597 solutions en 0.2s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 2048 nodes
+END   BFS: 0s
+START For loop: 2048 iterations
+END   For loop: 0s
+FINI. Trouvé 4213597 solutions en 0.7s
+FINI. Trouvé 4213597 solutions en 0.3s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 2048 nodes
+END   BFS: 0s
+START For loop: 2048 iterations
+END   For loop: 0s
+FINI. Trouvé 4213597 solutions en 0.7s
+FINI. Trouvé 4213597 solutions en 0.3s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 2048 nodes
+END   BFS: 0s
+START For loop: 2048 iterations
+END   For loop: 0s
+FINI. Trouvé 4213597 solutions en 0.7s
+FINI. Trouvé 4213597 solutions en 0.3s
+cd sequential && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/sequential'
+rm -f exact_cover.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/sequential'
+cd openmp && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/openmp'
+rm -f exact_cover_omp_bfs.out exact_cover_omp_tasks.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/openmp'
+cd mpi && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/mpi'
+rm -f exact_cover_mpi_dynamic.out exact_cover_mpi_static.out exact_cover_mpi_bfs.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/mpi'
+cd hybrid && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+rm -f exact_cover_hybrid_bfs.out exact_cover_hybrid_tasks.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/hybrid'
+cd checkpointing && make clean
+make[1]: Entering directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+rm -f exact_cover_hybrid_cp.out exact_cover_mpi_cp.out
+make[1]: Leaving directory '/home/qdeschamps/exact-cover-parallel/checkpointing'
+{'instance': '../instances/bell12.ec', 'csvfile': './csv/bell12_threads.csv', 'xlabel': 'Number of threads', 'xlist': [2, 4, 6, 8, 10, 12, 14, 16, 18], 'sequential': True, 'omp_bfs': True, 'omp_tasks': True}
+Instance: ../instances/bell12.ec
+CSV file: ./csv/bell12_threads.csv
+== Start benchmark ==
+-- Sequential --
+START: ../sequential/exact_cover.out --in ../instances/bell12.ec
+END: runtime = 1.277 seconds
+-- Parallel --
+x = 2
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/bell12.ec
+END: runtime = 0.856 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/bell12.ec
+END: runtime = 0.687 seconds
+x = 4
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/bell12.ec
+END: runtime = 0.589 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/bell12.ec
+END: runtime = 0.352 seconds
+x = 6
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/bell12.ec
+END: runtime = 0.568 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/bell12.ec
+END: runtime = 0.25 seconds
+x = 8
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/bell12.ec
+END: runtime = 0.593 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/bell12.ec
+END: runtime = 0.241 seconds
+x = 10
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/bell12.ec
+END: runtime = 0.645 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/bell12.ec
+END: runtime = 0.253 seconds
+x = 12
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/bell12.ec
+END: runtime = 0.668 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/bell12.ec
+END: runtime = 0.253 seconds
+x = 14
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/bell12.ec
+END: runtime = 0.684 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/bell12.ec
+END: runtime = 0.254 seconds
+x = 16
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/bell12.ec
+END: runtime = 0.697 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/bell12.ec
+END: runtime = 0.254 seconds
+x = 18
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/bell12.ec
+END: runtime = 0.693 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/bell12.ec
+END: runtime = 0.255 seconds
+Benchmark done in 10.071266412734985 seconds
+== End benchmark ==
