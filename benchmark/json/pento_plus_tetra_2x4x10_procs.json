@@ -8,5 +8,7 @@
     "mpi_dynamic": true,
     "hybrid_bfs": true,
     "hybrid_tasks": true,
-    "g5k": true
+    "g5k": true,
+    "make": false,
+    "clean": false
 }
