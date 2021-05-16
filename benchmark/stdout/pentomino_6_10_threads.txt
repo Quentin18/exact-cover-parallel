@@ -1,0 +1,149 @@
+Exploré 1000000 noeuds, trouvé 2609 solutions, temps écoulé 2.1s. 9w er 02 ch 39 34 1g 47 14 12 
+Exploré 2000000 noeuds, trouvé 5084 solutions, temps écoulé 4.3s. hw du 5b 47 13 16 8a 23 16 12 12 
+Exploré 3000000 noeuds, trouvé 7653 solutions, temps écoulé 6.5s. pw 8b 02 48 3a 3r 3k 36 39 
+FINI. Trouvé 9356 solutions en 7.9s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 372 nodes
+- Level 3: 2192 nodes
+END   BFS: 1s
+START For loop: 2192 iterations
+END   For loop: 4s
+FINI. Trouvé 9356 solutions en 5.0s
+FINI. Trouvé 9356 solutions en 4.2s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 372 nodes
+- Level 3: 2192 nodes
+END   BFS: 1s
+START For loop: 2192 iterations
+END   For loop: 2s
+FINI. Trouvé 9356 solutions en 3.3s
+FINI. Trouvé 9356 solutions en 2.3s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 372 nodes
+- Level 3: 2192 nodes
+END   BFS: 1s
+START For loop: 2192 iterations
+END   For loop: 1s
+FINI. Trouvé 9356 solutions en 2.8s
+FINI. Trouvé 9356 solutions en 1.6s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 372 nodes
+- Level 3: 2192 nodes
+END   BFS: 1s
+START For loop: 2192 iterations
+END   For loop: 1s
+FINI. Trouvé 9356 solutions en 2.7s
+FINI. Trouvé 9356 solutions en 1.3s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 372 nodes
+- Level 3: 2192 nodes
+END   BFS: 2s
+START For loop: 2192 iterations
+END   For loop: 1s
+FINI. Trouvé 9356 solutions en 2.7s
+FINI. Trouvé 9356 solutions en 1.2s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 372 nodes
+- Level 3: 2192 nodes
+END   BFS: 2s
+START For loop: 2192 iterations
+END   For loop: 1s
+FINI. Trouvé 9356 solutions en 2.6s
+FINI. Trouvé 9356 solutions en 1.1s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 372 nodes
+- Level 3: 2192 nodes
+END   BFS: 2s
+START For loop: 2192 iterations
+END   For loop: 1s
+FINI. Trouvé 9356 solutions en 2.6s
+FINI. Trouvé 9356 solutions en 1.0s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 372 nodes
+- Level 3: 2192 nodes
+END   BFS: 2s
+START For loop: 2192 iterations
+END   For loop: 1s
+FINI. Trouvé 9356 solutions en 2.5s
+FINI. Trouvé 9356 solutions en 0.9s
+START BFS
+- Level 0: 1 nodes
+- Level 1: 32 nodes
+- Level 2: 372 nodes
+- Level 3: 2192 nodes
+END   BFS: 2s
+START For loop: 2192 iterations
+END   For loop: 1s
+FINI. Trouvé 9356 solutions en 2.4s
+FINI. Trouvé 9356 solutions en 0.9s
+{'instance': '../instances/pentomino_6_10.ec', 'csvfile': './csv/pentomino_6_10_threads.csv', 'xlabel': 'Number of threads', 'xlist': [2, 4, 6, 8, 10, 12, 14, 16, 18], 'sequential': True, 'omp_bfs': True, 'omp_tasks': True, 'make': False, 'clean': False}
+Instance: ../instances/pentomino_6_10.ec
+CSV file: ./csv/pentomino_6_10_threads.csv
+== Start benchmark ==
+-- Sequential --
+START: ../sequential/exact_cover.out --in ../instances/pentomino_6_10.ec
+END: runtime = 7.935 seconds
+-- Parallel --
+x = 2
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pentomino_6_10.ec
+END: runtime = 5.109 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pentomino_6_10.ec
+END: runtime = 4.178 seconds
+x = 4
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pentomino_6_10.ec
+END: runtime = 3.347 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pentomino_6_10.ec
+END: runtime = 2.281 seconds
+x = 6
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pentomino_6_10.ec
+END: runtime = 2.866 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pentomino_6_10.ec
+END: runtime = 1.607 seconds
+x = 8
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pentomino_6_10.ec
+END: runtime = 2.727 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pentomino_6_10.ec
+END: runtime = 1.289 seconds
+x = 10
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pentomino_6_10.ec
+END: runtime = 2.687 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pentomino_6_10.ec
+END: runtime = 1.204 seconds
+x = 12
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pentomino_6_10.ec
+END: runtime = 2.644 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pentomino_6_10.ec
+END: runtime = 1.098 seconds
+x = 14
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pentomino_6_10.ec
+END: runtime = 2.621 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pentomino_6_10.ec
+END: runtime = 0.977 seconds
+x = 16
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pentomino_6_10.ec
+END: runtime = 2.559 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pentomino_6_10.ec
+END: runtime = 0.906 seconds
+x = 18
+START: ../openmp/exact_cover_omp_bfs.out --in ../instances/pentomino_6_10.ec
+END: runtime = 2.511 seconds
+START: ../openmp/exact_cover_omp_tasks.out --in ../instances/pentomino_6_10.ec
+END: runtime = 0.897 seconds
+Benchmark done in 49.44989776611328 seconds
+== End benchmark ==

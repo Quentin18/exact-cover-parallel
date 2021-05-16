@@ -60,10 +60,12 @@ Tous les benchmarks ont été lancés sur le cluster *gros* de Nancy.
 - [x] `matching9_threads.json`
 - [x] `matching10_procs.json`
 - [x] `matching10_threads.json`
+- [x] `pentomino_6_10_procs.json`
+- [x] `pentomino_6_10_threads.json`
 - [x] `pento_plus_tetra_2x4x10_procs.json`
 - [x] `pento_plus_tetra_2x4x10_threads.json`
-- [x] `pento_plus_tetra_8x8_secondary` : 1372.6 secondes avec 3x18 coeurs
 - [x] `pento_plus_tetra_8x10.json` : 13h32 avec 10x18 coeurs
+- [x] `pento_plus_tetra_8x8_secondary` : 1372.6 secondes avec 3x18 coeurs
 
 ## Résultats
 
@@ -79,4 +81,3 @@ pentomino_6_10 | 9 356
 pento_plus_tetra_2x4x10 | 895 536
 pento_plus_tetra_8x10 | 13 544 006 752
 pento_plus_tetra_8x8_secondary | 1 207 328
-rmols10 | **TODO**
