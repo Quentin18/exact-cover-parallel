@@ -58,7 +58,8 @@ if __name__ == '__main__':
 
     # Speedup
     t1 = y_list[0][0]
-    ax2.plot(x, x, fmts[0], label='Optimal')
+    if 'nodes' not in xlabel:
+        ax2.plot(x, x, fmts[0], label='Optimal')
     for y, fmt, label in zip(y_list[1:], fmts[1:], labels[1:]):
         ax2.plot(x, speedup(t1, y), fmt, label=label)
     ax2.set_xlabel(xlabel)
