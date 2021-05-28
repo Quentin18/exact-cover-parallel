@@ -1,6 +1,9 @@
 # Benchmark
 
-Ce répertoire contient des scripts en Python afin de lancer des benchmarks pour tester les différentes solutions de parallélisation sur une instance du problème. Des graphes peuvent être générés à partir de fichiers csv en utilisant `matplotlib`.
+Ce répertoire contient des scripts en Python afin de lancer des benchmarks pour
+tester les différents programmes de parallélisation sur une instance du
+problème. Des graphes peuvent être générés à partir de fichiers csv en utilisant
+`matplotlib`.
 
 ## Commandes
 
@@ -14,9 +17,9 @@ scp -r exact-cover-parallel qdeschamps@access.grid5000.fr:nancy/exact-cover-para
 ssh nancy.g5k
 ```
 
-- Réservation des noeuds en mode interactif (Cluster Gros, 10 noeuds)
+- Réservation des noeuds en mode interactif (cluster *gros*, 3 noeuds, 1 heure)
 ```
-oarsub -p "cluster='gros'" -l nodes=10,walltime=1 -I
+oarsub -p "cluster='gros'" -l nodes=3,walltime=1 -I
 ```
 
 - Lancement d'un benchmark sur une instance en mode interactif
@@ -36,17 +39,18 @@ oarstat -u
 
 - Récupération des résultats du benchmark (en dehors de Grid5000)
 ```
-scp qdeschamps@access.grid5000.fr:nancy/exact-cover-parallel/instance.csv ./instance.csv
+scp qdeschamps@access.grid5000.fr:nancy/exact-cover-parallel/[config.csv] ./[config.csv]
 ```
 
 - Génération d'un graphe à partir de résultats sous forme de fichier csv
 ```
-python3 csvgraph.py [instance.csv]
+python3 csvgraph.py [config.csv]
 ```
 
 ## Liste des benchmarks
 
 Tous les benchmarks ont été lancés sur le cluster *gros* de Nancy.
+Les programmes ont été compilés avec l'option `-O3`.
 
 - [x] `bell12_procs.json`
 - [x] `bell12_threads.json`
@@ -65,7 +69,7 @@ Tous les benchmarks ont été lancés sur le cluster *gros* de Nancy.
 - [x] `pento_plus_tetra_2x4x10_procs.json`
 - [x] `pento_plus_tetra_2x4x10_threads.json`
 - [x] `pento_plus_tetra_8x10.json` : 13h32 avec 10x18 coeurs
-- [x] `pento_plus_tetra_8x8_secondary` : 1372.6 secondes avec 3x18 coeurs
+- [x] `pento_plus_tetra_8x8_secondary` : 1372.6 secondes avec 3x18 coeurs (réalisé en mode iteractif)
 
 ## Résultats
 
