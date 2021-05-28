@@ -7,8 +7,8 @@ It loads the config of the benchmark from a json file.
 Params:
 - instance:     path to the instance file
 - csvfile:      path to the csv file (output)
-- xlabel:       "Number of processors" or "Number of threads" in general
-- xlist:        list of values for the number of processors/threads to test
+- xlabel:       "Number of nodes" or "Number of threads" in general
+- xlist:        list of values for the number of nodes/threads to test
 - sequential:   true to test the sequential program
 - omp_bfs:      true to test the program with OpenMP (bfs)
 - omp_tasks:    true to test the program with OpenMP (tasks)
@@ -67,8 +67,8 @@ def runtime(command: list, show=True, env=None):
 
 def benchmark(config: dict):
     """
-    Launches the exact cover solutions on an instance
-    and writes the result in a csv file.
+    Launches the exact cover programs on an instance
+    and writes the results in a csv file.
     """
     # Get instance
     instance = config['instance']
